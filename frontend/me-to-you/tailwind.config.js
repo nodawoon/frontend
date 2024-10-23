@@ -14,10 +14,13 @@ module.exports = {
       "medium-gray": "#777777",
       "dark-gray": "#444444",
       "black": "#000",
+      "primary": "#5498FF",
+      "primary-active": "#196FF0",
     },
     screens: {
       mobile: "320px",
       tablet: "600px",
+      desktop: "1024px",
     },
     extend: {
       fontFamily: {
