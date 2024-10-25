@@ -6,7 +6,7 @@ interface textAreaProps {
   maxLength: number;
 }
 
-function TextArea({ placeholder = "500자 이내로 작성해주세요.", width, maxLength }: textAreaProps) {
+function TextArea({ width, maxLength, placeholder = `${maxLength}자 이내로 작성해주세요.` }: textAreaProps) {
   const [inputValue, setInputValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -14,7 +14,7 @@ function TextArea({ placeholder = "500자 이내로 작성해주세요.", width,
     setInputValue(e.target.value);
   };
 
-  //줄 넘어갈 때마다 스크롤 자동으로 밑으로 보내는 함수
+  // 줄 넘어갈 때마다 스크롤 자동으로 밑으로 보내는 함수
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.scrollTop = textareaRef.current.scrollHeight - textareaRef.current.clientHeight;
@@ -22,21 +22,20 @@ function TextArea({ placeholder = "500자 이내로 작성해주세요.", width,
   }, [inputValue]);
 
   return (
-    <div className="relative" style={{ width: `${width}px` }}>
+    <div className="relative" style={{ width: `${width}%` }}>
       <textarea
-        ref={textareaRef} // ref로 textarea에 접근
+        ref={textareaRef}
         value={inputValue}
         onChange={handleInputChange}
-        className='resize-none border-2 border-gray rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray '
+        className='resize-none border-2 border-gray rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray'
         placeholder={placeholder}
         style={{
-          width: `${width}px`,
-          height: `${width / 2}px`,
+          width: '100%',
           paddingBottom: '30px',
         }}
         maxLength={maxLength}
       />
-      <div className="absolute left-0.5 right-3 bottom-[8.5px] text-xs z-10 bg-white text-right px-2 py-1 rounded-sm">
+      <div className="absolute right-4 bottom-[9px] w-[90%] text-xs z-10 bg-white text-right px-2 py-1 rounded-sm">
         {inputValue.length} / {maxLength}
       </div>
     </div>

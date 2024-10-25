@@ -2,6 +2,7 @@
 
 import Button from '@/components/common/Button';
 import ProgressBar from '@/components/common/ProgressBar';
+import RadioButton from '@/components/common/RadioButton';
 import SelectButton from '@/components/common/SelectButton';
 import TextArea from '@/components/common/TextArea';
 import TextInput from '@/components/common/TextInput';
@@ -49,7 +50,13 @@ export default function Home() {
     <br />
     <br />
     <br />
-    <TextArea width={300} maxLength={200} />
+    <TextArea width={80} maxLength={200} />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <RadioButton />
 
   </>;
 }
