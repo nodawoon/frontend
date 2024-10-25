@@ -46,7 +46,7 @@ export default function Home() {
     <br />
     <br />
     <br />
-    <TextInput width={200} />
+    <TextInput width={40} />
     <br />
     <br />
     <br />

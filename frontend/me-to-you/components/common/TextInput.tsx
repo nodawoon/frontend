@@ -12,14 +12,14 @@ function TextInput({ placeholder = "이메일", width }: textInputProps) {
   const [inputValue, setInputValue] = useState("");
 
   return (
-    <div className="relative" style={{ width: `${width}px` }}>
+    <div className="relative" style={{ width: `${width}%` }}>
       <input
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(inputValue !== "")}
-        style={{ width: `${width}px` }}
+        style={{ width: `${width}%` }}
         className={`border border-gray p-2 rounded-md outline-none focus:ring-1 focus:ring-primary transition-all z-10`}
       />
       <label
