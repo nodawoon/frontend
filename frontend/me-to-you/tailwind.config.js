@@ -16,6 +16,7 @@ module.exports = {
       "black": "#000",
       "primary": "#5498FF",
       "primary-active": "#196FF0",
+      "sub-sky": "#C4E1F6",
     },
     screens: {
       mobile: "320px",
@@ -30,7 +31,10 @@ module.exports = {
         "bold": ["Pretendard-Bold", "system-ui"],
         "extra-bold": ["Pretendard-ExtraBold", "system-ui"],
       },
+      fontSize: {
+        icon: "25px",
+      },
     },
   },
   plugins: [],
-}
+};
