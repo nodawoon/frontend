@@ -35,6 +35,11 @@ export default function Home() {
     <SelectButton />
     <SelectButton size='lg' />
 
+    <br />
+    <br />
+    <br />
+    <SelectButton size='sm' type='multiple' amount={7} maximum={3} />
+
     <div className='text-center'>
       프로그레스 바
     </div>
