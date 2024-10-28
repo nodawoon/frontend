@@ -33,6 +33,9 @@ module.exports = {
         "bold": ["Pretendard-Bold", "system-ui"],
         "extra-bold": ["Pretendard-ExtraBold", "system-ui"],
       },
+      fontSize: {
+        icon: "25px",
+      },
     },
   },
   plugins: [scrollbarPlugin],
