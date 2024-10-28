@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @font-face {
   font-family: "Pretendard-Light";
   src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff")
@@ -45,8 +44,8 @@
   font-style: normal;
 }
 
-body,
-#root {
+
+body {
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -73,4 +72,15 @@ input[type="radio"] {
 input[type="radio"]:checked {
   border: 1px solid #5498ff;
   background-color: #5498ff;
+}
+
+a:hover, .text-button:hover {
+  color: #777777;
+  cursor: pointer;
+}
+
+@layer utilities {
+  .intro-section-desktop {
+    @apply flex flex-col w-1/2 items-start justify-between bg-white h-screen overflow-hidden p-10;
+  }
 }
