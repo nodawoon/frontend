@@ -1,16 +1,20 @@
 "use client";
 
-import { ReactNode } from "react";
-
 interface CardButtonProps {
   type?: "submit" | undefined;
   className?: string;
   onClick?: () => void;
-  title: ReactNode;
-  text: ReactNode;
+  title: string;
+  text: string;
 }
 
-function CardButton({ type, className, onClick, title, text }: CardButtonProps) {
+const CardButton: React.FC<CardButtonProps> = ({
+  type,
+  className,
+  onClick,
+  title,
+  text,
+}: CardButtonProps) => {
   const combinedClassName =
     "flex flex-col justify-center h-20 w-96 px-3.5 text-base text-black bg-white border border-gray font-bold break-words rounded-lg hover:bg-soft-gray";
 
@@ -27,6 +31,6 @@ function CardButton({ type, className, onClick, title, text }: CardButtonProps) 
       <div className="py-0.5 text-sm font-light">{text}</div>
     </button>
   );
-}
+};
 
 export default CardButton;
