@@ -33,7 +33,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
       <Image
         className="my-auto bg-black rounded-full"
         src={profile}
-        alt=""
+        alt="프로필 이미지"
         width="50"
         height="50"
       />
