@@ -13,13 +13,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className="desktop:flex desktop:items-start max-h-screen">
-        <section className="desktop:w-full max-w-[460px] w-full mx-auto">
+    <html lang="ko" className='h-[100%]'>
+      <body className="h-[100%] desktop:flex overflow-y-hidden">
+
+        <section className="desktop:w-full max-w-[460px] w-full mx-auto h-[100%] overflow-y-scroll scrollbar-none">
           <Header />
           <section>{children}</section>
         </section>
-        <section className={`desktop:intro-section-desktop hidden`}>
+
+        <section className="desktop:intro-section-desktop hidden">
           <div className="h-1/2"></div>
           <Image
             src="/logo.svg"
@@ -37,9 +39,10 @@ export default function RootLayout({
           </div>
           <Image src="/github.svg" alt="깃허브 로고" width="50" height="50" />
           <p className="text-sm font-light text-dark-gray mt-10">
-            Copyright 2024. SSAFY. All rights reserved.
+            Copyright 2024. SSAFY. All rights reserved.
           </p>
         </section>
+
       </body>
     </html>
   );

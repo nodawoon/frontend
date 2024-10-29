@@ -74,6 +74,13 @@ input[type="radio"]:checked {
   background-color: #5498ff;
 }
 
+.truncate-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 a:hover, .text-button:hover {
   color: #777777;
   cursor: pointer;
