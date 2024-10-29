@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface textInputProps {
   placeholder?: string;
   width: number;
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 function TextInput({ placeholder = "이메일", width, disabled = false }: textInputProps) {
@@ -17,7 +17,7 @@ function TextInput({ placeholder = "이메일", width, disabled = false }: textI
       <input
         type="text"
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={e => setInputValue(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(inputValue !== "")}
         style={{ width: `${width}%` }}
@@ -26,9 +26,11 @@ function TextInput({ placeholder = "이메일", width, disabled = false }: textI
       />
       <label
         className={`absolute left-2 px-1 text-sm mt-1 text-gray bg-white transition-all duration-300 ease-in-out pointer-events-none
-          ${isFocused || inputValue
-            ? '-top-2.5 left-2 text-xs text-primary z-20' // 위로 이동
-            : 'top-2 left-2 text-base text-gray-500'}`} // 기본 위치
+          ${
+            isFocused || inputValue
+              ? "-top-2.5 left-2 text-xs text-primary z-20" // 위로 이동
+              : "top-2 left-2 text-base text-gray-500"
+          }`} // 기본 위치
       >
         {placeholder}
       </label>
