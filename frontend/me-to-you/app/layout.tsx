@@ -37,6 +37,7 @@ export default function RootLayout({
           </div>
           <Image src="/github.svg" alt="깃허브 로고" width="50" height="50" />
           <p className="text-sm font-light text-dark-gray mt-10">
+            {/* eslint-disable-next-line no-irregular-whitespace */}
             Copyright 2024. SSAFY. All rights reserved.
           </p>
         </section>

@@ -49,7 +49,7 @@ const Header: React.FC = () => {
     return window.removeEventListener("scroll", () => {
       setScrollY(window.scrollY);
     });
-  }, [window.scrollY]);
+  }, [scrollY]);
 
   if (pathname === "/signup" || pathname === "/login") return <header></header>;
 
