@@ -12,18 +12,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const introSectionStyle = "flex flex-col w-1/2 items-start justify-between p-10";
-
   return (
     <html lang="ko">
       <body className="desktop:flex desktop:items-start">
-        <section className="desktop:w-1/2 max-w-[460px] w-full mx-auto">
+        <section className="desktop:w-full max-w-[460px] w-full mx-auto">
           <Header />
           <section>{children}</section>
         </section>
-        <section
-          className={`desktop:${introSectionStyle} hidden w-full bg-white h-screen overflow-hidden`}
-        >
+        <section className={`desktop:intro-section-desktop hidden`}>
           <div className="h-1/2"></div>
           <Image
             src="/logo.svg"
