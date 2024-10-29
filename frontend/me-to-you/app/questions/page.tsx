@@ -1,4 +1,4 @@
-import SurveyCard from '@/components/questions/SurveyCard';
+import SurveyCard from '../../components/questions/SurveyCard';
 import Image from 'next/image';
 import React from 'react'
 
