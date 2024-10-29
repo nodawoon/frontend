@@ -21,7 +21,7 @@ function TextInput({ placeholder = "이메일", width, disabled = false }: textI
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(inputValue !== "")}
         style={{ width: `${width}%` }}
-        className={`border border-gray p-2 rounded-md outline-none focus:ring-1 focus:ring-primary transition-all z-10`}
+        className={`border border-gray p-2 rounded-md outline-none focus:ring-1 focus:ring-primary transition-all z-10 mt-2`}
         disabled={disabled}
       />
       <label

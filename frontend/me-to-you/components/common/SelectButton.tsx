@@ -26,7 +26,7 @@ const SelectButton = ({
   return (
     <button
       onClick={onClick}
-      className={`w-full font-bold border rounded-lg ${isSelected
+      className={`w-full font-bold border rounded-lg mt-2 ${isSelected
         ? "border-2 border-primary bg-sub-sky text-black"
         : "border-1 border-gray"} ${Size_Info[size]}`}
       disabled={disabled}

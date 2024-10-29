@@ -28,7 +28,7 @@ function TextArea({ width, maxLength, placeholder = `${maxLength}자 이내로 �
         ref={textareaRef}
         value={inputValue}
         onChange={handleInputChange}
-        className='resize-none border-2 border-gray rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray'
+        className='resize-none border-2 border-gray rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray mt-2'
         placeholder={placeholder}
         style={{
           width: '100%',

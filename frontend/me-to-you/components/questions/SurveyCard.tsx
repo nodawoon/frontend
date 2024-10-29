@@ -16,13 +16,13 @@ const SurveyCard = () => {
   };
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg mr-4">
+    <div className="p-2 rounded-lg w-[85%] ml-auto mr-auto">
       {survey.questions.map((question) => (
-        <div key={question.id} className="mb-6 border border-black p-4 rounded-2xl">
-          <div className="flex justify-between" onClick={() => handleClickOpen(question.id.toString())}>
-            <p className={`text-lg font-semibold mb-2 ${openQuestionId === question.id.toString() ? "" : "truncate-text"}`}>{question.id === 10 ? `${question.question}` : `${userName + question.question}`}</p>
+        <div key={question.id} className="mb-6 border border-none p-4 rounded-2xl bg-white">
+          <div className="flex justify-between items-center" onClick={() => handleClickOpen(question.id.toString())}>
+            <p className={`text-lg font-semibold ${openQuestionId === question.id.toString() ? "" : "truncate-text"}`}>{question.emoji} {!question.question.startsWith("님") ? `${question.question}` : `${userName + question.question}`}</p>
             <span
-              className="material-symbols-rounded text-icon cursor-pointer"
+              className="material-symbols-rounded text-icon cursor-pointer text-primary"
             >
               {openQuestionId === question.id.toString() ? "keyboard_arrow_up" : "keyboard_arrow_down"}
             </span>
@@ -52,7 +52,7 @@ const SurveyCard = () => {
                   }`}
                 style={{ transformOrigin: 'top', overflow: 'hidden' }}
               >
-                <div className="grid grid-flow-cols desktop:grid-cols-7 tablet:grid-cols-5 mobile:grid-cols-3 gap-2">
+                <div className="grid grid-flow-cols grid-cols-3 gap-2">
                   {question.options?.map((option, idx) => (
                     <SelectButton
                       size="sm"
