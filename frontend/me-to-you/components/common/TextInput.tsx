@@ -5,9 +5,10 @@ import React, { useState } from 'react';
 interface textInputProps {
   placeholder?: string;
   width: number;
+  disabled?: boolean
 }
 
-function TextInput({ placeholder = "이메일", width }: textInputProps) {
+function TextInput({ placeholder = "이메일", width, disabled = false }: textInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -21,6 +22,7 @@ function TextInput({ placeholder = "이메일", width }: textInputProps) {
         onBlur={() => setIsFocused(inputValue !== "")}
         style={{ width: `${width}%` }}
         className={`border border-gray p-2 rounded-md outline-none focus:ring-1 focus:ring-primary transition-all z-10`}
+        disabled={disabled}
       />
       <label
         className={`absolute left-2 px-1 text-sm mt-1 text-gray bg-white transition-all duration-300 ease-in-out pointer-events-none

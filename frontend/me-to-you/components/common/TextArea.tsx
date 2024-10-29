@@ -4,9 +4,10 @@ interface textAreaProps {
   placeholder?: string;
   width: number;
   maxLength: number;
+  disabled?: boolean;
 }
 
-function TextArea({ width, maxLength, placeholder = `${maxLength}자 이내로 작성해주세요.` }: textAreaProps) {
+function TextArea({ width, maxLength, placeholder = `${maxLength}자 이내로 작성해주세요.`, disabled = false }: textAreaProps) {
   const [inputValue, setInputValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -34,6 +35,7 @@ function TextArea({ width, maxLength, placeholder = `${maxLength}자 이내로 �
           paddingBottom: '30px',
         }}
         maxLength={maxLength}
+        disabled={disabled}
       />
       <div className="absolute right-4 bottom-[9px] w-[90%] text-xs z-10 bg-white text-right px-2 py-1 rounded-sm">
         {inputValue.length} / {maxLength}
