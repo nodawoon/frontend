@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="desktop:flex desktop:items-start">
+      <body className="desktop:flex desktop:items-start max-h-screen">
         <section className="desktop:w-full max-w-[460px] w-full mx-auto">
           <Header />
           <section>{children}</section>
