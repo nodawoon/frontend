@@ -44,8 +44,8 @@
   font-style: normal;
 }
 
-body,
-#root {
+
+body {
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -79,4 +79,15 @@ input[type="radio"]:checked {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+a:hover, .text-button:hover {
+  color: #777777;
+  cursor: pointer;
+}
+
+@layer utilities {
+  .intro-section-desktop {
+    @apply flex flex-col w-1/2 items-start justify-between bg-white h-screen overflow-hidden p-10;
+  }
 }
