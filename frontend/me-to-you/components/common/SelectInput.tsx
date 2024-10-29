@@ -34,11 +34,11 @@ const SelectInput: React.FC<SelectBoxProps> = ({ options, selectedOption, setSel
         )}
       </div>
       {isOpen && (
-        <ul className="absolute w-full bg-white border border-t-0 border-gray rounded-b-md box-border">
+        <ul className="absolute w-full max-h-40 overflow-y-auto bg-white border border-t-0 border-gray rounded-b-md box-border scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
           {options.map((option, index) => (
             <li
               key={option}
-              className={`p-2 flex items-center ${index !== options.length - 1 ? "border-b" : ""} border-gray
+              className={`h-10 p-2 flex items-center ${index !== options.length - 1 ? "border-b" : ""} border-gray
                 ${selectedOption === option ? "text-black" : "text-dark-gray"} hover:bg-sub-sky`}
               onClick={() => {
                 setSelectedOption(option);
