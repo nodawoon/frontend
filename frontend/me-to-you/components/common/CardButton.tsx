@@ -35,13 +35,13 @@ const CardButton: React.FC<CardButtonProps> = ({
   }
 
   const errorMessage = () => {
-    if (page !== 3) return;
+    if (page === 1 || page === 2) return;
     alert("아직 준비중입니다.");
   };
 
   return (
     <Link
-      href={page !== 3 ? url : ""}
+      href={page === 1 || page === 2 ? url : ""}
       className={`${combinedClassName} ${className}`}
       onClick={errorMessage}
     >
