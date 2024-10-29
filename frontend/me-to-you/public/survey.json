@@ -2,6 +2,7 @@
   "questions": [
     {
       "id": 1,
+      "emoji": "😊",
       "question": "님의 첫 인상은 어땠나요? (객관식 + 이유 서술형)",
       "type": "multiple_choice_with_text",
       "options": [
@@ -14,6 +15,7 @@
     },
     {
       "id": 2,
+      "emoji": "🥗",
       "question": "다음 키워드 중 OOO님과 잘 어울리는 키워드를 3개 이상 골라주세요. (키워드 선택)",
       "type": "multi_select",
       "options": [
@@ -59,42 +61,50 @@
     },
     {
       "id": 3,
+      "emoji": "😎",
       "question": "님과 닮은 캐릭터나 연예인이 있나요? 없다면 떠오르는 이미지를 써주세요.",
       "type": "short_answer"
     },
     {
       "id": 4,
+      "emoji": "🎈",
       "question": "님에게 지어주고 싶은 별명은?",
       "type": "short_answer"
     },
     {
       "id": 5,
+      "emoji": "😆",
       "question": "님과 같이 있을 수 있는 시간",
       "type": "multiple_choice",
       "options": ["1주일 이상", "하루 종일", "3시간 이하", "1분 1초도 함께 있고 싶지 않다"]
     },
     {
       "id": 6,
+      "emoji": "📝",
       "question": "님을 떠올리면 생각나는 단어 아무거나 쓰세요.",
       "type": "short_answer"
     },
     {
       "id": 7,
+      "emoji": "🥰",
       "question": "님과 같이 하고 싶은 것은?",
       "type": "long_answer"
     },
     {
       "id": 8,
+      "emoji": "💖",
       "question": "님에게 고마웠던 순간은?",
       "type": "long_answer"
     },
     {
       "id": 9,
+      "emoji": "✨",
       "question": "님과의 경험 중 가장 기억에 남는 일은 무엇인가요?",
       "type": "long_answer"
     },
     {
       "id": 10,
+      "emoji": "🎨",
       "question": "마지막으로 나에게 한 마디 부탁해! (자유롭게 하고 싶은 말)",
       "type": "long_answer"
     }
