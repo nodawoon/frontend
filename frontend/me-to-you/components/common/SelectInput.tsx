@@ -15,7 +15,7 @@ const SelectInput: React.FC<SelectBoxProps> = ({ options, selectedOption, setSel
   };
 
   return (
-    <div className="relative w-full bg-white z-20">
+    <div className="relative w-full bg-white z-20 h-10">
       <div
         className={`p-2 flex justify-between items-center border border-gray ${isOpen ? "rounded-t-md rounded-b-none" : "rounded-md"}`}
       >
