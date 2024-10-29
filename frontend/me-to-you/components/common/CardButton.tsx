@@ -4,7 +4,6 @@ import Link from "next/link";
 
 interface CardButtonProps {
   className?: string;
-  onClick?: void;
   page: number;
   title: string;
   text: string;
@@ -12,7 +11,6 @@ interface CardButtonProps {
 
 const CardButton: React.FC<CardButtonProps> = ({
   className,
-  onClick,
   page,
   title,
   text,
