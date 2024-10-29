@@ -16,7 +16,7 @@ const Page = () => {
           </div>
           <div className='ml-2 mr-2'>
             <div className='border-4 border-light-gray rounded-full bg-white flex p-2 w-[50px] h-[50px]'>
-              <Image src="/share/URL.svg" alt="url" width={30} height={12} />
+              <Image src="/share/url.svg" alt="url" width={30} height={12} />
             </div>
             <p className='text-sm'>링크복사</p>
           </div>
