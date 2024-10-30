@@ -3,7 +3,7 @@
     {
       "id": 1,
       "emoji": "😊",
-      "question": "님의 첫 인상은 어땠나요? (객관식 + 이유 서술형)",
+      "question": "님의 첫 인상은 어땠나요?",
       "type": "multiple_choice_with_text",
       "options": [
         "친근하고 다정해 보였다",
@@ -16,7 +16,7 @@
     {
       "id": 2,
       "emoji": "🥗",
-      "question": "다음 키워드 중 님과 잘 어울리는 키워드를 3개 이상 골라주세요. (키워드 선택)",
+      "question": "다음 키워드 중 님과 잘 어울리는 키워드를 3개 이상 골라주세요.",
       "type": "multi_select",
       "options": [
         "활발한",
@@ -74,26 +74,26 @@
     {
       "id": 5,
       "emoji": "😆",
-      "question": "님과 같이 있을 수 있는 시간은 몇시간?",
+      "question": "님과 같이 얼마나 함께 있을 수 있나요?",
       "type": "multiple_choice",
       "options": ["1주일 이상", "하루 종일", "3시간 이하", "1분 1초도 함께 있고 싶지 않다"]
     },
     {
       "id": 6,
       "emoji": "📝",
-      "question": "님을 떠올리면 생각나는 단어 아무거나 쓰세요.",
+      "question": "님을 떠올리면 생각나는 단어를 자유롭게 써주세요.",
       "type": "short_answer"
     },
     {
       "id": 7,
       "emoji": "🥰",
-      "question": "님과 같이 하고 싶은 것은?",
+      "question": "님과 같이 하고 싶은 것이 있나요?",
       "type": "long_answer"
     },
     {
       "id": 8,
       "emoji": "💖",
-      "question": "님에게 고마웠던 순간은?",
+      "question": "님은 10년 뒤에 어떤 모습일 것 같나요?",
       "type": "long_answer"
     },
     {
