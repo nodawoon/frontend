@@ -84,7 +84,7 @@ const SurveyCard = () => {
               style={{ transformOrigin: "top", overflow: "hidden" }}
             >
               <div className="">
-                <TextInput width={100} placeholder="10자 이내로 입력하세요." disabled />
+                <TextInput placeholder="10자 이내로 입력하세요." disabled />
               </div>
             </div>
           )}
