@@ -27,9 +27,11 @@ const SurveyCard = () => {
               className={`text-lg font-semibold ${openQuestionId === question.id.toString() ? "" : "truncate-text"}`}
             >
               {question.emoji}{" "}
-              {!question.question.startsWith("님")
-                ? `${question.question}`
-                : `${userName + question.question}`}
+              {question.question.startsWith("님")
+                ? `${userName + question.question}`
+                : question.question.startsWith("다음")
+                  ? `${question.question.slice(0, 9) + userName + question.question.slice(9)}`
+                  : `${question.question}`}
             </p>
             <span className="material-symbols-rounded text-icon cursor-pointer text-primary">
               {openQuestionId === question.id.toString()
