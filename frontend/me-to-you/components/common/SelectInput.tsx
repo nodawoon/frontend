@@ -15,9 +15,11 @@ const SelectInput: React.FC<SelectBoxProps> = ({ options, selectedOption, setSel
   };
 
   return (
-    <div className="w-full bg-white rounded-[10px] border border-gray text-dark-gray">
-      <div className={`flex justify-between items-center p-3 ${isOpen && "border-b border-gray"}`}>
-        <p className="text-xl">{selectedOption ? selectedOption : "선택"}</p>
+    <div className="relative w-full bg-white z-20 h-10">
+      <div
+        className={`p-2 flex justify-between items-center border border-gray ${isOpen ? "rounded-t-md rounded-b-none" : "rounded-md"}`}
+      >
+        <p>{selectedOption ? selectedOption : "선택"}</p>
         {isOpen ? (
           <span
             className="material-symbols-rounded text-primary text-icon"
@@ -31,19 +33,23 @@ const SelectInput: React.FC<SelectBoxProps> = ({ options, selectedOption, setSel
           </span>
         )}
       </div>
-      {isOpen &&
-        options.map((option, idx) => (
-          <div
-            key={idx}
-            className="p-3 border-b border-gray hover:bg-sub-sky"
-            onClick={() => {
-              setSelectedOption(option);
-              handleClickOpen();
-            }}
-          >
-            <span className="text-xl">{option}</span>
-          </div>
-        ))}
+      {isOpen && (
+        <ul className="absolute w-full max-h-40 overflow-y-auto bg-white border border-t-0 border-gray rounded-b-md box-border scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+          {options.map((option, index) => (
+            <li
+              key={option}
+              className={`h-10 p-2 flex items-center ${index !== options.length - 1 ? "border-b" : ""} border-gray
+                ${selectedOption === option ? "text-black" : "text-dark-gray"} hover:bg-sub-sky`}
+              onClick={() => {
+                setSelectedOption(option);
+                handleClickOpen();
+              }}
+            >
+              {option}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
