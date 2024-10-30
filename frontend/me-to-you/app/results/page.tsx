@@ -15,10 +15,10 @@ const Page: React.FC = () => {
 
   // 기본 6개, show 활성화 시 전부 보여주기
   const nextPage = (e: number): undefined => {
-    if (e === 1) {
-      router.push("/results/profiles");
-    } else if (e === 2) {
-      router.push("/results/questions");
+    if (e === -1) {
+      router.push("/results/respondents");
+    } else {
+      router.push("/results/questions/" + e);
     }
   };
 
@@ -29,7 +29,7 @@ const Page: React.FC = () => {
         key={index}
         className="flex rounded-md my-2 w-full h-16 mx-auto bg-white pl-4 pr-6 hover:bg-gray"
         onClick={() => {
-          nextPage(2);
+          nextPage(e.id);
         }}
       >
         <p className="flex self-center truncate text-[18px]">
@@ -62,7 +62,7 @@ const Page: React.FC = () => {
         </div>
         <Button
           onClick={() => {
-            nextPage(1);
+            nextPage(-1);
           }}
           size="md"
           className="mx-auto my-5"
