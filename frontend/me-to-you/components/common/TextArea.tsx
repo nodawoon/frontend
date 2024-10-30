@@ -1,10 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface textAreaProps {
   placeholder?: string;
   width: number;
   maxLength: number;
   disabled?: boolean;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // 이벤트 객체를 받도록 수정
 }
 
 function TextArea({
@@ -12,12 +14,13 @@ function TextArea({
   maxLength,
   placeholder = `${maxLength}자 이내로 작성해주세요.`,
   disabled = false,
+  value,
+  onChange,
 }: textAreaProps) {
-  const [inputValue, setInputValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
+    onChange(e); // 부모 컴포넌트로 이벤트 객체 전달
   };
 
   // 줄 넘어갈 때마다 스크롤 자동으로 밑으로 보내는 함수
@@ -26,13 +29,13 @@ function TextArea({
       textareaRef.current.scrollTop =
         textareaRef.current.scrollHeight - textareaRef.current.clientHeight;
     }
-  }, [inputValue]);
+  }, [value]);
 
   return (
     <div className="relative" style={{ width: `${width}%` }}>
       <textarea
         ref={textareaRef}
-        value={inputValue}
+        value={value} // 부모 컴포넌트의 상태 값 사용
         onChange={handleInputChange}
         className="resize-none border-2 border-gray rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray mt-2"
         placeholder={placeholder}
@@ -44,7 +47,7 @@ function TextArea({
         disabled={disabled}
       />
       <div className="absolute right-4 bottom-[9px] w-[90%] text-xs z-10 bg-white text-right px-2 py-1 rounded-sm">
-        {inputValue.length} / {maxLength}
+        {value.length} / {maxLength}
       </div>
     </div>
   );

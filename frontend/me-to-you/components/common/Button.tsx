@@ -9,11 +9,27 @@ interface ButtonProps {
   className?: string;
   onClick?: () => void;
   children: ReactNode;
+  option?: string;
 }
 
-function Button({ type, size, className, onClick, children }: ButtonProps) {
-  let combinedClassName =
-    "text-white bg-primary font-bold break-words rounded-xl hover:bg-primary-active ";
+function Button({ type, size, className, onClick, children, option = "primary" }: ButtonProps) {
+  let combinedClassName = "";
+
+  switch (option) {
+    case "primary": {
+      combinedClassName +=
+        "text-white bg-primary hover:bg-primary-active font-bold break-words rounded-xl ";
+      break;
+    }
+    case "secondary": {
+      combinedClassName +=
+        "text-primary bg-white border border-primary hover:bg-primary hover:text-white font-bold break-words rounded-xl ";
+      break;
+    }
+    default: {
+      break;
+    }
+  }
 
   switch (size) {
     case "sm": {
@@ -29,6 +45,7 @@ function Button({ type, size, className, onClick, children }: ButtonProps) {
       break;
     }
   }
+
   return (
     <button
       type={type ? type : "button"}
