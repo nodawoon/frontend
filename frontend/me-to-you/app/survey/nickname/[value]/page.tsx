@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import Button from "../../../../components/common/Button";
 import TextInput from "../../../../components/common/TextInput";
 import Link from "next/link";
@@ -8,6 +9,7 @@ import React, { useEffect } from "react";
 const Page = () => {
   const [validation, setValidation] = React.useState("");
   const [nickname, setNickname] = React.useState("");
+  const param = useParams();
 
   const validationNickname = (nickname: string) => {
     if (nickname.length > 8 || nickname.length < 2)
@@ -39,7 +41,7 @@ const Page = () => {
           />
         </div>
 
-        <Link className="mb-auto mt-auto text-center" href={"nickname"}>
+        <Link className="mb-auto mt-auto text-center" href={`../responses/${param.value}`}>
           <Button size="lg">설문 입력하러 가기</Button>
         </Link>
       </div>
