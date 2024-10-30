@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     colors: {
       "white": "#fff",
-      "light-gray": "#EEEEEE",
+      "light-gray": "#F1F1F1",
       "soft-gray": "#DDDDDD",
       "gray": "#BBBBBB",
       "medium-gray": "#777777",
@@ -19,6 +19,9 @@ module.exports = {
       "primary": "#5498FF",
       "primary-active": "#196FF0",
       "sub-sky": "#C4E1F6",
+      "green": "#91CEB3",
+      "pink": "#F1B1AD",
+      "yellow": "#FFF1BA",
     },
     screens: {
       mobile: "320px",
