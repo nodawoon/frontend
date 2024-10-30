@@ -39,6 +39,32 @@ module.exports = {
       fontSize: {
         icon: "25px",
       },
+      keyframes: {
+        slideRight: {
+          "0%": {
+            transform: "scaleX(0)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "scaleX(1)",
+            opacity: "1",
+          },
+        },
+        fadeIn: {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(-20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
+      },
+      animation: {
+        "slide-right": "slideRight 1s ease-out forwards",
+        "fade-in": "fadeIn 0.5s ease-out forwards",
+      },
     },
   },
   plugins: [scrollbarPlugin],

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/common/Button";
 import survey from "../../public/survey.json";
 import Image from "next/image";
+import StatisticsCard from "@/components/results/StatisticsCard";
 
 const Page: React.FC = () => {
   const profileList: number[] = [1, 2, 3, 4, 5, 6];
@@ -75,6 +76,11 @@ const Page: React.FC = () => {
           <p className="text-[22px] bold my-1">{name}님에 대해 알아보세요!</p>
           {surveyList}
         </div>
+      </div>
+      <div className="bg-white w-full flex flex-col gap-7 mt-8 mb-14">
+        <StatisticsCard type="first" />
+        <StatisticsCard type="keyword" />
+        <StatisticsCard type="time" />
       </div>
     </div>
   );
