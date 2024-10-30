@@ -1,7 +1,7 @@
 "use client";
 
-import Button from "@/components/common/Button";
-import TextInput from "@/components/common/TextInput";
+import Button from "../../../components/common/Button";
+import TextInput from "../../../components/common/TextInput";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
