@@ -1,19 +1,22 @@
-FROM node:20.15-alpine AS build
+FROM node:20 AS build
 
 WORKDIR /app
 
-COPY package.json ./
+COPY frontend/package*.json ./
 
-RUN npm install --force
+RUN npm install
 
-COPY . .
+COPY frontend .
 
 RUN npm run build
 
-RUN npm run start
+FROM node:20-alpine
 
-FROM nginx:alpine
+WORKDIR /app
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/.next /app/.next
+COPY --from=build /app/node_modules /app/node_modules
+COPY --from=build /app/public /app/public
+COPY --from=build /app/package.json /app/package.json
 
-COPY --from=build /app/dist /usr/share/nginx/html
+CMD ["npm", "run", "start"]
