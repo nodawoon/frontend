@@ -18,7 +18,7 @@ function Button({ type, size, className, onClick, children, option = "primary" }
   switch (option) {
     case "primary": {
       combinedClassName +=
-        "text-white bg-primary hover:bg-primary-active font-bold break-words rounded-xl ";
+        "text-white bg-primary border border-primary hover:bg-primary-active font-bold break-words rounded-xl ";
       break;
     }
     case "secondary": {

@@ -64,12 +64,7 @@ const Page = () => {
               <div key={question.id}>
                 {question.question.startsWith("님")
                   ? question.emoji + userName + question.question
-                  : question.question.startsWith("다음")
-                    ? question.emoji +
-                      question.question.slice(0, 9) +
-                      userName +
-                      question.question.slice(9)
-                    : question.emoji + question.question}
+                  : question.emoji + question.question}
               </div>
             ))}
         </div>
@@ -138,7 +133,7 @@ const Page = () => {
         )}
         {questionNumber < 10 ? (
           <Button
-            size={`${questionNumber > 1 ? "md" : "lg"}`}
+            size="md"
             className={`w-${questionNumber > 1 ? "[45%]" : "full"} ml-auto mr-auto`}
             onClick={() => handlerNextQuestion()}
           >
