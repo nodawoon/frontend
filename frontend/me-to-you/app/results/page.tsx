@@ -7,10 +7,10 @@ import survey from "../../public/survey.json";
 import Image from "next/image";
 
 const Page: React.FC = () => {
-  const profileList: number[] = [1, 2, 3, 4, 5, 6];
+  const profileList: number[] = [1, 2, 3, 4, 5];
   const surveyList: ReactNode[] = [];
   const name: string = "김싸피";
-  const combinedClassName: string = "h-auto border border-gray rounded-xl p-1 hover:bg-light-gray";
+  const combinedClassName: string = "h-auto border border-gray rounded-xl p-1 max-w-[30%] grow";
   const router = useRouter();
 
   // 기본 6개, show 활성화 시 전부 보여주기
@@ -42,9 +42,16 @@ const Page: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-screen">
-      <div className="flex flex-col items-center justify-center w-[90%]">
+      <div className="flex flex-col w-[90%]">
         <p className="text-[23px] mt-10 mb-5 w-full">내 질문에 응답한 사람들</p>
-        <div className="flex flex-wrap justify-between gap-y-3">
+        <div className="relative flex flex-wrap gap-3">
+          {profileList.length === 0 ? (
+            <div className="text-gray mb-5">아직 응답자가 없어요...</div>
+          ) : profileList.length < 4 ? (
+            <div className="absolute top-[10%] bg-gradient-to-t from-white w-full h-[100px]"></div>
+          ) : (
+            <div className="absolute bottom-[-10px] bg-gradient-to-t from-white w-full h-[130px]"></div>
+          )}
           {profileList.map((e, index) => {
             if (index < 6)
               return (
@@ -52,23 +59,25 @@ const Page: React.FC = () => {
                   key={index}
                   src="/character.svg"
                   alt="로고이미지"
-                  width="110"
-                  height="110"
+                  width="100"
+                  height="100"
                   className={combinedClassName}
                   priority
                 />
               );
           })}
         </div>
-        <Button
-          onClick={() => {
-            nextPage(-1);
-          }}
-          size="md"
-          className="mx-auto my-5"
-        >
-          더보기
-        </Button>
+        {profileList.length !== 0 && (
+          <Button
+            onClick={() => {
+              nextPage(-1);
+            }}
+            size="md"
+            className="mx-auto my-5"
+          >
+            더보기
+          </Button>
+        )}
       </div>
       <div className="bg-light-gray w-full py-5">
         <div className="flex flex-col w-[85%] mx-auto">
