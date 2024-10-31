@@ -6,15 +6,22 @@ import survey from "@/public/survey.json";
 import SelectButton from "@/components/common/SelectButton";
 import TextInput from "@/components/common/TextInput";
 import TextArea from "@/components/common/TextArea";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const userName = "김싸피";
 
 const Page = () => {
   const [questionNumber, setQuestionNumber] = useState<number>(1);
   const [answers, setAnswers] = useState<{ [key: number]: string | string[] }>({});
+  const params = useSearchParams();
+  const nickname = params.get("nickname");
+  const router = useRouter();
 
   const handlerSubmit = () => {
     console.info(answers);
+    console.info(nickname);
+    router.push("../responses/result");
   };
 
   const handlerSingleChoiceAnswer = (questionId: number, option: string) => {
