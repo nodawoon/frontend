@@ -41,6 +41,8 @@ const CardButton: React.FC<CardButtonProps> = ({
       icon: "info",
       title: "챗봇 개발 중!",
       text: "조금만 기다려주세요..!",
+      confirmButtonColor: "#5498FF",
+      confirmButtonText: "닫기",
     });
   };
 
