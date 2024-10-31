@@ -25,21 +25,18 @@ const Page: React.FC = () => {
         <div className="relative flex flex-wrap gap-3">
           {profileList.map((e, index) => {
             return (
-              <>
-                <div className="flex flex-col grow max-w-[30%]">
-                  <Image
-                    key={index}
-                    src="/character.svg"
-                    alt="로고이미지"
-                    width="100"
-                    height="100"
-                    className={combinedClassName}
-                    onClick={() => router.push("respondents/" + e.key)}
-                    priority
-                  />
-                  <span className="text-center w-full">{e.value}</span>
-                </div>
-              </>
+              <div key={index} className="flex flex-col grow max-w-[30%]">
+                <Image
+                  src="/character.svg"
+                  alt="로고이미지"
+                  width="100"
+                  height="100"
+                  className={combinedClassName}
+                  onClick={() => router.push("respondents/" + e.key)}
+                  priority
+                />
+                <span className="text-center w-full">{e.value}</span>
+              </div>
             );
           })}
         </div>

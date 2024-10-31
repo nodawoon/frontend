@@ -33,7 +33,7 @@ const Page: React.FC = () => {
         }}
       >
         <p className="flex self-center truncate text-[18px]">
-          <span className="mr-3">😊</span>
+          <span className="mr-3">{e.emoji}</span>
           <span className="truncate">{e.question}</span>
         </p>
       </div>
