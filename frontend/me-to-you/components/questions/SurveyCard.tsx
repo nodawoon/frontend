@@ -27,9 +27,11 @@ const SurveyCard = () => {
               className={`text-lg font-semibold ${openQuestionId === question.id.toString() ? "" : "truncate-text"}`}
             >
               {question.emoji}{" "}
-              {!question.question.startsWith("님")
-                ? `${question.question}`
-                : `${userName + question.question}`}
+              {question.question.startsWith("님")
+                ? `${userName + question.question}`
+                : question.question.startsWith("다음")
+                  ? `${question.question.slice(0, 9) + userName + question.question.slice(9)}`
+                  : `${question.question}`}
             </p>
             <span className="material-symbols-rounded text-icon cursor-pointer text-primary">
               {openQuestionId === question.id.toString()
@@ -49,8 +51,13 @@ const SurveyCard = () => {
             >
               <div className="space-y-2 mt-2">
                 {question.options?.map((option, idx) => (
-                  <SelectButton size="sm" key={idx}>
-                    {option}
+                  <SelectButton
+                    size="sm"
+                    key={idx}
+                    disabled
+                    className="w-full text-left font-light border-none"
+                  >
+                    {idx + 1}. {option}
                   </SelectButton>
                 ))}
               </div>
@@ -65,9 +72,9 @@ const SurveyCard = () => {
               }`}
               style={{ transformOrigin: "top", overflow: "hidden" }}
             >
-              <div className="grid grid-flow-cols grid-cols-3 gap-2">
+              <div className="flex flex-wrap gap-2">
                 {question.options?.map((option, idx) => (
-                  <SelectButton size="sm" key={idx} disabled>
+                  <SelectButton size="sm" key={idx} disabled className="font-light border-none">
                     {option}
                   </SelectButton>
                 ))}
