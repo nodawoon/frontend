@@ -55,7 +55,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`w-full ${isMenuOpen ? "absolute h-screen bg-white max-w-[460px]" : "relative h-14 bg-auto"}`}
+      className={`w-full ${isMenuOpen ? "absolute h-screen bg-white max-w-[460px] z-10" : "relative h-14 bg-auto"}`}
     >
       <div className="flex justify-between items-center p-4">
         {!(pathname === "/responses/invitation") && (
