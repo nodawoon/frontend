@@ -5,7 +5,7 @@ interface textAreaProps {
   width: number;
   maxLength: number;
   disabled?: boolean;
-  value: string;
+  value?: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // 이벤트 객체를 받도록 수정
 }
 
@@ -47,7 +47,7 @@ function TextArea({
         disabled={disabled}
       />
       <div className="absolute right-4 bottom-[9px] w-[90%] text-xs z-10 bg-white text-right px-2 py-1 rounded-sm">
-        {value.length} / {maxLength}
+        {value ? value.length / maxLength : ""}
       </div>
     </div>
   );
