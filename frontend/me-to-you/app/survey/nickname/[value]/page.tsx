@@ -41,7 +41,10 @@ const Page = () => {
           />
         </div>
 
-        <Link className="mb-auto mt-auto text-center" href={`../responses/${param.value}`}>
+        <Link
+          className="mb-auto mt-auto text-center"
+          href={{ pathname: `../responses/${param.value}`, query: { nickname: nickname } }}
+        >
           <Button size="lg">설문 입력하러 가기</Button>
         </Link>
       </div>
