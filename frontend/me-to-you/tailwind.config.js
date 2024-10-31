@@ -40,6 +40,16 @@ module.exports = {
         icon: "25px",
       },
       keyframes: {
+        slideUp: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(100px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
         slideRight: {
           "0%": {
             transform: "scaleX(0)",
@@ -64,6 +74,7 @@ module.exports = {
       animation: {
         "slide-right": "slideRight 1s ease-out forwards",
         "fade-in": "fadeIn 0.5s ease-out forwards",
+        "slide-up": "slideUp 0.8s ease-out forwards",
       },
     },
   },
