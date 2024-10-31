@@ -3,12 +3,16 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setIsSideBarState } from "@/store/questionSlice";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactUsOpen, setIsContactUsOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState("");
   const [scrollY, setScrollY] = useState(0);
+  const sideBarState = useAppSelector(state => state.question.isSideBarOpen);
+  const dispatch = useAppDispatch();
 
   const pathname = usePathname();
 
@@ -71,6 +75,7 @@ const Header: React.FC = () => {
               setIsContactUsOpen(false);
             } else {
               setIsMenuOpen(!isMenuOpen);
+              dispatch(setIsSideBarState(!sideBarState));
             }
           }}
         >
@@ -79,7 +84,12 @@ const Header: React.FC = () => {
       </div>
       {isMenuOpen && (
         <Suspense fallback={<div>Loading...</div>}>
-          <Sidebar isContactUsOpen={isContactUsOpen} setIsContactUsOpen={setIsContactUsOpen} />
+          <Sidebar
+            isContactUsOpen={isContactUsOpen}
+            setIsContactUsOpen={setIsContactUsOpen}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+          />
         </Suspense>
       )}
     </header>

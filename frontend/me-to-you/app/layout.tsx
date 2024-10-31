@@ -1,7 +1,7 @@
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Image from "next/image";
-import ReduxProvider from "./reduxProvider";
+import ReduxProvider from "./ReduxProvider";
 
 export const metadata: { description: string; title: string } = {
   title: "너에게 난",
