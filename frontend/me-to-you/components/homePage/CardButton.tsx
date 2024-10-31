@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 interface CardButtonProps {
   className?: string;
@@ -36,7 +37,13 @@ const CardButton: React.FC<CardButtonProps> = ({
 
   const errorMessage = () => {
     if (page === 1 || page === 2) return;
-    alert("아직 준비중입니다.");
+    Swal.fire({
+      icon: "info",
+      title: "챗봇 개발 중!",
+      text: "조금만 기다려주세요..!",
+      confirmButtonColor: "#5498FF",
+      confirmButtonText: "닫기",
+    });
   };
 
   return (

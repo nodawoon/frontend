@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setIsSideBarState } from "@/store/questionSlice";
+import { PAGE_CONFIG, PageConfig } from "@/constants/pageConfig";
+
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,69 +18,66 @@ const Header: React.FC = () => {
 
   const pathname = usePathname();
 
-  useEffect(() => {
-    const baseRoute = pathname.split("/")[1];
-    setPageTitle(
-      isContactUsOpen
-        ? "개발자 정보"
-        : isMenuOpen
-          ? "설정"
-          : baseRoute === ""
-            ? "너에게 난"
-            : baseRoute === "login"
-              ? "로그인"
-              : baseRoute === "signup"
-                ? "회원가입"
-                : baseRoute === "profile"
-                  ? "프로필"
-                  : baseRoute === "questions"
-                    ? "설문 생성"
-                    : baseRoute === "results"
-                      ? "결과 확인"
-                      : baseRoute === "responses"
-                        ? "설문 응답"
-                        : baseRoute === "chatbot"
-                          ? "챗봇 생성"
-                          : "404 | Page Not Found"
+  const getPageConfig = (path: string): PageConfig => {
+    if (PAGE_CONFIG[path]) return PAGE_CONFIG[path];
+
+    const matchingPath = Object.keys(PAGE_CONFIG).find(
+      configPath => path.startsWith(configPath) && configPath !== "/"
     );
-  }, [pathname, isMenuOpen, isContactUsOpen]);
+
+    return matchingPath
+      ? PAGE_CONFIG[matchingPath]
+      : { title: "404 | Page Not Found", background: "bg-white" };
+  };
+
+  const currentPageConfig = getPageConfig(pathname);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      setScrollY(window.scrollY);
-    });
+    if (isContactUsOpen) {
+      setPageTitle("개발자 정보");
+    } else if (isMenuOpen) {
+      setPageTitle("설정");
+    } else {
+      setPageTitle(currentPageConfig.title);
+    }
+  }, [pathname, isMenuOpen, isContactUsOpen, currentPageConfig.title]);
 
-    if (scrollY > 10) setIsMenuOpen(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      const newScrollY = window.scrollY;
+      setScrollY(newScrollY);
+      if (newScrollY > 10) setIsMenuOpen(false);
+    };
 
-    return window.removeEventListener("scroll", () => {
-      setScrollY(window.scrollY);
-    });
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollY]);
 
-  if (pathname === "/signup" || pathname === "/login") return <header></header>;
+  if (pathname === "/login" || pathname === "/signup") return <header />;
+
+  const handleMenuClick = () => {
+    if (isContactUsOpen) {
+      setIsContactUsOpen(false);
+    } else {
+      setIsMenuOpen(!isMenuOpen);
+    }
+  };
 
   return (
     <header
-      className={`w-full ${isMenuOpen ? "absolute h-screen bg-white max-w-[460px]" : "relative h-14 bg-auto"}`}
+      className={`w-full text-black ${
+        isMenuOpen ? "absolute h-screen bg-white max-w-[460px]" : "relative h-14"
+      } ${currentPageConfig.background}`}
     >
       <div className="flex justify-between items-center p-4">
-        {!(pathname === "/responses/invitation") && (
+        {!currentPageConfig.hideBackButton && (
           <span className="material-symbols-rounded" onClick={() => window.history.back()}>
             arrow_back_ios
           </span>
         )}
+        {currentPageConfig.hideBackButton && <span />}
         <p className="text-base font-bold">{pageTitle}</p>
-        <span
-          className="material-symbols-rounded"
-          onClick={() => {
-            if (isContactUsOpen) {
-              setIsContactUsOpen(false);
-            } else {
-              setIsMenuOpen(!isMenuOpen);
-              dispatch(setIsSideBarState(!sideBarState));
-            }
-          }}
-        >
+        <span className="material-symbols-rounded" onClick={handleMenuClick}>
           {isMenuOpen ? "close" : "menu"}
         </span>
       </div>
