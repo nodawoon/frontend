@@ -116,7 +116,7 @@ const ProfilePage: React.FC = () => {
         <p className="text-lg font-bold w-1/3">닉네임</p>
         {isEdit ? (
           <TextInput
-            placeholder="변경 할 닉네입을 입력해주세요(2-8자)"
+            placeholder="변경 할 닉네임을 입력해주세요(2-8자)"
             value={inputs.nickname}
             handleChangeInput={handleChangeNickname}
             validationMessage={validation}
