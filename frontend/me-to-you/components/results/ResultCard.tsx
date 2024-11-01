@@ -20,7 +20,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   onClick,
 }: ResultCardProps) => {
   const combinedClassName =
-    "flex justify-start h-auto max-w-[100%] px-3.5 text-base text-black bg-white font-bold break-words rounded-lg grow";
+    "flex justify-start h-auto max-w-[100%] px-3.5 text-base text-black bg-white font-bold break-words rounded-lg grow ";
 
   return (
     <div className={`${combinedClassName} ${className} ` + flow} onClick={onClick}>
