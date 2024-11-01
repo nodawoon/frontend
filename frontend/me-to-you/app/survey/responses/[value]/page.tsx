@@ -8,9 +8,9 @@ import TextInput from "@/components/common/TextInput";
 import TextArea from "@/components/common/TextArea";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { setQuestionState } from "@/store/questionSlice";
+import { setQuestionState } from "@/slice/questionSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addResponse, setRespondentNickname } from "@/store/responseSlice";
+import { addResponse, setRespondentNickname } from "@/slice/responseSlice";
 
 const userName = "김싸피";
 
@@ -22,6 +22,8 @@ const Page = () => {
   const params = useSearchParams();
   const nickname = params.get("nickname") || "";
   const router = useRouter();
+  const [customAnswer, setCustomAnswer] = useState<{ [key: number]: string }>({});
+  const [isCustomInputActive, setIsCustomInputActive] = useState<{ [key: number]: boolean }>({});
 
   const handlerSubmit = async () => {
     await dispatch(setRespondentNickname(nickname));
@@ -30,10 +32,32 @@ const Page = () => {
   };
 
   const handlerSingleChoiceAnswer = (questionId: number, option: string) => {
+    if (option === "직접 입력") {
+      setIsCustomInputActive(prev => ({ ...prev, [questionId]: true }));
+      setCustomAnswer(prev => ({ ...prev, [questionId]: "" }));
+      dispatch(
+        addResponse({
+          surveyQuestionId: questionId,
+          response: [], // 다른 응답을 취소하기 위해 빈 배열로 설정
+        })
+      );
+    } else {
+      setIsCustomInputActive(prev => ({ ...prev, [questionId]: false }));
+      dispatch(
+        addResponse({
+          surveyQuestionId: questionId,
+          response: [option],
+        })
+      );
+    }
+  };
+
+  const handleCustomAnswerChange = (questionId: number, value: string) => {
+    setCustomAnswer(prev => ({ ...prev, [questionId]: value }));
     dispatch(
       addResponse({
         surveyQuestionId: questionId,
-        response: [option],
+        response: [value],
       })
     );
   };
@@ -91,18 +115,32 @@ const Page = () => {
                   question.type === "multiple_choice_with_text" ? (
                     <div className="flex flex-col h-[60vh] justify-around">
                       {question.options?.map((option, idx) => (
-                        <SelectButton
-                          size="sm"
-                          key={idx}
-                          className="w-full text-left font-bold h-10"
-                          isSelected={
-                            responseList.find(response => response.surveyQuestionId === question.id)
-                              ?.response[0] === option
-                          }
-                          onClick={() => handlerSingleChoiceAnswer(question.id, option)}
-                        >
-                          {option}
-                        </SelectButton>
+                        <div key={idx}>
+                          <SelectButton
+                            size="sm"
+                            className="w-full text-left font-bold h-10"
+                            isSelected={
+                              responseList.find(
+                                response => response.surveyQuestionId === question.id
+                              )?.response[0] === option ||
+                              (option === "직접 입력" && isCustomInputActive[question.id])
+                            }
+                            onClick={() => handlerSingleChoiceAnswer(question.id, option)}
+                          >
+                            {option}
+                          </SelectButton>
+                          {isCustomInputActive[question.id] && option === "직접 입력" && (
+                            <div className="mt-2">
+                              <TextInput
+                                placeholder="10자 이내로 입력하세요."
+                                handleChangeInput={e =>
+                                  handleCustomAnswerChange(question.id, e.target.value)
+                                }
+                                value={customAnswer[question.id] || ""}
+                              />
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   ) : question.type === "multi_select" ? (
