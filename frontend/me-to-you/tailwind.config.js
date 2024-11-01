@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     colors: {
       "white": "#fff",
-      "light-gray": "#EEEEEE",
+      "light-gray": "#F1F1F1",
       "soft-gray": "#DDDDDD",
       "gray": "#BBBBBB",
       "medium-gray": "#777777",
@@ -19,6 +19,9 @@ module.exports = {
       "primary": "#5498FF",
       "primary-active": "#196FF0",
       "sub-sky": "#C4E1F6",
+      "green": "#91CEB3",
+      "pink": "#F1B1AD",
+      "yellow": "#FFF1BA",
     },
     screens: {
       mobile: "320px",
@@ -35,6 +38,43 @@ module.exports = {
       },
       fontSize: {
         icon: "25px",
+      },
+      keyframes: {
+        slideUp: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(100px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        slideRight: {
+          "0%": {
+            transform: "scaleX(0)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "scaleX(1)",
+            opacity: "1",
+          },
+        },
+        fadeIn: {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(-20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
+      },
+      animation: {
+        "slide-right": "slideRight 1s ease-out forwards",
+        "fade-in": "fadeIn 0.5s ease-out forwards",
+        "slide-up": "slideUp 0.8s ease-out forwards",
       },
     },
   },

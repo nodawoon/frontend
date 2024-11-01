@@ -1,4 +1,4 @@
-import CardButton from "@/components/homePage/CardButton";
+import CardButton from "@/components/home/CardButton";
 
 export default function Home() {
   return (
