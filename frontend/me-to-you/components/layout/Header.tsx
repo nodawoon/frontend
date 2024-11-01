@@ -4,9 +4,8 @@ import React, { useEffect, useState, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setIsSideBarState } from "@/store/questionSlice";
+import { setIsSideBarState } from "@/slice/questionSlice";
 import { PAGE_CONFIG, PageConfig } from "@/constants/pageConfig";
-
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

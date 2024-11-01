@@ -4,7 +4,7 @@ import Link from "next/link";
 import ContactUs from "@/components/layout/ContactUs";
 import { usePathname } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { setIsSideBarState, setQuestionState } from "@/store/questionSlice";
+import { setIsSideBarState, setQuestionState } from "@/slice/questionSlice";
 import survey from "../../public/survey.json";
 import Image from "next/image";
 

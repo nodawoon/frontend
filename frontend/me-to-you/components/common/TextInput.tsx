@@ -29,6 +29,7 @@ function TextInput({
         onBlur={() => setIsFocused(value !== "")}
         className={`h-10 w-full border border-gray p-2 rounded-md outline-none focus:ring-1 focus:ring-primary transition-all z-10`}
         disabled={disabled}
+        maxLength={10}
       />
       <label
         className={`absolute left-2 px-1 text-sm mt-1 text-gray bg-white transition-all duration-300 ease-in-out pointer-events-none
