@@ -17,7 +17,7 @@ const Page: React.FC = () => {
   }
   const currentSurvey = survey.questions[Number(param.surveyQuestionId) - 1];
   const question: string = currentSurvey.emoji + " " + name + currentSurvey.question;
-  const profileList: { name: string; response: string; date: string }[] = [
+  const profileList: { name: string; response: string | string[]; date: string }[] = [
     {
       name: "김싸피",
       response:
@@ -35,13 +35,13 @@ const Page: React.FC = () => {
       response: "어색했다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
       date: "2024.10.25",
     },
-    { name: "서싸피", response: "다가가기 어려웠다", date: "2024.10.30" },
+    { name: "서싸피", response: ["다가가", "asd", "bsa"], date: "2024.10.30" },
   ];
 
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-screen bg-light-gray">
       <div className="flex flex-col w-[90%]">
-        <p className="text-[23px] mt-10 mb-5 w-full">{question}</p>
+        <p className="text-[23px] mt-10 mb-5 w-full font-bold">{question}</p>
         <div className="relative flex flex-wrap gap-3">
           {profileList.map((e, index) => {
             return (
