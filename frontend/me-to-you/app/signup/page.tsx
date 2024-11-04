@@ -136,7 +136,7 @@ const SignupPage: React.FC = () => {
       });
       router.push(ROUTES.HOME);
     }
-  }, [inputs, user, isFormValid, dispatch, router]);
+  }, [inputs, isFormValid, dispatch, user, handleInputChange, router]);
 
   useEffect(() => {
     validationNickname(inputs.nickname);
