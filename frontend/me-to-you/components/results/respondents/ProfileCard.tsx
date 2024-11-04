@@ -15,7 +15,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ className, name, date }: Prof
   return (
     <div className={combinedClassName + className}>
       <Image
-        className="my-auto rounded-full border border-gray"
+        className="my-auto rounded-full border border-gray w-[50px] h-[50px]"
         src="/character.svg"
         alt="프로필 이미지"
         width="50"
