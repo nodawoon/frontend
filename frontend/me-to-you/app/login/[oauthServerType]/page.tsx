@@ -1,22 +1,24 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Loading from "@/components/common/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { login } from "@/slice/userSlice";
 import Swal from "sweetalert2";
 import { ROUTES } from "@/constants/routes";
+import { MESSAGES } from "@/constants/messages";
 
 const AuthPage: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   const { error, isLogin, isFirst } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
 
-  const provider = location?.pathname.split("/")[2];
+  const provider = pathname.split("/")[2];
 
   useEffect(() => {
     (async () => {

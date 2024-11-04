@@ -16,6 +16,7 @@ import SelectInput from "@/components/common/SelectInput";
 import Button from "@/components/common/Button";
 import { formatBirthday } from "@/utils/date";
 import { ROUTES } from "@/constants/routes";
+import { MESSAGES } from "@/constants/messages";
 
 const DATE_CONFIG = {
   MIN_YEAR: 1900,
