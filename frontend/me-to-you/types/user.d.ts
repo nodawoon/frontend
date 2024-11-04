@@ -39,6 +39,8 @@ interface CheckNicknameResponse {
   exist: boolean;
 }
 
+type Gender = "MAN" | "WOMAN";
+
 type MBTI_TYPE =
   | "ISTJ"
   | "ISFJ"

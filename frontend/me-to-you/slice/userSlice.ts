@@ -15,7 +15,7 @@ const initialState: UserState = {
     gender: "MAN",
     birthday: "",
     mbti: "ISTJ",
-    profileImage: "",
+    profileImage: "default",
     oauthServerType: "KAKAO",
   },
 };
