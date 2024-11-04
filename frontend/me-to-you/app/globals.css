@@ -86,6 +86,12 @@ a:hover, .text-button:hover {
   cursor: pointer;
 }
 
+.rounded-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain
+}
+
 @layer utilities {
   .intro-section-desktop {
     @apply flex flex-col w-1/2 items-start justify-between bg-white h-screen overflow-hidden p-10;
