@@ -3,5 +3,7 @@ export const MESSAGES = {
   INVALID_DATE: "생년월일을 올바른 형식(yyyyMMdd)으로 입력해주세요.",
   INVALID_DATE_RANGE: "생년월일을 1900.01.01 이상, 오늘 날짜 이하로 입력해주세요.",
   LOGIN_REQUIRED: "로그인부터 해주세요!",
+  INVALID_SIGNUP_FORM: "모든 값을 입력해주세요!",
+  NICKNAME_LENGTH: "닉네임은 2자 이상, 8자 이하로 설정해주세요!",
   WELCOME: (nickname: string) => `${nickname}님 환영합니다 :)`,
 };

@@ -118,7 +118,24 @@ const SignupPage: React.FC = () => {
       return;
     }
 
-    if (!isFormValid) return;
+    if (inputs.nickname.length > 8 || inputs.nickname.length < 2) {
+      await Swal.fire({
+        icon: "error",
+        text: MESSAGES.NICKNAME_LENGTH,
+        confirmButtonColor: "#5498FF",
+      });
+      return;
+    }
+
+    if (!isFormValid) {
+      await Swal.fire({
+        icon: "error",
+        text: MESSAGES.INVALID_SIGNUP_FORM,
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      return;
+    }
 
     const response = await dispatch(
       signup({
@@ -131,7 +148,7 @@ const SignupPage: React.FC = () => {
     if (response.meta.requestStatus === "fulfilled") {
       await Swal.fire({
         icon: "success",
-        text: MESSAGES.WELCOME(user.nickname),
+        text: MESSAGES.WELCOME(inputs.nickname),
         confirmButtonColor: "#5498FF",
         confirmButtonText: "닫기",
       });
