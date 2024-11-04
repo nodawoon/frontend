@@ -1,19 +1,49 @@
 "use client";
 
-import React from "react";
-import { redirect, useParams, useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Loading from "@/components/common/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { login } from "@/slice/userSlice";
+import Swal from "sweetalert2";
 
 const AuthPage: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // TODO: 나중에 사용
-  const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-  if (searchParams.get("code")) {
-    // TODO: serverType, code 상태 저장하기
-    redirect("/signup");
-  }
+  const { error, isLogin, isFirst } = useSelector((state: RootState) => state.user);
+  const dispatch: AppDispatch = useDispatch();
+
+  const provider = location.pathname.split("/")[2];
+
+  useEffect(() => {
+    const code = searchParams.get("code");
+
+    if (!code) return;
+
+    dispatch(
+      login({
+        oauthServerType: provider.toUpperCase(),
+        code,
+      })
+    ).then(response => {
+      if (response.meta.requestStatus === "rejected") {
+        Swal.fire({
+          icon: "error",
+          text: `로그인에 실패 했습니다. 에러 메세지: ${error}`,
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
+      }
+    });
+  }, [provider, searchParams, dispatch, error]);
+
+  useEffect(() => {
+    if (!isLogin) return;
+
+    router.push(isFirst ? "/signup" : "/");
+  }, [isLogin, isFirst, router]);
 
   return <Loading />;
 };
