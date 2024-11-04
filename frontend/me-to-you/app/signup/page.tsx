@@ -17,13 +17,6 @@ import Button from "@/components/common/Button";
 import { formatBirthday } from "@/utils/date";
 import { ROUTES } from "@/constants/routes";
 
-const MESSAGES = {
-  INVALID_DATE: "생년월일을 올바른 형식(yyyyMMdd)으로 입력해주세요.",
-  INVALID_DATE_RANGE: "생년월일을 1900.01.01 이상, 오늘 날짜 이하로 입력해주세요.",
-  LOGIN_REQUIRED: "로그인부터 해주세요!",
-  WELCOME: (nickname: string) => `${nickname}님 환영합니다 :)`,
-};
-
 const DATE_CONFIG = {
   MIN_YEAR: 1900,
   MIN_MONTH: 0,
