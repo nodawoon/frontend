@@ -8,6 +8,7 @@ interface ResultCardProps {
   text: string | string[];
   date: string;
   flow?: string;
+  key?: number;
   onClick?: () => void;
 }
 
@@ -27,14 +28,12 @@ const ResultCard: React.FC<ResultCardProps> = ({
       <div className="flex">
         {text.map((e, index) => {
           return (
-            <>
-              <div
-                key={index}
-                className="w-auto rounded-md bg-soft-gray px-2.5 mr-2 font-medium py-0.5 text-sm"
-              >
-                {e}
-              </div>
-            </>
+            <div
+              key={index}
+              className="w-auto rounded-md bg-soft-gray px-2.5 mr-2 font-medium py-0.5 text-sm"
+            >
+              {e}
+            </div>
           );
         })}
       </div>

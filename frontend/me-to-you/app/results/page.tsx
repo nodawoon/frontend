@@ -1,16 +1,17 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/Button";
 import survey from "../../public/survey.json";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { loadRespondentList } from "@/slice/respondentsSlice";
 import StatisticsCard from "@/components/results/StatisticsCard";
 
 const Page: React.FC = () => {
-  const profileList: number[] = [1, 2, 3, 4, 5];
   const surveyList: ReactNode[] = [];
-  const name: string = "김싸피";
   const combinedClassName: string = "h-auto border border-gray rounded-xl p-1 max-w-[30%] grow";
   const router = useRouter();
 
@@ -22,6 +23,16 @@ const Page: React.FC = () => {
       router.push("/results/questions/" + e);
     }
   };
+
+  const dispatch: AppDispatch = useDispatch();
+  const { list } = useSelector((state: RootState) => state.respondents);
+  const { nickname } = useSelector((state: RootState) => state.user.user);
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(loadRespondentList());
+    })();
+  }, [dispatch]);
 
   // survey 목록 불러오기
   survey.questions.forEach((e, index) => {
@@ -40,20 +51,20 @@ const Page: React.FC = () => {
       </div>
     );
   });
-
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-screen">
       <div className="flex flex-col w-[90%]">
         <p className="text-[23px] mt-10 mb-5 w-full">내 질문에 응답한 사람들</p>
         <div className="relative flex flex-wrap gap-3">
-          {profileList.length === 0 ? (
+          {list[0]?.respondentNickname === "" ? (
             <div className="text-gray mb-5">아직 응답자가 없어요...</div>
-          ) : profileList.length < 4 ? (
+          ) : list.length < 4 ? (
             <div className="absolute top-[10%] bg-gradient-to-t from-white w-full h-[100px]"></div>
           ) : (
             <div className="absolute bottom-[-10px] bg-gradient-to-t from-white w-full h-[130px]"></div>
           )}
-          {profileList.map((e, index) => {
+          {list.map((e, index) => {
+            if (e.respondentNickname === "") return;
             if (index < 6)
               return (
                 <Image
@@ -68,7 +79,7 @@ const Page: React.FC = () => {
               );
           })}
         </div>
-        {profileList.length !== 0 && (
+        {list[0]?.respondentNickname !== "" && (
           <Button
             onClick={() => {
               nextPage(-1);
@@ -82,7 +93,7 @@ const Page: React.FC = () => {
       </div>
       <div className="bg-light-gray w-full py-5">
         <div className="flex flex-col w-[85%] mx-auto">
-          <p className="text-[22px] bold my-1">{name}님에 대해 알아보세요!</p>
+          <p className="text-[22px] bold my-1">{nickname}님에 대해 알아보세요!</p>
           {surveyList}
         </div>
       </div>
