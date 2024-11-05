@@ -12,7 +12,6 @@ import {
 const initialState: UserState = {
   loading: false,
   error: "",
-  isLogin: false,
   isNicknameExist: false,
   isFirst: true,
   user: {
@@ -79,14 +78,14 @@ export const userSlice = createSlice({
         state.user.email = email;
         state.user.oauthServerType = oauthServerType;
         state.isFirst = isFirst;
-        state.isLogin = true;
         state.error = "";
+        sessionStorage.setItem("isLogin", "yes");
       })
       .addCase(login.rejected, (state, action) => {
         state.error = action.error.message;
       })
-      .addCase(logout.fulfilled, state => {
-        state.isLogin = false;
+      .addCase(logout.fulfilled, () => {
+        sessionStorage.removeItem("isLogin");
       })
       .addCase(logout.rejected, (state, action) => {
         state.error = action.error.message;

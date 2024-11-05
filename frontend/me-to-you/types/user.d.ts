@@ -1,7 +1,6 @@
 interface UserState {
   loading: boolean;
   error: string | undefined;
-  isLogin: boolean;
   isNicknameExist: boolean;
   isFirst: boolean;
   user: UserResponse;
