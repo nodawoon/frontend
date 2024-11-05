@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { clientInstance } from "@/libs/http-client";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SurveyResponse {
   surveyQuestionId: number;
@@ -6,14 +7,26 @@ interface SurveyResponse {
 }
 
 interface SurveyResponseState {
+  shareUrl: string;
   respondentNickname: string;
   surveyResponseRequestList: SurveyResponse[];
+  error: string | undefined;
 }
 
 const initialState: SurveyResponseState = {
+  shareUrl: "",
   respondentNickname: "",
   surveyResponseRequestList: [],
+  error: "",
 };
+
+const submitSurveyResponse = createAsyncThunk(
+  "surveyResponse/submitSurveyResponse",
+  async (surveyResponse: SurveyResponseState) => {
+    const response = await clientInstance.post("/survey-responses", surveyResponse);
+    return response.data;
+  }
+);
 
 const surveyResponseSlice = createSlice({
   name: "surveyResponse",
@@ -33,11 +46,23 @@ const surveyResponseSlice = createSlice({
         state.surveyResponseRequestList.push(action.payload);
       }
     },
-    clearResponses: state => {
+    removeResponses: state => {
       state.surveyResponseRequestList = [];
     },
   },
+  extraReducers: builder => {
+    builder
+      .addCase(submitSurveyResponse.fulfilled, (state, action) => {
+        state.shareUrl = "";
+        state.respondentNickname = "";
+        state.surveyResponseRequestList = [];
+        state.error = "";
+      })
+      .addCase(submitSurveyResponse.rejected, (state, action) => {
+        state.error = action.error.message;
+      });
+  },
 });
 
-export const { setRespondentNickname, addResponse, clearResponses } = surveyResponseSlice.actions;
+export const { setRespondentNickname, addResponse, removeResponses } = surveyResponseSlice.actions;
 export default surveyResponseSlice.reducer;
