@@ -14,14 +14,14 @@ import { addResponse, addRespondentNickname, addshareUrl } from "@/slice/respons
 import { clientInstance } from "@/libs/http-client";
 import { createSurveyResponse } from "@/services/share";
 import Swal from "sweetalert2";
-
-const userName = "김싸피";
+import { loadUser } from "@/slice/userSlice";
 
 const Page = () => {
   const questionState = useAppSelector(state => state.question.questionNumber);
   const sideBarState = useAppSelector(state => state.question.isSideBarOpen);
   const responseList = useAppSelector(state => state.surveyResponse.surveyResponseRequestList);
   const submitForm = useAppSelector(state => state.surveyResponse);
+  const user = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const params = useParams();
@@ -30,6 +30,10 @@ const Page = () => {
 
   const id = params.value;
   const nickname: string | null = searchParams.get("nickname") ?? "";
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
 
   useEffect(() => {
     const existingResponse = responseList.find(
@@ -135,7 +139,7 @@ const Page = () => {
             .map(question => (
               <div key={question.id}>
                 {question.question.startsWith("님")
-                  ? question.emoji + userName + question.question
+                  ? question.emoji + user.nickname + question.question
                   : question.emoji + question.question}
               </div>
             ))}

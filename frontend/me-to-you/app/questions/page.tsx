@@ -5,6 +5,8 @@ import SurveyCard from "../../components/questions/SurveyCard";
 import React, { useEffect, useState } from "react";
 import { getShareUrl } from "@/services/share";
 import Script from "next/script";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loadUser } from "@/slice/userSlice";
 
 const CLIENT_URL = process.env.NEXT_PUBLIC_CLIENT_URL;
 
@@ -73,7 +75,7 @@ const Page = () => {
       <div className="bg-light-gray text-center relative">
         {" "}
         {/* relative 추가 */}
-        <p className="px-10 py-8 text-base font-bold">
+        <p className="px-10 py-8 text-sm font-bold">
           설문이 생성되었어요. 친구들에게 공유해보세요!
         </p>
         <SurveyCard />
@@ -84,8 +86,6 @@ const Page = () => {
         />
         {isCopied && (
           <div className="absolute w-[80%] bottom-6 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-50 flex justify-center items-center">
-            {" "}
-            {/* 가운데 배치 */}
             <div className="bg-white text-black font-bold w-[100%] py-4 px-8 rounded-lg shadow-lg animate-clipboard-fade-out">
               복사 되었습니다!
             </div>
