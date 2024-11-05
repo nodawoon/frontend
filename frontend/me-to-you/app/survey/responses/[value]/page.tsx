@@ -53,21 +53,27 @@ const Page = () => {
   const handlerSubmit = async () => {
     await dispatch(addshareUrl(`${id}`));
     await dispatch(addRespondentNickname(nickname));
-    responseList.some(response => {
-      if (response.response.length === 0 || response.response[0] === "") {
+
+    const checkResponse = responseList.some(response => {
+      if (
+        response.response.length === 0 ||
+        response.response[0] === "" ||
+        (response.surveyQuestionId === 2 && response.response.length < 3)
+      ) {
         Swal.fire({
           title: `${response.surveyQuestionId}번 항목을 작성하지 않으셨습니다.`,
           text: "작성하고 오세요!",
           icon: "warning",
           showConfirmButton: true,
         });
-        return true;
+        return false;
       }
     });
 
-    console.info(submitForm);
-    const response = createSurveyResponse(submitForm);
-    console.info(response);
+    if (checkResponse) {
+      const response = createSurveyResponse(submitForm);
+      console.info(response);
+    }
   };
 
   const handlerSingleChoiceAnswer = (questionId: number, option: string) => {
