@@ -49,8 +49,6 @@ const Page = () => {
   const handlerSubmit = async () => {
     await dispatch(addshareUrl(`${id}`));
     await dispatch(addRespondentNickname(nickname));
-    console.info(submitForm);
-
     responseList.some(response => {
       if (response.response.length === 0 || response.response[0] === "") {
         Swal.fire({
@@ -62,6 +60,10 @@ const Page = () => {
         return true;
       }
     });
+
+    console.info(submitForm);
+    const response = createSurveyResponse(submitForm);
+    console.info(response);
   };
 
   const handlerSingleChoiceAnswer = (questionId: number, option: string) => {
