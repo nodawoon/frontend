@@ -1,4 +1,5 @@
 export const MBTI_LIST = [
+  "모르겠음",
   "ISTJ",
   "ISFJ",
   "INFJ",

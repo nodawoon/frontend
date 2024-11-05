@@ -24,7 +24,7 @@ interface SignupRequest {
   oauthServerType: "KAKAO" | "GOOGLE" | "NAVER";
 }
 
-interface SignupResponse {
+interface UserResponse {
   userId: number;
   nickname: string;
   email: string;
@@ -42,6 +42,7 @@ interface CheckNicknameResponse {
 type Gender = "MAN" | "WOMAN";
 
 type MBTI_TYPE =
+  | "NONE"
   | "ISTJ"
   | "ISFJ"
   | "INFJ"

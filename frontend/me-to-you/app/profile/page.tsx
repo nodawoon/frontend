@@ -8,31 +8,14 @@ import SelectInput from "@/components/common/SelectInput";
 import { MBTI_LIST } from "@/constants/mbti";
 import ProfileImageUploader from "@/components/profile/ProfileImageUploader";
 import { checkFileValid } from "@/utils/file";
-
-const user = {
-  userId: 0,
-  email: "johndoe@gmail.com",
-  nickname: "김싸피",
-  gender: "MAN",
-  birthday: "2024-10-31",
-  mbti: "INTJ",
-  profileImage: "",
-  oauthServerType: "KAKAO",
-};
-
-const keys = ["소셜 타입", "이메일", "생년월일", "성별"];
-const values = [
-  user.oauthServerType === "KAKAO"
-    ? "카카오"
-    : user.oauthServerType === "GOOGLE"
-      ? "구글"
-      : "네이버",
-  user.email,
-  user.birthday,
-  user.gender === "MAN" ? "남자" : "여자",
-];
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { loadUser } from "@/slice/userSlice";
+import { useCheckNickName } from "@/hooks/useCheckNickName";
 
 const ProfilePage: React.FC = () => {
+  const { user } = useSelector((state: RootState) => state.user);
+
   const [isEdit, setIsEdit] = useState(false);
   const [inputs, setInputs] = React.useState({
     nickname: user.nickname ? user.nickname : "",
@@ -40,9 +23,23 @@ const ProfilePage: React.FC = () => {
     profileImage: user.profileImage ? user.profileImage : "",
   });
   const [uploadImage, setUploadImage] = useState<File | null>(null);
-  const [validation, setValidation] = React.useState("");
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const dispatch: AppDispatch = useDispatch();
+
+  const { validationText, validationNickname, debouncedCheckNickname } = useCheckNickName();
+
+  const keys = ["소셜 타입", "이메일", "생년월일", "성별"];
+  const values = [
+    user.oauthServerType === "KAKAO"
+      ? "카카오"
+      : user.oauthServerType === "GOOGLE"
+        ? "구글"
+        : "네이버",
+    user.email,
+    user.birthday,
+    user.gender === "MAN" ? "남자" : "여자",
+  ];
 
   const handleClickProfileImage = () => {
     if (fileInputRef.current) {
@@ -79,18 +76,16 @@ const ProfilePage: React.FC = () => {
       nickname: user.nickname ? user.nickname : "",
       mbti: user.mbti ? user.mbti : "",
     }));
-  }, [isEdit, setIsEdit]);
-
-  const validationNickname = (nickname: string) => {
-    if (nickname.length > 8 || nickname.length < 2)
-      setValidation("닉네임은 2자 이상 8자 이하로 설정해주세요.");
-    else setValidation("");
-    // TODO: 닉네임 중복 API 호출
-  };
+  }, [isEdit, user.mbti, user.nickname]);
 
   useEffect(() => {
     validationNickname(inputs.nickname);
-  }, [inputs.nickname]);
+    debouncedCheckNickname(inputs.nickname);
+  }, [inputs.nickname, validationNickname, debouncedCheckNickname]);
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col items-center gap-8 mt-8">
@@ -119,7 +114,7 @@ const ProfilePage: React.FC = () => {
             placeholder="변경 할 닉네임을 입력해주세요(2-8자)"
             value={inputs.nickname}
             handleChangeInput={handleChangeNickname}
-            validationMessage={validation}
+            validationMessage={validationText}
           />
         ) : (
           <p className="text-lg">{user.nickname}</p>
@@ -130,7 +125,9 @@ const ProfilePage: React.FC = () => {
         {isEdit ? (
           <SelectInput
             options={MBTI_LIST}
-            selectedOption={user.mbti ? user.mbti : inputs.mbti}
+            selectedOption={
+              user.mbti ? (user.mbti === "NONE" ? "모르겠음" : user.mbti) : inputs.mbti
+            }
             setSelectedOption={handleChangeMBTI}
           />
         ) : (

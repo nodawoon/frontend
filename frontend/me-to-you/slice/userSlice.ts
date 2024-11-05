@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSocialLogin } from "@/services/oauth";
-import { createUser, getCheckNickname } from "@/services/user";
+import { createUser, deleteUser, getCheckNickname, getUser } from "@/services/user";
 
 const initialState: UserState = {
   loading: false,
@@ -15,7 +15,7 @@ const initialState: UserState = {
     gender: "MAN",
     birthday: "",
     mbti: "ISTJ",
-    profileImage: "default",
+    profileImage: "https://me-to-you.s3.ap-northeast-2.amazonaws.com/me-to-you.png",
     oauthServerType: "KAKAO",
   },
 };
@@ -38,6 +38,16 @@ export const checkNicknameDuplication = createAsyncThunk(
 
 export const signup = createAsyncThunk("user/signup", async (user: SignupRequest) => {
   const response = await createUser(user);
+  return response.data;
+});
+
+export const loadUser = createAsyncThunk("user/getUser", async () => {
+  const response = await getUser();
+  return response.data;
+});
+
+export const removeUser = createAsyncThunk("user/deleteUser", async () => {
+  const response = await deleteUser();
   return response.data;
 });
 
@@ -84,6 +94,25 @@ export const userSlice = createSlice({
         state.error = undefined;
       })
       .addCase(signup.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(loadUser.pending, state => {
+        state.loading = true;
+      })
+      .addCase(loadUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+      })
+      .addCase(loadUser.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(removeUser.pending, state => {
+        state.loading = true;
+      })
+      .addCase(removeUser.fulfilled, state => {
+        state.loading = false;
+      })
+      .addCase(removeUser.rejected, (state, action) => {
         state.error = action.error.message;
       });
   },

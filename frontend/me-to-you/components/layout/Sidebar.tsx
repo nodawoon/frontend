@@ -2,11 +2,14 @@
 import React, { Dispatch, SetStateAction, Suspense } from "react";
 import Link from "next/link";
 import ContactUs from "@/components/layout/ContactUs";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { setIsSideBarState, setQuestionState } from "@/slice/questionSlice";
 import survey from "../../public/survey.json";
 import Image from "next/image";
+import { removeUser } from "@/slice/userSlice";
+import Swal from "sweetalert2";
+import { ROUTES } from "@/constants/routes";
 
 const userName = "김싸피";
 
@@ -24,14 +27,32 @@ const Sidebar: React.FC<SidebarProps> = ({
   setIsMenuOpen,
 }) => {
   const pathname = usePathname();
+  const router = useRouter();
+
   const questionNumber = useAppSelector(state => state.question.questionNumber);
   const responseList = useAppSelector(state => state.surveyResponse.surveyResponseRequestList);
+
+  const { error } = useAppSelector(state => state.user);
+
   const dispatch = useAppDispatch();
 
   const handleChangeQuestion = (num: number) => {
     dispatch(setQuestionState(num));
     dispatch(setIsSideBarState(false));
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleClickDeleteAccount = async () => {
+    const result = await dispatch(removeUser());
+
+    if (result.meta.requestStatus === "fulfilled") router.push(ROUTES.LOGIN);
+    else
+      await Swal.fire({
+        icon: "error",
+        text: `Error Message: ${error}`,
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
   };
 
   return isContactUsOpen ? (
@@ -73,7 +94,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           프로필 보기
         </Link>
         <p className="text-xl font-medium text-button">로그아웃</p>
-        <p className="text-xl font-medium text-button">회원탈퇴</p>
+        <p className="text-xl font-medium text-button" onClick={handleClickDeleteAccount}>
+          회원탈퇴
+        </p>
       </div>
       <p className="text-xl font-medium text-button" onClick={() => setIsContactUsOpen(true)}>
         개발자 정보
