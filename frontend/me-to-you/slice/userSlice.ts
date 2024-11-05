@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSocialLogin } from "@/services/oauth";
-import { createUser, deleteUser, getCheckNickname } from "@/services/user";
+import { createUser, deleteUser, getCheckNickname, getUser } from "@/services/user";
 
 const initialState: UserState = {
   loading: false,
@@ -38,6 +38,11 @@ export const checkNicknameDuplication = createAsyncThunk(
 
 export const signup = createAsyncThunk("user/signup", async (user: SignupRequest) => {
   const response = await createUser(user);
+  return response.data;
+});
+
+export const loadUser = createAsyncThunk("user/getUser", async () => {
+  const response = await getUser();
   return response.data;
 });
 
@@ -89,6 +94,16 @@ export const userSlice = createSlice({
         state.error = undefined;
       })
       .addCase(signup.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(loadUser.pending, state => {
+        state.loading = true;
+      })
+      .addCase(loadUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+      })
+      .addCase(loadUser.rejected, (state, action) => {
         state.error = action.error.message;
       })
       .addCase(removeUser.pending, state => {
