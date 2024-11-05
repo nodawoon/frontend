@@ -15,7 +15,7 @@ const initialState: UserState = {
     gender: "MAN",
     birthday: "",
     mbti: "ISTJ",
-    profileImage: "",
+    profileImage: "https://me-to-you.s3.ap-northeast-2.amazonaws.com/me-to-you.png",
     oauthServerType: "KAKAO",
   },
 };

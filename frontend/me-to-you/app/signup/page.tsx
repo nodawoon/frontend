@@ -58,7 +58,7 @@ const SignupPage: React.FC = () => {
     nickname: "",
     birthday: "",
     gender: "MAN",
-    mbti: "ISTJ",
+    mbti: "NONE",
   });
 
   const { validationText, validationNickname, debouncedCheckNickname } = useCheckNickName();
@@ -95,7 +95,8 @@ const SignupPage: React.FC = () => {
 
   const handleChangeMBTI = useCallback(
     (option: string) => {
-      handleInputChange("mbti", option as MBTI_TYPE);
+      if (option === "모르겠음") handleInputChange("mbti", "NONE");
+      else handleInputChange("mbti", option as MBTI_TYPE);
     },
     [handleInputChange]
   );
@@ -145,6 +146,7 @@ const SignupPage: React.FC = () => {
         oauthServerType: user.oauthServerType,
       })
     );
+
     if (response.meta.requestStatus === "fulfilled") {
       await Swal.fire({
         icon: "success",
@@ -227,7 +229,7 @@ const SignupPage: React.FC = () => {
           component={
             <SelectInput
               options={MBTI_LIST}
-              selectedOption={inputs.mbti}
+              selectedOption={inputs.mbti === "NONE" ? "모르겠음" : inputs.mbti}
               setSelectedOption={handleChangeMBTI}
             />
           }

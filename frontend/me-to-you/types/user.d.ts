@@ -42,6 +42,7 @@ interface CheckNicknameResponse {
 type Gender = "MAN" | "WOMAN";
 
 type MBTI_TYPE =
+  | "NONE"
   | "ISTJ"
   | "ISFJ"
   | "INFJ"
