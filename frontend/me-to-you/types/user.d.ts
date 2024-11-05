@@ -1,10 +1,9 @@
 interface UserState {
   loading: boolean;
   error: string | undefined;
-  isLogin: boolean;
   isNicknameExist: boolean;
   isFirst: boolean;
-  user: SignupResponse;
+  user: UserResponse;
 }
 
 interface LoginResponse {
@@ -37,6 +36,12 @@ interface UserResponse {
 
 interface CheckNicknameResponse {
   exist: boolean;
+}
+
+interface UpdateUserRequest {
+  nickname: string;
+  profileImage: string;
+  mbti: MBTI_TYPE;
 }
 
 type Gender = "MAN" | "WOMAN";
