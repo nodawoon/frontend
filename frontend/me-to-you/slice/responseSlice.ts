@@ -1,23 +1,10 @@
 import { clientInstance } from "@/libs/http-client";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface SurveyResponse {
-  surveyQuestionId: number;
-  response: string[];
-}
-
-interface SurveyResponseState {
-  shareUrl: string;
-  respondentNickname: string;
-  surveyResponseRequestList: SurveyResponse[];
-  error: string | undefined;
-}
-
 const initialState: SurveyResponseState = {
   shareUrl: "",
   respondentNickname: "",
   surveyResponseRequestList: [],
-  error: "",
 };
 
 const submitSurveyResponse = createAsyncThunk(
@@ -32,7 +19,10 @@ const surveyResponseSlice = createSlice({
   name: "surveyResponse",
   initialState,
   reducers: {
-    setRespondentNickname: (state, action: PayloadAction<string>) => {
+    addshareUrl: (state, action: PayloadAction<string>) => {
+      state.shareUrl = action.payload;
+    },
+    addRespondentNickname: (state, action: PayloadAction<string>) => {
       state.respondentNickname = action.payload;
     },
     addResponse: (state, action: PayloadAction<SurveyResponse>) => {
@@ -46,23 +36,23 @@ const surveyResponseSlice = createSlice({
         state.surveyResponseRequestList.push(action.payload);
       }
     },
-    removeResponses: state => {
+    removeResponse: state => {
       state.surveyResponseRequestList = [];
     },
   },
   extraReducers: builder => {
     builder
-      .addCase(submitSurveyResponse.fulfilled, (state, action) => {
+      .addCase(submitSurveyResponse.fulfilled, state => {
         state.shareUrl = "";
         state.respondentNickname = "";
         state.surveyResponseRequestList = [];
-        state.error = "";
       })
       .addCase(submitSurveyResponse.rejected, (state, action) => {
-        state.error = action.error.message;
+        console.info(action.error.message);
       });
   },
 });
 
-export const { setRespondentNickname, addResponse, removeResponses } = surveyResponseSlice.actions;
+export const { addshareUrl, addRespondentNickname, addResponse, removeResponse } =
+  surveyResponseSlice.actions;
 export default surveyResponseSlice.reducer;

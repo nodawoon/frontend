@@ -1,16 +1,19 @@
 "use client";
 import Button from "@/components/common/Button";
 import ProgressBar from "@/components/common/ProgressBar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import survey from "@/public/survey.json";
 import SelectButton from "@/components/common/SelectButton";
 import TextInput from "@/components/common/TextInput";
 import TextArea from "@/components/common/TextArea";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { setQuestionState } from "@/slice/questionSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addResponse, setRespondentNickname } from "@/slice/responseSlice";
+import { addResponse, addRespondentNickname, addshareUrl } from "@/slice/responseSlice";
+import { clientInstance } from "@/libs/http-client";
+import { createSurveyResponse } from "@/services/share";
+import Swal from "sweetalert2";
 
 const userName = "김싸피";
 
@@ -18,17 +21,49 @@ const Page = () => {
   const questionState = useAppSelector(state => state.question.questionNumber);
   const sideBarState = useAppSelector(state => state.question.isSideBarOpen);
   const responseList = useAppSelector(state => state.surveyResponse.surveyResponseRequestList);
+  const submitForm = useAppSelector(state => state.surveyResponse);
   const dispatch = useAppDispatch();
-  const params = useSearchParams();
-  const nickname = params.get("nickname") || "";
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = useParams();
   const [customAnswer, setCustomAnswer] = useState<{ [key: number]: string }>({});
   const [isCustomInputActive, setIsCustomInputActive] = useState<{ [key: number]: boolean }>({});
 
+  const id = params.value;
+  const nickname: string | null = searchParams.get("nickname") ?? "";
+
+  useEffect(() => {
+    const existingResponse = responseList.find(
+      response => response.surveyQuestionId === questionState
+    );
+
+    if (!existingResponse) {
+      dispatch(
+        addResponse({
+          surveyQuestionId: questionState,
+          response: [],
+        })
+      );
+    }
+  }, [questionState, responseList, dispatch]);
+
   const handlerSubmit = async () => {
-    await dispatch(setRespondentNickname(nickname));
-    console.info(responseList);
-    //router.push("../result");
+    await dispatch(addshareUrl(`${id}`));
+    await dispatch(addRespondentNickname(nickname));
+    responseList.some(response => {
+      if (response.response.length === 0 || response.response[0] === "") {
+        Swal.fire({
+          title: `${response.surveyQuestionId}번 항목을 작성하지 않으셨습니다.`,
+          text: "작성하고 오세요!",
+          icon: "warning",
+          showConfirmButton: true,
+        });
+        return true;
+      }
+    });
+
+    console.info(submitForm);
+    const response = createSurveyResponse(submitForm);
+    console.info(response);
   };
 
   const handlerSingleChoiceAnswer = (questionId: number, option: string) => {
