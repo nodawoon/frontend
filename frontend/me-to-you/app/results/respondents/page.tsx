@@ -18,16 +18,6 @@ const Page: React.FC = () => {
     })();
   }, [dispatch]);
 
-  // const profileList: { key: number; value: string }[] = [
-  //   { key: 1, value: "김싸피" },
-  //   { key: 2, value: "김싸피" },
-  //   { key: 3, value: "김싸피" },
-  //   { key: 4, value: "김싸피" },
-  //   { key: 5, value: "김싸피" },
-  //   { key: 6, value: "김싸피" },
-  //   { key: 7, value: "김싸피" },
-  //   { key: 8, value: "김싸피" },
-  // ];
   const combinedClassName: string = "h-auto rounded-xl p-1 bg-white hover:bg-gray w-full";
 
   return (

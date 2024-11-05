@@ -10,3 +10,14 @@ export const getRespondentList = async () => {
       throw error;
     });
 };
+
+export const getRespondentQuestionList = async (param: string | string[]) => {
+  return await clientInstance
+    .get<ApiResponseType<RespondentQuestionState>>("/survey-results/question-id/" + param)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};

@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import questionReducer from "../slice/questionSlice";
 import surveyResponseReducer from "../slice/responseSlice";
 import { userReducer } from "@/slice/userSlice";
-import { respondentReducer } from "@/slice/respondentsSlice";
+import { respondentReducer, respondentQuestionReducer } from "@/slice/respondentsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +10,7 @@ export const store = configureStore({
     question: questionReducer,
     surveyResponse: surveyResponseReducer,
     respondents: respondentReducer,
+    respondentsQuestion: respondentQuestionReducer,
   },
 });
 
