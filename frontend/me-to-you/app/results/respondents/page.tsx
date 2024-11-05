@@ -3,14 +3,13 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { AppDispatch, RootState } from "@/store/store";
-import { useDispatch, useSelector } from "react-redux";
 import { loadRespondentList } from "@/slice/respondentsSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 const Page: React.FC = () => {
   const router = useRouter();
-  const { list } = useSelector((state: RootState) => state.respondents);
-  const dispatch: AppDispatch = useDispatch();
+  const { list } = useAppSelector(state => state.respondents);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {

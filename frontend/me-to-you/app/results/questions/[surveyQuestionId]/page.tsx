@@ -1,21 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { AppDispatch, RootState } from "@/store/store";
-import { useDispatch, useSelector } from "react-redux";
 import { loadRespondentQuestionList } from "@/slice/respondentsSlice";
 import { useParams } from "next/navigation";
 import survey from "../../../../public/survey.json";
 import ResultCard from "@/components/results/ResultCard";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 const Page: React.FC = () => {
   const param = useParams();
   const router = useRouter();
 
-  const { list } = useSelector((state: RootState) => state.respondentsQuestion);
-  const { nickname } = useSelector((state: RootState) => state.user.user);
-  const dispatch: AppDispatch = useDispatch();
+  const { list } = useAppSelector(state => state.respondentsQuestion);
+  const { nickname } = useAppSelector(state => state.user.user);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {

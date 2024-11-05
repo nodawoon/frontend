@@ -5,10 +5,9 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/common/Button";
 import survey from "../../public/survey.json";
 import Image from "next/image";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
 import { loadRespondentList } from "@/slice/respondentsSlice";
 import StatisticsCard from "@/components/results/StatisticsCard";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 const Page: React.FC = () => {
   const surveyList: ReactNode[] = [];
@@ -24,9 +23,9 @@ const Page: React.FC = () => {
     }
   };
 
-  const dispatch: AppDispatch = useDispatch();
-  const { list } = useSelector((state: RootState) => state.respondents);
-  const { nickname } = useSelector((state: RootState) => state.user.user);
+  const dispatch = useAppDispatch();
+  const { list } = useAppSelector(state => state.respondents);
+  const { nickname } = useAppSelector(state => state.user.user);
 
   useEffect(() => {
     (async () => {
