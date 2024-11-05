@@ -1,19 +1,55 @@
 "use client";
 
-import React from "react";
-import { redirect, useParams, useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Loading from "@/components/common/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { login } from "@/slice/userSlice";
+import Swal from "sweetalert2";
+import { ROUTES } from "@/constants/routes";
+import { MESSAGES } from "@/constants/messages";
 
 const AuthPage: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // TODO: 나중에 사용
-  const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  if (searchParams.get("code")) {
-    // TODO: serverType, code 상태 저장하기
-    redirect("/signup");
-  }
+  const { error, isLogin, isFirst } = useSelector((state: RootState) => state.user);
+  const dispatch: AppDispatch = useDispatch();
+
+  const provider = pathname.split("/")[2];
+
+  useEffect(() => {
+    (async () => {
+      const code = searchParams.get("code");
+
+      if (!code) return;
+
+      const result = await dispatch(
+        login({
+          oauthServerType: provider.toUpperCase(),
+          code,
+        })
+      );
+
+      if (result.meta.requestStatus === "rejected") {
+        await Swal.fire({
+          icon: "error",
+          text: MESSAGES.LOGIN_FAILED(error || "알 수 없는 오류가 발생했습니다"),
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
+        router.push("/login");
+      }
+    })();
+  }, [provider, searchParams, dispatch, error, router]);
+
+  useEffect(() => {
+    if (!isLogin) return;
+
+    router.push(isFirst ? ROUTES.SIGNUP : ROUTES.HOME);
+  }, [isLogin, isFirst, router]);
 
   return <Loading />;
 };

@@ -1,97 +1,177 @@
 "use client";
 
 import React, { memo, useCallback, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { isBefore, isValid, parse } from "date-fns";
+import Swal from "sweetalert2";
+import { AppDispatch, RootState } from "@/store/store";
+import { signup } from "@/slice/userSlice";
+import { useCheckNickName } from "@/hooks/useCheckNickName";
+import { MBTI_LIST } from "@/constants/mbti";
 import ReadOnlyUserInfo from "@/components/common/ReadOnlyUserInfo";
 import TextInput from "@/components/common/TextInput";
 import RadioButton from "@/components/common/RadioButton";
 import SelectInput from "@/components/common/SelectInput";
-import { MBTI_LIST } from "@/constants/mbti";
 import Button from "@/components/common/Button";
-import { isBefore, isValid, parse } from "date-fns";
+import { formatBirthday } from "@/utils/date";
+import { ROUTES } from "@/constants/routes";
+import { MESSAGES } from "@/constants/messages";
 
-const oauthServerType = "GOOGLE";
-const email = "johndoe@gmail.com";
+const DATE_CONFIG = {
+  MIN_YEAR: 1900,
+  MIN_MONTH: 0,
+  MIN_DAY: 1,
+  FORMAT: "yyyy-MM-dd",
+};
+
+interface InputState {
+  nickname: string;
+  birthday: string;
+  gender: Gender;
+  mbti: MBTI_TYPE;
+}
+
+const validateBirthday = (birthday: string): boolean => {
+  const parsedDate = parse(birthday, DATE_CONFIG.FORMAT, new Date());
+  const minDate = new Date(DATE_CONFIG.MIN_YEAR, DATE_CONFIG.MIN_MONTH, DATE_CONFIG.MIN_DAY);
+  const today = new Date();
+
+  if (!isValid(parsedDate)) return false;
+  return !isBefore(parsedDate, minDate) && !isBefore(today, parsedDate);
+};
+
+const InputField = memo<{
+  label: string;
+  component?: React.ReactNode;
+}>(function InputField({ label, component }) {
+  return (
+    <div className="flex items-center justify-between">
+      <p className="w-1/3 font-bold">{label}</p>
+      {component}
+    </div>
+  );
+});
 
 const SignupPage: React.FC = () => {
-  const [inputs, setInputs] = React.useState({
+  const [inputs, setInputs] = React.useState<InputState>({
     nickname: "",
     birthday: "",
-    gender: "",
-    mbti: "",
+    gender: "MAN",
+    mbti: "ISTJ",
   });
-  const [validation, setValidation] = React.useState("");
+
+  const { validationText, validationNickname, debouncedCheckNickname } = useCheckNickName();
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSelector((state: RootState) => state.user);
+  const router = useRouter();
 
   const isFormValid = useMemo(
-    () => inputs.nickname && inputs.gender && inputs.birthday,
+    () => Boolean(inputs.nickname && inputs.gender && inputs.birthday),
     [inputs.nickname, inputs.gender, inputs.birthday]
   );
 
-  const handleChangeNickname = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputs(prev => ({ ...prev, nickname: e.target.value }));
-  }, []);
+  const handleInputChange = useCallback(
+    <K extends keyof InputState>(key: K, value: InputState[K]) => {
+      setInputs(prev => ({ ...prev, [key]: value }));
+    },
+    []
+  );
 
-  const handleChangeBirthday = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = e.target.value.replace(/\D/g, "");
-    const year = inputValue.slice(0, 4);
-    const month = inputValue.slice(4, 6);
-    const day = inputValue.slice(6, 8);
+  const handleChangeNickname = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      handleInputChange("nickname", e.target.value);
+    },
+    [handleInputChange]
+  );
 
-    inputValue = [year, month, day].filter(Boolean).join("-");
+  const handleChangeBirthday = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const formattedDate = formatBirthday(e.target.value);
+      handleInputChange("birthday", formattedDate);
+    },
+    [handleInputChange]
+  );
 
-    setInputs(prev => ({ ...prev, birthday: inputValue }));
-  }, []);
+  const handleChangeMBTI = useCallback(
+    (option: string) => {
+      handleInputChange("mbti", option as MBTI_TYPE);
+    },
+    [handleInputChange]
+  );
 
-  const handleChangeMBTI = React.useCallback((option: string) => {
-    setInputs(prev => ({ ...prev, mbti: option }));
-  }, []);
+  const handleChangeGender = useCallback(
+    (value: string) => {
+      handleInputChange("gender", value as Gender);
+    },
+    [handleInputChange]
+  );
 
-  const handleChangeGender = React.useCallback((value: string) => {
-    setInputs(prev => ({ ...prev, gender: value }));
-  }, []);
-
-  const handleClickSignupButton = useCallback(() => {
-    const parsedDate = parse(inputs.birthday, "yyyy-MM-dd", new Date());
-    const minDate = new Date(1900, 0, 1);
-    const today = new Date();
-
-    if (!isValid(parsedDate)) {
-      alert("생년월일을 올바른 형식(yyyyMMdd)으로 입력해주세요.");
-      setInputs(prev => ({ ...prev, birthday: "" }));
+  const handleClickSignupButton = useCallback(async () => {
+    if (!validateBirthday(inputs.birthday)) {
+      await Swal.fire({
+        icon: "error",
+        text: MESSAGES.INVALID_DATE,
+        confirmButtonColor: "#5498FF",
+      });
+      handleInputChange("birthday", "");
       return;
     }
 
-    if (isValid(parsedDate) && (isBefore(parsedDate, minDate) || isBefore(today, parsedDate))) {
-      alert("생년월일을 1900.01.01 이상, 오늘 날짜 이하로 입력해주세요.");
-      setInputs(prev => ({ ...prev, birthday: "" }));
+    if (inputs.nickname.length > 8 || inputs.nickname.length < 2) {
+      await Swal.fire({
+        icon: "error",
+        text: MESSAGES.NICKNAME_LENGTH,
+        confirmButtonColor: "#5498FF",
+      });
       return;
     }
 
-    // TODO: 회원가입 API 호출
-    // if(isFormValid)
-  }, [inputs]);
+    if (!isFormValid) {
+      await Swal.fire({
+        icon: "error",
+        text: MESSAGES.INVALID_SIGNUP_FORM,
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      return;
+    }
 
-  const validationNickname = (nickname: string) => {
-    if (nickname.length > 8 || nickname.length < 2)
-      setValidation("닉네임은 2자 이상 8자 이하로 설정해주세요.");
-    else setValidation("");
-    // TODO: 닉네임 중복 API 호출
-  };
-
-  const InputField: React.FC<{
-    label: string;
-    component?: React.ReactNode;
-  }> = memo(function InputField({ label, component }) {
-    return (
-      <div className="flex items-center justify-between">
-        <p className="w-1/3 font-bold">{label}</p>
-        {component}
-      </div>
+    const response = await dispatch(
+      signup({
+        ...inputs,
+        email: user.email,
+        profileImage: user.profileImage,
+        oauthServerType: user.oauthServerType,
+      })
     );
-  });
+    if (response.meta.requestStatus === "fulfilled") {
+      await Swal.fire({
+        icon: "success",
+        text: MESSAGES.WELCOME(inputs.nickname),
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      router.push(ROUTES.HOME);
+    }
+  }, [inputs, isFormValid, dispatch, user, handleInputChange, router]);
 
   useEffect(() => {
     validationNickname(inputs.nickname);
-  }, [inputs.nickname]);
+    debouncedCheckNickname(inputs.nickname);
+  }, [inputs.nickname, validationNickname, debouncedCheckNickname]);
+
+  useEffect(() => {
+    if (user.email === "") {
+      Swal.fire({
+        icon: "warning",
+        text: MESSAGES.LOGIN_REQUIRED,
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      router.push(ROUTES.LOGIN);
+    }
+  }, [user.email, router]);
 
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-screen overflow-hidden">
@@ -103,8 +183,12 @@ const SignupPage: React.FC = () => {
       <ReadOnlyUserInfo
         infoKey={["소셜 타입", "이메일"]}
         infoValue={[
-          oauthServerType === "GOOGLE" ? "구글" : oauthServerType === "NAVER" ? "네이버" : "카카오",
-          email,
+          user.oauthServerType === "GOOGLE"
+            ? "구글"
+            : user.oauthServerType === "NAVER"
+              ? "네이버"
+              : "카카오",
+          user.email,
         ]}
       />
 
@@ -114,7 +198,7 @@ const SignupPage: React.FC = () => {
           <TextInput
             placeholder="닉네임"
             value={inputs.nickname}
-            validationMessage={validation}
+            validationMessage={validationText}
             handleChangeInput={e => handleChangeNickname(e)}
           />
         </div>
