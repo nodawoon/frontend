@@ -23,3 +23,14 @@ export const createUser = async (user: SignupRequest) => {
       throw error;
     });
 };
+
+export const deleteUser = async () => {
+  return await clientInstance
+    .delete("/users")
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};
