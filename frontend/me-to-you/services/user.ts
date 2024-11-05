@@ -56,3 +56,14 @@ export const deleteUser = async () => {
       throw error;
     });
 };
+
+export const logoutUser = async () => {
+  return await clientInstance
+    .post("/users/logout")
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};

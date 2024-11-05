@@ -7,7 +7,7 @@ import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { setIsSideBarState, setQuestionState } from "@/slice/questionSlice";
 import survey from "../../public/survey.json";
 import Image from "next/image";
-import { removeUser } from "@/slice/userSlice";
+import { logout, removeUser } from "@/slice/userSlice";
 import Swal from "sweetalert2";
 import { ROUTES } from "@/constants/routes";
 
@@ -45,8 +45,35 @@ const Sidebar: React.FC<SidebarProps> = ({
   const handleClickDeleteAccount = async () => {
     const result = await dispatch(removeUser());
 
-    if (result.meta.requestStatus === "fulfilled") router.push(ROUTES.LOGIN);
-    else
+    if (result.meta.requestStatus === "fulfilled") {
+      await Swal.fire({
+        icon: "success",
+        text: "다음에 또 오세요 :)",
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      router.push(ROUTES.LOGIN);
+    } else
+      await Swal.fire({
+        icon: "error",
+        text: `Error Message: ${error}`,
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+  };
+
+  const handleClickLogout = async () => {
+    const result = await dispatch(logout());
+
+    if (result.meta.requestStatus === "fulfilled") {
+      await Swal.fire({
+        icon: "success",
+        text: "다음에 또 오세요 :)",
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      router.push(ROUTES.LOGIN);
+    } else
       await Swal.fire({
         icon: "error",
         text: `Error Message: ${error}`,
@@ -93,7 +120,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         <Link href="/profile" className="text-xl font-medium">
           프로필 보기
         </Link>
-        <p className="text-xl font-medium text-button">로그아웃</p>
+        <p className="text-xl font-medium text-button" onClick={handleClickLogout}>
+          로그아웃
+        </p>
         <p className="text-xl font-medium text-button" onClick={handleClickDeleteAccount}>
           회원탈퇴
         </p>

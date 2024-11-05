@@ -1,6 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSocialLogin } from "@/services/oauth";
-import { createUser, deleteUser, getCheckNickname, getUser, updateUser } from "@/services/user";
+import {
+  createUser,
+  deleteUser,
+  getCheckNickname,
+  getUser,
+  logoutUser,
+  updateUser,
+} from "@/services/user";
 
 const initialState: UserState = {
   loading: false,
@@ -27,6 +34,11 @@ export const login = createAsyncThunk(
     return response.data;
   }
 );
+
+export const logout = createAsyncThunk("user/logout", async () => {
+  const response = await logoutUser();
+  return response.data;
+});
 
 export const checkNicknameDuplication = createAsyncThunk(
   "user/createCheckNickname",
@@ -71,6 +83,12 @@ export const userSlice = createSlice({
         state.error = "";
       })
       .addCase(login.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(logout.fulfilled, state => {
+        state.isLogin = false;
+      })
+      .addCase(logout.rejected, (state, action) => {
         state.error = action.error.message;
       })
       .addCase(checkNicknameDuplication.fulfilled, (state, action) => {
