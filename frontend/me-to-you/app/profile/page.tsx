@@ -65,8 +65,15 @@ const ProfilePage = () => {
     }
   };
 
-  const handleClickProfileImage = () => {
-    fileInputRef.current?.click();
+  const handleClickProfileImage = async () => {
+    await Swal.fire({
+      icon: "warning",
+      text: "프로필 사진 편집은 잠시만 기다려주세요! (개발 중...🛠)",
+      confirmButtonColor: "#5498FF",
+      confirmButtonText: "닫기",
+    });
+    return;
+    // TODO: fileInputRef.current?.click();
   };
 
   const handleClickSaveButton = useCallback(async () => {
