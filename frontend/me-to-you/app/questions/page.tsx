@@ -6,6 +6,8 @@ import React, { useEffect, useState } from "react";
 import { getShareUrl } from "@/services/share";
 import Script from "next/script";
 
+const CLIENT_URL = process.env.NEXT_PUBLIC_CLIENT_URL;
+
 const Page = () => {
   const [shareUrl, setShareUrl] = useState<string>("");
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -35,7 +37,7 @@ const Page = () => {
   }, []);
 
   const handleKakaoShare = () => {
-    const invitationUrl = `${process.env.CLIENT_URL}/survey/invitation/${shareUrl}`;
+    const invitationUrl = `${CLIENT_URL}/survey/invitation/${shareUrl}`;
     window.Kakao.Share.sendDefault({
       objectType: "text",
       text: "(너에게 난) 친구의 설문이 도착했어요! 답변하러 가볼까요?",
@@ -47,7 +49,7 @@ const Page = () => {
   };
 
   const handleUrlShare = () => {
-    const copyText = `${process.env.CLIENT_URL}/survey/invitation/${shareUrl}`;
+    const copyText = `${CLIENT_URL}/survey/invitation/${shareUrl}`;
     navigator.clipboard
       .writeText(copyText)
       .then(() => {

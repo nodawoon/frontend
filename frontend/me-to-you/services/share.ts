@@ -11,3 +11,14 @@ export const getShareUrl = async () => {
       throw error;
     });
 };
+
+export const createSurveyResponse = async (surveyResponse: SurveyResponseState) => {
+  return await clientInstance
+    .post<ApiResponseType<SurveyResponseState>>("/survey-responses", surveyResponse)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};
