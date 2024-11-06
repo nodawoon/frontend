@@ -12,6 +12,7 @@ const Page: React.FC = () => {
   const param = useParams();
   const router = useRouter();
   const [isCurrent, setIsCurrent] = useState(-1);
+  const [isIndex, setIsIndex] = useState(false);
   const [name, setName] = useState("");
   const { list } = useAppSelector(state => state.respondentDetail);
   const resList = useAppSelector(state => state.respondents).list;
@@ -20,7 +21,6 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      let isIndex = false;
       await dispatch(loadRespondentDetail(param.respondentId));
       await dispatch(loadRespondentList());
       await dispatch(loadUser());
@@ -28,18 +28,21 @@ const Page: React.FC = () => {
       resList.forEach(e => {
         if (e.respondentId === Number(param.respondentId) && e.respondentNickname !== undefined) {
           setName(e.respondentNickname !== "" ? e.respondentNickname : "익명");
-          isIndex = true;
+          setIsIndex(true);
         }
       });
-      if (!isIndex) router.push("/results/respondents");
     })();
-  }, [dispatch, param.respondentId, resList, router]);
+  }, [dispatch]);
 
   const questions = survey.questions;
 
   const flow = (i: number) => {
     return i === isCurrent ? "" : "truncate";
   };
+
+  if (!isIndex) {
+    return <div></div>;
+  }
 
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-screen">

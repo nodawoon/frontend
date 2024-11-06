@@ -56,7 +56,7 @@ const Page: React.FC = () => {
       <div className="flex flex-col w-[90%]">
         <p className="text-[23px] mt-10 mb-5 w-full">내 질문에 응답한 사람들</p>
         <div className="relative flex flex-wrap gap-3">
-          {list[0].respondentNickname === undefined ? (
+          {list[0]?.respondentNickname === undefined ? (
             <div className="text-gray mb-5">아직 응답자가 없어요...</div>
           ) : list.length < 4 ? (
             <div className="absolute top-[10%] bg-gradient-to-t from-white w-full h-[100px]"></div>
