@@ -11,7 +11,7 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     hideBackButton: true,
     background: "bg-light-gray",
   },
-  "/login": {
+  "/signin": {
     title: "로그인",
     hideHeader: true,
   },

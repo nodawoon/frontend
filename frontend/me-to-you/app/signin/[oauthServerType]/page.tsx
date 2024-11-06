@@ -42,7 +42,7 @@ const AuthPage: React.FC = () => {
           confirmButtonColor: "#5498FF",
           confirmButtonText: "닫기",
         });
-        router.push("/login");
+        router.push(ROUTES.LOGIN);
       }
     })();
   }, [provider, searchParams, dispatch, error, router]);

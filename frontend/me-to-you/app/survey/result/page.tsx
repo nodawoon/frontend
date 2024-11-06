@@ -4,6 +4,7 @@ import Button from "../../../components/common/Button";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import {ROUTES} from "@/constants/routes";
 
 const Page = () => {
   return (
@@ -24,7 +25,7 @@ const Page = () => {
           <p>로그인하시면 설문을 만들어</p>
           <p>친구들에게 보낼 수 있어요.</p>
         </div>
-        <Link className="mt-[40%]" href={`/login`}>
+        <Link className="mt-[40%]" href={ROUTES.LOGIN}>
           <Button size="lg">내 설문 만들러 가기</Button>
         </Link>
       </div>

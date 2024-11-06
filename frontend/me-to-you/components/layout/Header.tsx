@@ -6,6 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setIsSideBarState } from "@/slice/questionSlice";
 import { PAGE_CONFIG, PageConfig } from "@/constants/pageConfig";
+import {ROUTES} from "@/constants/routes";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,7 +51,7 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollY]);
 
-  if (pathname === "/login" || pathname === "/signup") return <header />;
+  if (pathname === ROUTES.LOGIN || pathname === ROUTES.SIGNUP) return <header />;
 
   const handleMenuClick = () => {
     if (isContactUsOpen) {

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { MESSAGES } from "@/constants/messages";
+import {ROUTES} from "@/constants/routes";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -11,7 +12,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     const isLogin = sessionStorage.getItem("isLogin");
-    const isPublicPath = pathname.startsWith("/login");
+    const isPublicPath = pathname.startsWith("/signin");
     const isSurvey = pathname.startsWith("/survey/invitation");
 
     if (pathname === "/signup" && isLogin) {
@@ -30,12 +31,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         confirmButtonColor: "#5498FF",
         confirmButtonText: "닫기",
       });
-      router.push("/login");
+      router.push(ROUTES.LOGIN);
       return;
     }
 
     if (isLogin === "yes" && isPublicPath) {
-      router.push("/");
+      router.push(ROUTES.HOME);
       return;
     }
   }, [pathname, router]);
