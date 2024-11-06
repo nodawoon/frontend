@@ -38,8 +38,7 @@ const Page = () => {
 
       if (typeof value === "string") {
         getUserNickname(value).then(res => {
-          setNickname(res.data.data.nickname); // Nickname 인터페이스의 nickname 속성에 접근
-          console.info(res.data.data.nickname);
+          setNickname(res.data.data.nickname);
         });
       }
     };

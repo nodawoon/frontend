@@ -5,8 +5,6 @@ import SurveyCard from "../../components/questions/SurveyCard";
 import React, { useEffect, useState } from "react";
 import { getShareUrl } from "@/services/share";
 import Script from "next/script";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loadUser } from "@/slice/userSlice";
 
 const CLIENT_URL = process.env.NEXT_PUBLIC_CLIENT_URL;
 

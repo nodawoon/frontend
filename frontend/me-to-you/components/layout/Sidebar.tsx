@@ -108,7 +108,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <ContactUs />
     </Suspense>
   ) : pathname.startsWith("/survey/responses") ? (
-    <div className="flex flex-col gap-4 w-full h-screen pl-9 pt-10 absolute bg-white z-10">
+    <div className="flex flex-col gap-4 w-full h-screen pl-9 pt-10 absolute bg-white z-50">
       {survey.questions.map(question => (
         <button
           key={question.id}
