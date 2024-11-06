@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction, Suspense } from "react";
+import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react";
 import ContactUs from "@/components/layout/ContactUs";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
@@ -117,7 +117,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
           <div className="flex items-center gap-2">
             <div className="w-[20px] h-[20px] flex-shrink-0">
-              {responseList[question.id - 1]?.response ? (
+              {(question.id === 2 && responseList[question.id - 1].response.length >= 3) ||
+              (question.id !== 2 && responseList[question.id - 1]?.response.length > 0) ? (
                 <Image src="/check_circle.svg" width={20} height={20} alt="check" />
               ) : (
                 <span className="invisible">
@@ -140,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="flex flex-col gap-5">
         <p className="text-xl font-medium text-button" onClick={handleClickNavProfile}>
           프로필 보기
-        </Link>
+        </p>
         <p className="text-xl font-medium text-button" onClick={handleClickLogout}>
           로그아웃
         </p>
