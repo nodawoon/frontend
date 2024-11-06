@@ -63,7 +63,7 @@ const SignupPage: React.FC = () => {
 
   const { validationText, validationNickname, debouncedCheckNickname } = useCheckNickName();
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, isFirst } = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
   const isFormValid = useMemo(
@@ -174,6 +174,10 @@ const SignupPage: React.FC = () => {
       router.push(ROUTES.LOGIN);
     }
   }, [user.email, router]);
+
+  useEffect(() => {
+    router.push(isFirst ? ROUTES.SIGNUP : ROUTES.HOME);
+  }, [isFirst]);
 
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-screen overflow-hidden">

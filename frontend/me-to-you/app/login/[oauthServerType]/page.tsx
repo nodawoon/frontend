@@ -15,7 +15,7 @@ const AuthPage: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { error, isLogin, isFirst } = useSelector((state: RootState) => state.user);
+  const { error, isFirst } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
 
   const provider = pathname.split("/")[2];
@@ -33,7 +33,9 @@ const AuthPage: React.FC = () => {
         })
       );
 
-      if (result.meta.requestStatus === "rejected") {
+      if (result.meta.requestStatus === "fulfilled") {
+        router.push(ROUTES.SIGNUP);
+      } else {
         await Swal.fire({
           icon: "error",
           text: MESSAGES.LOGIN_FAILED(error || "알 수 없는 오류가 발생했습니다"),
@@ -44,12 +46,6 @@ const AuthPage: React.FC = () => {
       }
     })();
   }, [provider, searchParams, dispatch, error, router]);
-
-  useEffect(() => {
-    if (!isLogin) return;
-
-    router.push(isFirst ? ROUTES.SIGNUP : ROUTES.HOME);
-  }, [isLogin, isFirst, router]);
 
   return <Loading />;
 };

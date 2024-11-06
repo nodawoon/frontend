@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSocialLogin } from "@/services/oauth";
-import { createUser, deleteUser, getCheckNickname, getUser } from "@/services/user";
+import {
+  createUser,
+  deleteUser,
+  getCheckNickname,
+  getUser,
+  logoutUser,
+  updateUser,
+} from "@/services/user";
 
 const initialState: UserState = {
   loading: false,
   error: "",
-  isLogin: false,
   isNicknameExist: false,
   isFirst: true,
   user: {
@@ -28,6 +34,11 @@ export const login = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk("user/logout", async () => {
+  const response = await logoutUser();
+  return response.data;
+});
+
 export const checkNicknameDuplication = createAsyncThunk(
   "user/createCheckNickname",
   async (nickname: string) => {
@@ -43,6 +54,11 @@ export const signup = createAsyncThunk("user/signup", async (user: SignupRequest
 
 export const loadUser = createAsyncThunk("user/getUser", async () => {
   const response = await getUser();
+  return response.data;
+});
+
+export const editUser = createAsyncThunk("user/updateUser", async (user: UpdateUserRequest) => {
+  const response = await updateUser(user);
   return response.data;
 });
 
@@ -62,10 +78,16 @@ export const userSlice = createSlice({
         state.user.email = email;
         state.user.oauthServerType = oauthServerType;
         state.isFirst = isFirst;
-        state.isLogin = true;
         state.error = "";
+        sessionStorage.setItem("isLogin", "yes");
       })
       .addCase(login.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(logout.fulfilled, () => {
+        sessionStorage.removeItem("isLogin");
+      })
+      .addCase(logout.rejected, (state, action) => {
         state.error = action.error.message;
       })
       .addCase(checkNicknameDuplication.fulfilled, (state, action) => {
@@ -104,6 +126,16 @@ export const userSlice = createSlice({
         state.user = action.payload.data;
       })
       .addCase(loadUser.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(editUser.pending, state => {
+        state.loading = true;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+      })
+      .addCase(editUser.rejected, (state, action) => {
         state.error = action.error.message;
       })
       .addCase(removeUser.pending, state => {

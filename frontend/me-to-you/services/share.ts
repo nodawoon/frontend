@@ -1,10 +1,24 @@
-import axios from "axios";
+import { clientInstance } from "@/libs/http-client";
+import { ShareUrl } from "@/types/common";
 
-const API_URL = "http://localhost:3000/api";
+export const getShareUrl = async () => {
+  return await clientInstance
+    .get<ApiResponseType<ShareUrl>>("/users/share-url")
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      throw error;
+    });
+};
 
-export const fetchShareUrl = async () => {
-  const responseUrl = await axios.get(`${API_URL}/users/share-url`, {
-    withCredentials: true,
-  });
-  return responseUrl.data.data.shareUrl;
+export const createSurveyResponse = async (surveyResponse: SurveyResponseState) => {
+  return await clientInstance
+    .post<ApiResponseType<SurveyResponseState>>("/survey-responses", surveyResponse)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
 };

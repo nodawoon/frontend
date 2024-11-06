@@ -70,11 +70,20 @@ module.exports = {
             transform: "translateX(0)",
           },
         },
+        clipboardFadeOut: {
+          "0": {
+            opacity: "1",
+          },
+          "100%": {
+            opacity: "0",
+          },
+        },
       },
       animation: {
         "slide-right": "slideRight 1s ease-out forwards",
         "fade-in": "fadeIn 0.5s ease-out forwards",
         "slide-up": "slideUp 0.8s ease-out forwards",
+        "clipboard-fade-out": "clipboardFadeOut 1s ease-out forwards",
       },
     },
   },

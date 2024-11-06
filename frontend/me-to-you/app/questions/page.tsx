@@ -3,23 +3,64 @@
 import ShareLink from "@/components/questions/ShareLink";
 import SurveyCard from "../../components/questions/SurveyCard";
 import React, { useEffect, useState } from "react";
-import { fetchShareUrl } from "@/services/share";
+import { getShareUrl } from "@/services/share";
+import Script from "next/script";
+
+const CLIENT_URL = process.env.NEXT_PUBLIC_CLIENT_URL;
 
 const Page = () => {
-  const [shareUrl, setShareUrl] = useState<Promise<string>>();
+  const [shareUrl, setShareUrl] = useState<string>("");
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
-  // TODO: 로그인 되면, Axios 통신을 통해 링크 공유 생성하기
-  // useEffect(() => {
-  //   const url = fetchShareUrl();
-  //   setShareUrl(url);
-  // }, []);
+  useEffect(() => {
+    const fetchShareurl = async () => {
+      await getShareUrl()
+        .then(response => {
+          const data = response.data.shareUrl;
+          const parts = data.split("/");
+          const id = parts[parts.length - 1];
+          setShareUrl(id);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    };
+
+    fetchShareurl();
+  }, []);
+
+  useEffect(() => {
+    const API_KEY = process.env.NEXT_PUBLIC_KAKAO_API_KEY;
+    if (window.Kakao && !window.Kakao.isInitialized() && API_KEY) {
+      window.Kakao.init(API_KEY);
+    }
+  }, []);
 
   const handleKakaoShare = () => {
-    console.info(shareUrl);
+    const invitationUrl = `${CLIENT_URL}/survey/invitation/${shareUrl}`;
+    window.Kakao.Share.sendDefault({
+      objectType: "text",
+      text: "(너에게 난) 친구의 설문이 도착했어요! 답변하러 가볼까요?",
+      link: {
+        mobileWebUrl: invitationUrl,
+        webUrl: invitationUrl,
+      },
+    });
   };
 
   const handleUrlShare = () => {
-    console.info(shareUrl);
+    const copyText = `${CLIENT_URL}/survey/invitation/${shareUrl}`;
+    navigator.clipboard
+      .writeText(copyText)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 1000);
+      })
+      .catch(() => {
+        console.error("복사 실패");
+      });
   };
 
   const handleQRShare = () => {
@@ -27,18 +68,31 @@ const Page = () => {
   };
 
   return (
-    <div className="bg-light-gray text-center">
-      <p className="px-10 py-8 text-base font-bold">
+    <>
+      <Script src="https://developers.kakao.com/sdk/js/kakao.js" strategy="afterInteractive" />
+      <div className="bg-light-gray text-center relative">
         {" "}
-        설문이 생성되었어요. 친구들에게 공유해보세요!{" "}
-      </p>
-      <SurveyCard />
-      <ShareLink
-        handleKakaoShare={handleKakaoShare}
-        handleUrlShare={handleUrlShare}
-        handleQRShare={handleQRShare}
-      />
-    </div>
+        {/* relative 추가 */}
+        <p className="px-10 py-8 text-base font-bold">
+          설문이 생성되었어요. 친구들에게 공유해보세요!
+        </p>
+        <SurveyCard />
+        <ShareLink
+          handleKakaoShare={handleKakaoShare}
+          handleUrlShare={handleUrlShare}
+          handleQRShare={handleQRShare}
+        />
+        {isCopied && (
+          <div className="absolute w-[80%] bottom-6 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-50 flex justify-center items-center">
+            {" "}
+            {/* 가운데 배치 */}
+            <div className="bg-white text-black font-bold w-[100%] py-4 px-8 rounded-lg shadow-lg animate-clipboard-fade-out">
+              복사 되었습니다!
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
