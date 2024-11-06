@@ -42,7 +42,12 @@ export default function RootLayout({
                   메인 색상인 파란색은 신뢰를 나타내며 고양이 캐릭터는 무의식을 의미합니다.
                 </p>
               </div>
-              <Image src="/github.svg" alt="깃허브 로고" width="50" height="50" />
+              {/*<Image*/}
+              {/*  src="/github.svg"*/}
+              {/*  alt="깃허브 로고"*/}
+              {/*  width="50"*/}
+              {/*  height="50"*/}
+              {/*/>*/}
               <p className="text-sm font-light text-dark-gray mt-10">
                 Copyright 2024. SSAFY. All rights reserved.
               </p>
