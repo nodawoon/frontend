@@ -26,13 +26,23 @@ function Button({
 
   switch (option) {
     case "primary": {
-      combinedClassName +=
-        "text-white bg-primary border border-primary hover:bg-primary-active font-bold break-words rounded-xl ";
+      if (disabled) {
+        combinedClassName +=
+          "text-white bg-gray border border-gray font-bold break-words rounded-xl ";
+      } else {
+        combinedClassName +=
+          "text-white bg-primary border border-primary hover:bg-primary-active font-bold break-words rounded-xl ";
+      }
       break;
     }
     case "secondary": {
-      combinedClassName +=
-        "text-primary bg-white border border-primary hover:bg-primary hover:text-white font-bold break-words rounded-xl ";
+      if (disabled) {
+        combinedClassName +=
+          "text-white bg-gray border border-gray font-bold break-words rounded-xl ";
+      } else {
+        combinedClassName +=
+          "text-primary bg-white border border-primary hover:bg-primary hover:text-white font-bold break-words rounded-xl ";
+      }
       break;
     }
     default: {
@@ -58,7 +68,7 @@ function Button({
   return (
     <button
       type={type ? type : "button"}
-      className={`${combinedClassName} ${className} ${disabled ? "bg-gray border border-gray" : ""}`}
+      className={`${combinedClassName} ${className}`}
       onClick={onClick}
       disabled={disabled}
     >

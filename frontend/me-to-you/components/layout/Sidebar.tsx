@@ -117,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
           <div className="flex items-center gap-2">
             <div className="w-[20px] h-[20px] flex-shrink-0">
-              {(question.id === 2 && responseList[question.id - 1].response.length >= 3) ||
+              {(question.id === 2 && responseList[question.id - 1]?.response.length >= 3) ||
               (question.id !== 2 && responseList[question.id - 1]?.response.length > 0) ? (
                 <Image src="/check_circle.svg" width={20} height={20} alt="check" />
               ) : (
