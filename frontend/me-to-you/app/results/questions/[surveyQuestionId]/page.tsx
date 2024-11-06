@@ -7,20 +7,22 @@ import survey from "../../../../public/survey.json";
 import ResultCard from "@/components/results/ResultCard";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loadUser } from "@/slice/userSlice";
 
 const Page: React.FC = () => {
   const param = useParams();
   const router = useRouter();
 
   const { list } = useAppSelector(state => state.respondentsQuestion);
-  const { nickname } = useAppSelector(state => state.user.user);
+  const { user } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
       await dispatch(loadRespondentQuestionList(param.surveyQuestionId));
+      await dispatch(loadUser());
     })();
-  }, [dispatch, param.surveyQuestionId]);
+  }, [dispatch, param.surveyQuestionId, user]);
 
   const [isTruncate, setIsTruncate] = useState(-1);
   if (Number(param.surveyQuestionId) < 1 || Number(param.surveyQuestionId) > 10) {
@@ -29,12 +31,16 @@ const Page: React.FC = () => {
   }
 
   const currentSurvey = survey.questions[Number(param.surveyQuestionId) - 1];
-  const question: string = currentSurvey.emoji + " " + name + currentSurvey.question;
+  const question: string =
+    currentSurvey.emoji +
+    " " +
+    (Number(param.surveyQuestionId) !== 10 ? user.nickname : "") +
+    currentSurvey.question;
 
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-screen bg-light-gray">
       <div className="flex flex-col w-[90%]">
-        <p className="text-[23px] mt-10 mb-5 w-full font-bold">{nickname + question}</p>
+        <p className="text-[23px] mt-10 mb-5 w-full font-bold">{question}</p>
         <div className="flex flex-wrap gap-3">
           {list.map((e, index) => {
             if (e.respondentNickname === undefined) return;
