@@ -22,7 +22,7 @@ const Page: React.FC = () => {
       await dispatch(loadRespondentQuestionList(param.surveyQuestionId));
       await dispatch(loadUser());
     })();
-  }, [dispatch, param.surveyQuestionId, user]);
+  }, [dispatch]);
 
   const [isTruncate, setIsTruncate] = useState(-1);
   if (
@@ -30,7 +30,7 @@ const Page: React.FC = () => {
     Number(param.surveyQuestionId) > 10 ||
     Number.isNaN(Number(param.surveyQuestionId))
   ) {
-    router.push("/results");
+    window.history.back();
     return;
   }
 
@@ -58,6 +58,7 @@ const Page: React.FC = () => {
                   text={e.response}
                   date={e.createdDate}
                   flow={isTruncate === index ? "break-all" : "truncate"}
+                  questionNumber={Number(param.surveyQuestionId)}
                   onClick={() => (isTruncate === index ? setIsTruncate(-1) : setIsTruncate(index))}
                 />
               );
