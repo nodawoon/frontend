@@ -8,6 +8,7 @@ import Image from "next/image";
 import { loadRespondentList } from "@/slice/respondentsSlice";
 import StatisticsCard from "@/components/results/StatisticsCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loadUser } from "@/slice/userSlice";
 
 const Page: React.FC = () => {
   const surveyList: ReactNode[] = [];
@@ -23,12 +24,13 @@ const Page: React.FC = () => {
   };
 
   const { list } = useAppSelector(state => state.respondents);
-  const { nickname } = useAppSelector(state => state.user.user);
+  const { user } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
       await dispatch(loadRespondentList());
+      await dispatch(loadUser());
     })();
   }, [dispatch]);
 
@@ -44,7 +46,7 @@ const Page: React.FC = () => {
       >
         <p className="flex self-center truncate text-[18px]">
           <span className="mr-3">{e.emoji}</span>
-          <span className="truncate">{e.question}</span>
+          <span className="truncate">{(index !== 9 ? user.nickname : "") + e.question}</span>
         </p>
       </div>
     );
@@ -91,7 +93,7 @@ const Page: React.FC = () => {
       </div>
       <div className="bg-light-gray w-full py-5">
         <div className="flex flex-col w-[85%] mx-auto">
-          <p className="text-[22px] bold my-1">{nickname}님에 대해 알아보세요!</p>
+          <p className="text-[22px] bold my-1">{user.nickname}님에 대해 알아보세요!</p>
           {surveyList}
         </div>
       </div>

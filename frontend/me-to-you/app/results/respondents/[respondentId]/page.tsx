@@ -6,6 +6,7 @@ import survey from "../../../../public/survey.json";
 import ProfileCard from "@/components/results/respondents/ProfileCard";
 import { loadRespondentDetail, loadRespondentList } from "@/slice/respondentsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loadUser } from "@/slice/userSlice";
 
 const Page: React.FC = () => {
   const param = useParams();
@@ -14,27 +15,26 @@ const Page: React.FC = () => {
   const [name, setName] = useState("");
   const { list } = useAppSelector(state => state.respondentDetail);
   const resList = useAppSelector(state => state.respondents).list;
+  const { user } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
+      let isIndex = false;
       await dispatch(loadRespondentDetail(param.respondentId));
-
-      if (resList[0].respondentNickname === undefined) {
-        await dispatch(loadRespondentList());
-      }
+      await dispatch(loadRespondentList());
+      await dispatch(loadUser());
 
       resList.forEach(e => {
         if (e.respondentId === Number(param.respondentId) && e.respondentNickname !== undefined) {
           setName(e.respondentNickname !== "" ? e.respondentNickname : "익명");
-        } else if (e.respondentNickname === undefined) {
-          router.push("/results/respondents");
+          isIndex = true;
         }
       });
+      if (!isIndex) router.push("/results/respondents");
     })();
   }, [dispatch, param.respondentId, resList, router]);
 
-  const myName = "이싸피";
   const questions = survey.questions;
 
   const flow = (i: number) => {
@@ -56,7 +56,7 @@ const Page: React.FC = () => {
                 <div className={"my-2 font-bold flex " + flow(index)}>
                   <span>{index + 1 + "."}</span>
                   <span className={"pl-1 " + flow(index)}>
-                    {e.emoji + " " + (index !== 9 ? myName : "") + e.question}
+                    {e.emoji + " " + (index !== 9 ? user.nickname : "") + e.question}
                   </span>
                 </div>
                 {e.type !== "multi_select" ? (
