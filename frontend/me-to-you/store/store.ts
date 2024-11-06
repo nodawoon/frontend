@@ -7,6 +7,7 @@ import {
   respondentQuestionReducer,
   respondentDetailReducer,
 } from "@/slice/respondentsSlice";
+import { statisticsReducer } from "@/slice/statisticsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     respondents: respondentReducer,
     respondentsQuestion: respondentQuestionReducer,
     respondentDetail: respondentDetailReducer,
+    statistics: statisticsReducer,
   },
 });
 
