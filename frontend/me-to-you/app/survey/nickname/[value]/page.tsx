@@ -62,13 +62,19 @@ const Page = () => {
         />
       </div>
 
-      {nickname.length >= 2 && (
+      {nickname.length >= 2 && nickname.length <= 8 ? (
         <Link
           href={{ pathname: `../responses/${param.value}`, query: { nickname: nickname } }}
           className="w-full max-w-md mx-auto absolute bottom-5 left-0 right-0 text-center"
         >
           <Button size="lg">설문 입력하러 가기</Button>
         </Link>
+      ) : (
+        <div className="w-full max-w-md mx-auto absolute bottom-5 left-0 right-0 text-center">
+          <Button size="lg" disabled>
+            설문 입력하러 가기
+          </Button>
+        </div>
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { getUserNickname } from "@/services/share";
 import Button from "../../../../components/common/Button";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +30,23 @@ const Page = () => {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
+  const [nickname, setNickname] = useState("");
+
+  useEffect(() => {
+    const getNickname = async () => {
+      const value = Array.isArray(param.value) ? param.value[0] : param.value;
+
+      if (typeof value === "string") {
+        getUserNickname(value).then(res => {
+          setNickname(res.data.data.nickname); // Nickname 인터페이스의 nickname 속성에 접근
+          console.info(res.data.data.nickname);
+        });
+      }
+    };
+
+    getNickname();
+  }, [param.value]);
+
   return (
     <div
       className={`overflow-y-hidden flex justify-center items-center ${screenSize === "large" ? "mt-64" : screenSize === "medium" ? "mt-48" : "mt-32"}`}
@@ -43,7 +61,7 @@ const Page = () => {
           style={{ width: "175px", height: "175px" }}
         />
         <div className="font-bold text-[28px] text-center mt-2">
-          <p>김싸피님이 보낸</p>
+          <p>{nickname}님이 보낸</p>
           <p>
             <span className="text-primary">소개</span> 요청이에요.
           </p>

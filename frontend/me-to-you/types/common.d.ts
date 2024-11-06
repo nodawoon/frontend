@@ -4,6 +4,10 @@ interface ShareUrl {
   shareUrl: string;
 }
 
+interface Nickname {
+  nickname: string;
+}
+
 interface Kakao {
   isInitialized(): boolean;
   init(appKey: string): void;
