@@ -10,6 +10,26 @@ const Page = () => {
   const [validation, setValidation] = React.useState("");
   const [nickname, setNickname] = React.useState("");
   const param = useParams();
+  const [screenSize, setScreenSize] = React.useState("small");
+
+  useEffect(() => {
+    const updateSize = () => {
+      const width = window.screen.width;
+      const height = window.screen.height;
+
+      if (width >= 1920 && height >= 1080) {
+        setScreenSize("large");
+      } else if (width >= 1366 && height >= 768) {
+        setScreenSize("medium");
+      } else {
+        setScreenSize("small");
+      }
+    };
+
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, [screenSize]);
 
   const validationNickname = (nickname: string) => {
     if (nickname.length > 8 || nickname.length < 2)
@@ -29,25 +49,27 @@ const Page = () => {
   }, [nickname]);
 
   return (
-    <div className="overflow-y-hidden w-[90%] ml-auto mr-auto">
-      <div className="flex flex-col h-screen justify-center mt-[30%]">
-        <div className="mb-auto">
-          <p className="font-bold text-[24px] mb-3">닉네임</p>
-          <TextInput
-            placeholder="닉네임"
-            value={nickname}
-            validationMessage={validation}
-            handleChangeInput={e => handleChangeNickname(e)}
-          />
-        </div>
+    <div
+      className={`overflow-y-hidden w-[90%] mx-auto flex flex-col justify-start relative ${screenSize === "large" ? "h-screen" : screenSize === "medium" ? "h-[90vh]" : "h-[90vh]"}`}
+    >
+      <div className="mt-10">
+        <p className="font-bold text-[24px] mb-3">닉네임</p>
+        <TextInput
+          placeholder="닉네임"
+          value={nickname}
+          validationMessage={validation}
+          handleChangeInput={e => handleChangeNickname(e)}
+        />
+      </div>
 
+      {nickname.length >= 2 && (
         <Link
-          className="mb-auto mt-auto text-center"
           href={{ pathname: `../responses/${param.value}`, query: { nickname: nickname } }}
+          className="w-full max-w-md mx-auto absolute bottom-5 left-0 right-0 text-center"
         >
           <Button size="lg">설문 입력하러 가기</Button>
         </Link>
-      </div>
+      )}
     </div>
   );
 };
