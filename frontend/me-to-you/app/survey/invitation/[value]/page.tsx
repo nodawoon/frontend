@@ -49,7 +49,7 @@ const Page = () => {
 
   return (
     <div
-      className={`overflow-y-hidden flex justify-center items-center ${screenSize === "large" ? "mt-64" : screenSize === "medium" ? "mt-48" : "mt-32"}`}
+      className={`overflow-y-hidden flex justify-center items-center ${screenSize === "large" ? "mt-48" : screenSize === "medium" ? "mt-32" : "mt-16"}`}
     >
       <div className="flex flex-col h-full justify-center items-center max-w-md px-4">
         <Image

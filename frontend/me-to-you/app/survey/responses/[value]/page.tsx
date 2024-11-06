@@ -137,7 +137,7 @@ const Page = () => {
     <div className="w-[90%] ml-auto mr-auto h-[90vh] flex flex-col justify-between py-4">
       <div>
         <ProgressBar progress={questionState * 10} width={100} className="h-2 mb-6" />
-        <div className="font-bold text-2xl mt-4 mb-4">
+        <div className="font-bold text-2xl mt-10 mb-4">
           {survey.questions
             .filter(question => question.id === questionState)
             .map(question => (
