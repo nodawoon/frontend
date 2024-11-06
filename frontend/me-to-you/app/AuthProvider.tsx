@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { MESSAGES } from "@/constants/messages";
-import {ROUTES} from "@/constants/routes";
+import { ROUTES } from "@/constants/routes";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -12,7 +12,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     const isLogin = sessionStorage.getItem("isLogin");
-    const isPublicPath = pathname.startsWith("/signin");
+    const isPublicPath = pathname.startsWith(ROUTES.LOGIN);
     const isSurvey = pathname.startsWith("/survey/invitation");
 
     if (pathname === "/signup" && isLogin) {
