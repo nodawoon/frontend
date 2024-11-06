@@ -67,7 +67,7 @@ const Header: React.FC = () => {
       } ${currentPageConfig.background}`}
     >
       <div className="flex justify-between items-center p-4">
-        {!currentPageConfig.hideBackButton && !isMenuOpen ? (
+        {!currentPageConfig.hideBackButton && !isMenuOpen && (
           <span
             className="material-symbols-rounded"
             onClick={() => {
@@ -76,10 +76,8 @@ const Header: React.FC = () => {
           >
             arrow_back_ios
           </span>
-        ) : (
-          <span></span>
         )}
-        {currentPageConfig.hideBackButton && <span />}
+        {(currentPageConfig.hideBackButton || isMenuOpen) && <span />}
         <p className="text-base font-bold">{pageTitle}</p>
         <span className="material-symbols-rounded" onClick={handleMenuClick}>
           {isMenuOpen ? "close" : "menu"}
