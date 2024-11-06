@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { loadKeywordCount } from "@/slice/statisticsSlice";
 
-const colors = ["bg-sub-sky", "bg-pink", "bg-green", "bg-yellow", "bg-soft-gray"];
+const colors = ["bg-green", "bg-sub-sky", "bg-pink"];
 
 const PodiumChart: React.FC = () => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -27,6 +27,8 @@ const PodiumChart: React.FC = () => {
       if (b.ranking === 1) return 1;
       return 0;
     });
+
+  // TODO: 카운트 올라가는 애니메이션
 
   useEffect(() => {
     dispatch(loadKeywordCount());
