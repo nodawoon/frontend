@@ -16,7 +16,6 @@ const Page: React.FC = () => {
       await dispatch(loadRespondentList());
     })();
   }, [dispatch]);
-
   const combinedClassName: string = "h-auto rounded-xl p-1 bg-white hover:bg-gray w-full";
 
   return (
@@ -25,7 +24,7 @@ const Page: React.FC = () => {
         <p className="text-[23px] mt-10 mb-5 w-full">내 질문에 응답한 사람들</p>
         <div className="relative flex flex-wrap gap-3">
           {list.map((e, index) => {
-            if (e.respondentNickname === "") return;
+            if (e.respondentNickname === undefined) return;
             return (
               <div key={index} className="flex flex-col grow max-w-[30%]">
                 <Image
@@ -37,7 +36,9 @@ const Page: React.FC = () => {
                   onClick={() => router.push("respondents/" + e.respondentId)}
                   priority
                 />
-                <span className="text-center w-full">{e.respondentNickname}</span>
+                <span className="text-center w-full">
+                  {e.respondentNickname !== "" ? e.respondentNickname : "익명"}
+                </span>
               </div>
             );
           })}

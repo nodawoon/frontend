@@ -21,3 +21,14 @@ export const getRespondentQuestionList = async (param: string | string[]) => {
       throw error;
     });
 };
+
+export const getRespondentDetail = async (param: string | string[]) => {
+  return await clientInstance
+    .get<ApiResponseType<RespondentDetailState>>("/survey-results/" + param)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};

@@ -31,38 +31,17 @@ const Page: React.FC = () => {
   const currentSurvey = survey.questions[Number(param.surveyQuestionId) - 1];
   const question: string = currentSurvey.emoji + " " + name + currentSurvey.question;
 
-  // const profileList: { name: string; response: string | string[]; date: string }[] = [
-  //   {
-  //     name: "김싸피",
-  //     response:
-  //       "친근하고 좋았다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
-  //     date: "2024.10.17",
-  //   },
-  //   {
-  //     name: "이싸피",
-  //     response:
-  //       "친구 하고 싶다kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkㅏㅏㅏk",
-  //     date: "2024.10.24",
-  //   },
-  //   {
-  //     name: "박싸피",
-  //     response: "어색했다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
-  //     date: "2024.10.25",
-  //   },
-  //   { name: "서싸피", response: ["다가가", "asd", "bsa"], date: "2024.10.30" },
-  // ];
-
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-screen bg-light-gray">
       <div className="flex flex-col w-[90%]">
         <p className="text-[23px] mt-10 mb-5 w-full font-bold">{nickname + question}</p>
-        <div className="relative flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3">
           {list.map((e, index) => {
-            if (e.createdDate === "") return;
+            if (e.respondentNickname === undefined) return;
             return (
               <ResultCard
                 key={index}
-                name={e.respondentNickname}
+                name={e.respondentNickname !== "" ? e.respondentNickname : "익명"}
                 text={e.response}
                 date={e.createdDate}
                 flow={isTruncate === index ? "break-all" : "truncate"}
