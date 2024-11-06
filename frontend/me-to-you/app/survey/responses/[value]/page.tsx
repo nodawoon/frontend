@@ -6,7 +6,7 @@ import survey from "@/public/survey.json";
 import SelectButton from "@/components/common/SelectButton";
 import TextInput from "@/components/common/TextInput";
 import TextArea from "@/components/common/TextArea";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { setQuestionState } from "@/slice/questionSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addResponse, addRespondentNickname, addshareUrl } from "@/slice/responseSlice";
@@ -25,6 +25,7 @@ const Page = () => {
   const params = useParams();
   const [customAnswer, setCustomAnswer] = useState<{ [key: number]: string }>({});
   const [isCustomInputActive, setIsCustomInputActive] = useState<{ [key: number]: boolean }>({});
+  const router = useRouter();
 
   const id = params.value;
   const nickname: string | null = searchParams.get("nickname") ?? "";
@@ -65,12 +66,14 @@ const Page = () => {
           showConfirmButton: true,
         });
         return false;
+      } else {
+        return true;
       }
     });
 
     if (checkResponse) {
-      const response = createSurveyResponse(submitForm);
-      console.info(response);
+      await createSurveyResponse(submitForm);
+      router.push("/survey/result");
     }
   };
 
