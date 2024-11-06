@@ -7,11 +7,9 @@ import SelectButton from "@/components/common/SelectButton";
 import TextInput from "@/components/common/TextInput";
 import TextArea from "@/components/common/TextArea";
 import { useParams, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
 import { setQuestionState } from "@/slice/questionSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addResponse, addRespondentNickname, addshareUrl } from "@/slice/responseSlice";
-import { clientInstance } from "@/libs/http-client";
 import { createSurveyResponse } from "@/services/share";
 import Swal from "sweetalert2";
 import { loadUser } from "@/slice/userSlice";
@@ -158,12 +156,12 @@ const Page = () => {
                 <div key={question.id}>
                   {question.type === "multiple_choice" ||
                   question.type === "multiple_choice_with_text" ? (
-                    <div className="flex flex-col h-[60vh] justify-around">
+                    <div className="flex flex-col justify-around">
                       {question.options?.map((option, idx) => (
                         <div key={idx}>
                           <SelectButton
                             size="sm"
-                            className="w-full text-left font-bold h-10"
+                            className="w-full text-left font-bold h-10 mt-[25px]"
                             isSelected={
                               responseList.find(
                                 response => response.surveyQuestionId === question.id
@@ -175,7 +173,7 @@ const Page = () => {
                             {option}
                           </SelectButton>
                           {isCustomInputActive[question.id] && option === "직접 입력" && (
-                            <div className="mt-2">
+                            <div className="mt-[10px]">
                               <TextInput
                                 placeholder="10자 이내로 입력하세요."
                                 handleChangeInput={e =>
