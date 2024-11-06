@@ -109,6 +109,16 @@ const SignupPage: React.FC = () => {
   );
 
   const handleClickSignupButton = useCallback(async () => {
+    if (user.email === "") {
+      await Swal.fire({
+        icon: "warning",
+        text: MESSAGES.LOGIN_REQUIRED,
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      router.push(ROUTES.LOGIN);
+    }
+
     if (!validateBirthday(inputs.birthday)) {
       await Swal.fire({
         icon: "error",
@@ -164,20 +174,8 @@ const SignupPage: React.FC = () => {
   }, [inputs.nickname, validationNickname, debouncedCheckNickname]);
 
   useEffect(() => {
-    if (user.email === "") {
-      Swal.fire({
-        icon: "warning",
-        text: MESSAGES.LOGIN_REQUIRED,
-        confirmButtonColor: "#5498FF",
-        confirmButtonText: "닫기",
-      });
-      router.push(ROUTES.LOGIN);
-    }
-  }, [user.email, router]);
-
-  useEffect(() => {
     router.push(isFirst ? ROUTES.SIGNUP : ROUTES.HOME);
-  }, [isFirst]);
+  }, [isFirst, router]);
 
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-screen overflow-hidden">

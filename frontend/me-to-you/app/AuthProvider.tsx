@@ -11,22 +11,34 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     const isLogin = sessionStorage.getItem("isLogin");
-    const isPublicPath = pathname === "/login" || pathname === "/signup";
+    const isPublicPath = pathname.startsWith("/login");
+    const isSurvey = pathname.startsWith("/survey/invitation");
 
-    if (!isLogin && !isPublicPath) {
+    if (pathname === "/signup" && isLogin) {
+      router.push("/");
+      return;
+    }
+
+    if (pathname === "/signup") {
+      return;
+    }
+
+    if (!isLogin && !isPublicPath && !isSurvey) {
       Swal.fire({
         icon: "info",
-        text: "로그인부터 해주세요!",
+        text: MESSAGES.LOGIN_REQUIRED,
         confirmButtonColor: "#5498FF",
         confirmButtonText: "닫기",
       });
       router.push("/login");
+      return;
     }
 
     if (isLogin === "yes" && isPublicPath) {
       router.push("/");
+      return;
     }
-  }, []);
+  }, [pathname, router]);
 
   return <>{children}</>;
 }
