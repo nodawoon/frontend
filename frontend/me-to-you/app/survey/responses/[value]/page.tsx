@@ -10,16 +10,14 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { setQuestionState } from "@/slice/questionSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addResponse, addRespondentNickname, addshareUrl } from "@/slice/responseSlice";
-import { createSurveyResponse } from "@/services/share";
+import { createSurveyResponse, getUserNickname } from "@/services/share";
 import Swal from "sweetalert2";
-import { loadUser } from "@/slice/userSlice";
 
 const Page = () => {
   const questionState = useAppSelector(state => state.question.questionNumber);
   const sideBarState = useAppSelector(state => state.question.isSideBarOpen);
   const responseList = useAppSelector(state => state.surveyResponse.surveyResponseRequestList);
   const submitForm = useAppSelector(state => state.surveyResponse);
-  const user = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const params = useParams();
@@ -29,10 +27,21 @@ const Page = () => {
 
   const id = params.value;
   const nickname: string | null = searchParams.get("nickname") ?? "";
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    dispatch(loadUser());
-  }, []);
+    const getUesrName = async () => {
+      if (typeof id === "string") {
+        await getUserNickname(id).then(res => {
+          setUserName(res.data.data.nickname);
+        });
+      }
+    };
+
+    getUesrName();
+    dispatch(addshareUrl(`${id}`));
+    dispatch(addRespondentNickname(nickname));
+  }, [id]);
 
   useEffect(() => {
     const existingResponse = responseList.find(
@@ -50,9 +59,7 @@ const Page = () => {
   }, [questionState, responseList, dispatch]);
 
   const handlerSubmit = async () => {
-    await dispatch(addshareUrl(`${id}`));
-    await dispatch(addRespondentNickname(nickname));
-
+    console.info(submitForm);
     const checkResponse = responseList.some(response => {
       if (
         response.response.length === 0 ||
@@ -73,7 +80,14 @@ const Page = () => {
 
     if (checkResponse) {
       await createSurveyResponse(submitForm);
-      router.push("/survey/result");
+      Swal.fire({
+        title: "설문 제출 성공!",
+        text: "답변이 친구에게로 전달 될거에요.",
+        icon: "success",
+        showConfirmButton: true,
+      }).then(() => {
+        router.push("/survey/result");
+      });
     }
   };
 
@@ -146,7 +160,7 @@ const Page = () => {
             .map(question => (
               <div key={question.id}>
                 {question.question.startsWith("님")
-                  ? question.emoji + user.nickname + question.question
+                  ? question.emoji + userName + question.question
                   : question.emoji + question.question}
               </div>
             ))}
