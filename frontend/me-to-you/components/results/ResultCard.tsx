@@ -5,10 +5,10 @@ import Image from "next/image";
 interface ResultCardProps {
   className?: string;
   name: string;
-  text: string | string[];
+  text: string;
   date: string;
   flow?: string;
-  key?: number;
+  questionNumber?: number;
   onClick?: () => void;
 }
 
@@ -18,6 +18,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   text,
   date,
   flow,
+  questionNumber,
   onClick,
 }: ResultCardProps) => {
   const combinedClassName =
@@ -25,12 +26,12 @@ const ResultCard: React.FC<ResultCardProps> = ({
 
   const texts: React.FC<string[]> = (text: string[]) => {
     return (
-      <div className="flex">
+      <div className={"flex " + (questionNumber === 2 && flow === "break-all" ? "flex-wrap" : "")}>
         {text.map((e, index) => {
           return (
             <div
               key={index}
-              className="w-auto rounded-md bg-soft-gray px-2.5 mr-2 font-medium py-0.5 text-sm"
+              className="w-auto rounded-md bg-soft-gray px-2.5 mr-2 font-medium py-0.5 text-sm my-1"
             >
               {e}
             </div>
@@ -41,7 +42,10 @@ const ResultCard: React.FC<ResultCardProps> = ({
   };
 
   return (
-    <div className={`${combinedClassName} ${className} ` + flow} onClick={onClick}>
+    <div
+      className={`${combinedClassName} ${className} ` + (questionNumber === 2 ? "truncate" : flow)}
+      onClick={onClick}
+    >
       <Image
         className="my-auto rounded-full border border-gray w-[50px] h-[50px]"
         src="/character.svg"
@@ -49,13 +53,23 @@ const ResultCard: React.FC<ResultCardProps> = ({
         width="50"
         height="50"
       />
-      <div className={"my-auto flex w-96 flex-col justify-center ml-3 py-3 " + flow}>
+      <div
+        className={
+          "my-auto flex w-96 flex-col justify-center ml-3 py-3 " +
+          (questionNumber === 2 ? "truncate" : flow)
+        }
+      >
         <div className="flex w-full justify-between py-0.5 text-sm font-medium">
           <div className="w-auto">{name}</div>
           <div className="w-auto text-sm text-medium-gray">{date}</div>
         </div>
-        <div className={"w-full text-left py-0.5 text-m font-light " + flow}>
-          {typeof text !== "string" ? texts(text) : text}
+        <div
+          className={
+            "w-full text-left py-0.5 text-m font-light " +
+            (questionNumber === 2 ? "truncate" : flow)
+          }
+        >
+          {questionNumber === 2 ? texts(text.split(",")) : text}
         </div>
       </div>
     </div>

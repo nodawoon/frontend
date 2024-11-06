@@ -10,29 +10,29 @@ import { loadUser } from "@/slice/userSlice";
 
 const Page: React.FC = () => {
   const param = useParams();
-  const router = useRouter();
   const [isCurrent, setIsCurrent] = useState(-1);
   const [isIndex, setIsIndex] = useState(false);
-  const [name, setName] = useState("");
-  const { list } = useAppSelector(state => state.respondentDetail);
-  const resList = useAppSelector(state => state.respondents).list;
-  const { user } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
+
+  const { list } = useAppSelector(state => state.respondentDetail);
+  const { user } = useAppSelector(state => state.user);
+  const resList = useAppSelector(state => state.respondents).list;
 
   useEffect(() => {
     (async () => {
       await dispatch(loadRespondentDetail(param.respondentId));
-      await dispatch(loadRespondentList());
       await dispatch(loadUser());
-
-      resList.forEach(e => {
-        if (e.respondentId === Number(param.respondentId) && e.respondentNickname !== undefined) {
-          setName(e.respondentNickname !== "" ? e.respondentNickname : "익명");
-          setIsIndex(true);
-        }
-      });
+      await dispatch(loadRespondentList());
     })();
   }, [dispatch]);
+
+  useEffect(() => {
+    resList.forEach(e => {
+      if (e.respondentId === Number(param.respondentId) && e.respondentNickname !== undefined) {
+        setIsIndex(true);
+      }
+    });
+  }, [resList]);
 
   const questions = survey.questions;
 
@@ -41,13 +41,17 @@ const Page: React.FC = () => {
   };
 
   if (!isIndex) {
-    return <div></div>;
+    return <div className="text-center mt-10 text-[30px]"></div>;
   }
 
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-screen">
       <div className="flex flex-col w-[90%]">
-        <ProfileCard className="mt-5 mb-7 w-full" name={name} date={list[0]?.createdDate} />
+        <ProfileCard
+          className="mt-5 mb-7 w-full"
+          name={user.nickname}
+          date={list[0]?.createdDate}
+        />
         <div className="relative flex flex-wrap gap-3 mb-10">
           {questions.map((e, index) => {
             return (
@@ -67,12 +71,12 @@ const Page: React.FC = () => {
                     {list[index]?.response}
                   </div>
                 ) : (
-                  <div className="w-full flex bg-light-gray rounded-md px-5 py-2">
+                  <div className="w-full flex flex-wrap bg-light-gray rounded-md px-5 py-2">
                     {list[index]?.response.split(",").map((e, i) => {
                       return (
                         <div
                           key={i}
-                          className="w-auto bg-soft-gray px-3 mr-3 rounded-md font-bold py-1 text-[14px]"
+                          className="w-auto bg-soft-gray px-3 mr-3 my-1 rounded-md font-bold py-0.5 text-[14px]"
                         >
                           {e}
                         </div>
