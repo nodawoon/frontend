@@ -7,21 +7,19 @@ import SelectButton from "@/components/common/SelectButton";
 import TextInput from "@/components/common/TextInput";
 import TextArea from "@/components/common/TextArea";
 import { useParams, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
 import { setQuestionState } from "@/slice/questionSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addResponse, addRespondentNickname, addshareUrl } from "@/slice/responseSlice";
-import { clientInstance } from "@/libs/http-client";
 import { createSurveyResponse } from "@/services/share";
 import Swal from "sweetalert2";
-
-const userName = "김싸피";
+import { loadUser } from "@/slice/userSlice";
 
 const Page = () => {
   const questionState = useAppSelector(state => state.question.questionNumber);
   const sideBarState = useAppSelector(state => state.question.isSideBarOpen);
   const responseList = useAppSelector(state => state.surveyResponse.surveyResponseRequestList);
   const submitForm = useAppSelector(state => state.surveyResponse);
+  const user = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const params = useParams();
@@ -30,6 +28,10 @@ const Page = () => {
 
   const id = params.value;
   const nickname: string | null = searchParams.get("nickname") ?? "";
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
 
   useEffect(() => {
     const existingResponse = responseList.find(
@@ -49,21 +51,27 @@ const Page = () => {
   const handlerSubmit = async () => {
     await dispatch(addshareUrl(`${id}`));
     await dispatch(addRespondentNickname(nickname));
-    responseList.some(response => {
-      if (response.response.length === 0 || response.response[0] === "") {
+
+    const checkResponse = responseList.some(response => {
+      if (
+        response.response.length === 0 ||
+        response.response[0] === "" ||
+        (response.surveyQuestionId === 2 && response.response.length < 3)
+      ) {
         Swal.fire({
           title: `${response.surveyQuestionId}번 항목을 작성하지 않으셨습니다.`,
           text: "작성하고 오세요!",
           icon: "warning",
           showConfirmButton: true,
         });
-        return true;
+        return false;
       }
     });
 
-    console.info(submitForm);
-    const response = createSurveyResponse(submitForm);
-    console.info(response);
+    if (checkResponse) {
+      const response = createSurveyResponse(submitForm);
+      console.info(response);
+    }
   };
 
   const handlerSingleChoiceAnswer = (questionId: number, option: string) => {
@@ -135,7 +143,7 @@ const Page = () => {
             .map(question => (
               <div key={question.id}>
                 {question.question.startsWith("님")
-                  ? question.emoji + userName + question.question
+                  ? question.emoji + user.nickname + question.question
                   : question.emoji + question.question}
               </div>
             ))}
@@ -148,12 +156,12 @@ const Page = () => {
                 <div key={question.id}>
                   {question.type === "multiple_choice" ||
                   question.type === "multiple_choice_with_text" ? (
-                    <div className="flex flex-col h-[60vh] justify-around">
+                    <div className="flex flex-col justify-around">
                       {question.options?.map((option, idx) => (
                         <div key={idx}>
                           <SelectButton
                             size="sm"
-                            className="w-full text-left font-bold h-10"
+                            className="w-full text-left font-bold h-10 mt-[25px]"
                             isSelected={
                               responseList.find(
                                 response => response.surveyQuestionId === question.id
@@ -165,7 +173,7 @@ const Page = () => {
                             {option}
                           </SelectButton>
                           {isCustomInputActive[question.id] && option === "직접 입력" && (
-                            <div className="mt-2">
+                            <div className="mt-[10px]">
                               <TextInput
                                 placeholder="10자 이내로 입력하세요."
                                 handleChangeInput={e =>

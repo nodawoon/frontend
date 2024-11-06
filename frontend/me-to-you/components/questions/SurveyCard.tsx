@@ -1,14 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import survey from "../../public/survey.json";
 import SelectButton from "../common/SelectButton";
 import TextInput from "../common/TextInput";
 import TextArea from "../common/TextArea";
-
-const userName = "김싸피";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loadUser } from "@/slice/userSlice";
 
 const SurveyCard = () => {
   const [openQuestionId, setOpenQuestionId] = useState<string | null>(null); // 열려 있는 질문 ID
+  const user = useAppSelector(state => state.user.user);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
 
   const handleClickOpen = (questionId: string) => {
     // 현재 열려 있는 질문을 다시 클릭하면 닫히고, 다른 질문을 클릭하면 해당 질문이 열리도록 설정
@@ -28,7 +34,7 @@ const SurveyCard = () => {
             >
               {question.emoji}{" "}
               {question.question.startsWith("님")
-                ? `${userName + question.question}`
+                ? `${user.nickname + question.question}`
                 : `${question.question}`}
             </p>
             <span className="material-symbols-rounded text-icon cursor-pointer text-primary">

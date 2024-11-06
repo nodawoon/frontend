@@ -1,7 +1,7 @@
 "use client";
 import React, { Dispatch, SetStateAction, Suspense } from "react";
 import ContactUs from "@/components/layout/ContactUs";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { setIsSideBarState, setQuestionState } from "@/slice/questionSlice";
 import survey from "../../public/survey.json";
@@ -9,8 +9,7 @@ import Image from "next/image";
 import { logout, removeUser } from "@/slice/userSlice";
 import Swal from "sweetalert2";
 import { ROUTES } from "@/constants/routes";
-
-const userName = "김싸피";
+import { getUserNickname } from "@/services/share";
 
 interface SidebarProps {
   isContactUsOpen: boolean;
@@ -27,6 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const param = useParams();
 
   const questionNumber = useAppSelector(state => state.question.questionNumber);
   const responseList = useAppSelector(state => state.surveyResponse.surveyResponseRequestList);
@@ -86,6 +86,23 @@ const Sidebar: React.FC<SidebarProps> = ({
       });
   };
 
+  const [nickname, setNickname] = useState("");
+
+  useEffect(() => {
+    const getNickname = async () => {
+      const value = Array.isArray(param.value) ? param.value[0] : param.value;
+
+      if (typeof value === "string") {
+        getUserNickname(value).then(res => {
+          setNickname(res.data.data.nickname); // Nickname 인터페이스의 nickname 속성에 접근
+          console.info(res.data.data.nickname);
+        });
+      }
+    };
+
+    getNickname();
+  }, [param.value]);
+
   return isContactUsOpen ? (
     <Suspense fallback={<div>Loading...</div>}>
       <ContactUs />
@@ -111,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <span className="truncate">
               {question.id}.{" "}
               {question.question.startsWith("님")
-                ? userName + question.question
+                ? nickname + question.question
                 : question.question}
             </span>
           </div>

@@ -10,9 +10,18 @@ interface ButtonProps {
   onClick?: () => void;
   children: ReactNode;
   option?: string;
+  disabled?: boolean;
 }
 
-function Button({ type, size, className, onClick, children, option = "primary" }: ButtonProps) {
+function Button({
+  type,
+  size,
+  className,
+  onClick,
+  children,
+  option = "primary",
+  disabled = false,
+}: ButtonProps) {
   let combinedClassName = "";
 
   switch (option) {
@@ -49,8 +58,9 @@ function Button({ type, size, className, onClick, children, option = "primary" }
   return (
     <button
       type={type ? type : "button"}
-      className={`${combinedClassName} ${className}`}
+      className={`${combinedClassName} ${className} ${disabled ? "bg-gray border border-gray" : ""}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>
