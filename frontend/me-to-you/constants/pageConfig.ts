@@ -27,9 +27,17 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     title: "설문 생성",
     background: "bg-light-gray",
   },
-  "/results": {
+  "/results/questions": {
     title: "결과 확인",
     background: "bg-light-gray",
+  },
+  "/results/respondents": {
+    title: "결과 확인",
+    background: "bg-light-gray",
+  },
+  "/results": {
+    title: "결과 확인",
+    background: "bg-white",
   },
   "/responses": {
     title: "설문 응답",

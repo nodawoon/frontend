@@ -24,9 +24,7 @@ const Header: React.FC = () => {
       configPath => path.startsWith(configPath) && configPath !== "/"
     );
 
-    return matchingPath
-      ? PAGE_CONFIG[matchingPath]
-      : { title: "404 | Page Not Found", background: "bg-white" };
+    return matchingPath ? PAGE_CONFIG[matchingPath] : { title: "", background: "bg-white" };
   };
 
   const currentPageConfig = getPageConfig(pathname);
@@ -69,12 +67,17 @@ const Header: React.FC = () => {
       } ${currentPageConfig.background}`}
     >
       <div className="flex justify-between items-center p-4">
-        {!currentPageConfig.hideBackButton && (
-          <span className="material-symbols-rounded" onClick={() => window.history.back()}>
+        {!currentPageConfig.hideBackButton && !isMenuOpen && (
+          <span
+            className="material-symbols-rounded"
+            onClick={() => {
+              window.history.back();
+            }}
+          >
             arrow_back_ios
           </span>
         )}
-        {currentPageConfig.hideBackButton && <span />}
+        {(currentPageConfig.hideBackButton || isMenuOpen) && <span />}
         <p className="text-base font-bold">{pageTitle}</p>
         <span className="material-symbols-rounded" onClick={handleMenuClick}>
           {isMenuOpen ? "close" : "menu"}
