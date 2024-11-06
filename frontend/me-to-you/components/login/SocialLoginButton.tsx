@@ -16,6 +16,10 @@ const SocialLoginButton: React.FC = () => {
     window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI}&state=Bibliophile`;
   };
 
+  console.info("카카오 리다이렉트", process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI);
+  console.info("구글 리다이렉트", process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI);
+  console.info("네이버 리다이렉트", process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI);
+
   const renderSocialLoginButton = (type: string) => {
     return (
       <button

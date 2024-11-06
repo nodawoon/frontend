@@ -15,7 +15,7 @@ const AuthPage: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { error, isFirst } = useSelector((state: RootState) => state.user);
+  const { error } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
 
   const provider = pathname.split("/")[2];
