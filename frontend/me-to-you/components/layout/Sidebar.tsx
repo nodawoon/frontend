@@ -1,6 +1,5 @@
 "use client";
 import React, { Dispatch, SetStateAction, Suspense } from "react";
-import Link from "next/link";
 import ContactUs from "@/components/layout/ContactUs";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
@@ -42,6 +41,11 @@ const Sidebar: React.FC<SidebarProps> = ({
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleClickNavProfile = () => {
+    router.push("/profile");
+    setIsMenuOpen(false);
+  };
+
   const handleClickDeleteAccount = async () => {
     const result = await dispatch(removeUser());
 
@@ -60,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <ContactUs />
     </Suspense>
   ) : pathname.startsWith("/survey/responses") ? (
-    <div className="flex flex-col gap-4 w-[80%] ml-8 mt-10">
+    <div className="flex flex-col gap-4 w-full h-screen pl-9 pt-10 absolute bg-white z-10">
       {survey.questions.map(question => (
         <button
           key={question.id}
@@ -88,11 +92,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       ))}
     </div>
   ) : (
-    <div className="w-full h-screen bg-auto pl-9 flex flex-col justify-center gap-28">
+    <div className="absolute bg-white w-full h-screen pl-9 flex flex-col justify-center gap-28 z-10 max-w-[460px]">
       <div className="flex flex-col gap-5">
-        <Link href="/profile" className="text-xl font-medium">
+        <p className="text-xl font-medium text-button" onClick={handleClickNavProfile}>
           프로필 보기
-        </Link>
+        </p>
         <p className="text-xl font-medium text-button">로그아웃</p>
         <p className="text-xl font-medium text-button" onClick={handleClickDeleteAccount}>
           회원탈퇴
