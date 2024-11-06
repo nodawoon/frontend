@@ -47,23 +47,32 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const handleClickDeleteAccount = async () => {
-    const result = await dispatch(removeUser());
-
-    if (result.meta.requestStatus === "fulfilled") {
-      await Swal.fire({
-        icon: "success",
-        text: "다음에 또 오세요 :)",
-        confirmButtonColor: "#5498FF",
-        confirmButtonText: "닫기",
-      });
-      router.push(ROUTES.LOGIN);
-    } else
-      await Swal.fire({
-        icon: "error",
-        text: `Error Message: ${error}`,
-        confirmButtonColor: "#5498FF",
-        confirmButtonText: "닫기",
-      });
+    Swal.fire({
+      text: "정말로 탈퇴 하실거에요?😥 (가지마..)",
+      showCancelButton: true,
+      cancelButtonText: "닫기",
+      confirmButtonText: "탈퇴하기",
+      confirmButtonColor: "#5498FF",
+    }).then(result => {
+      if (result.isConfirmed) {
+        dispatch(removeUser())
+          .then(response => {
+            if (response.meta.requestStatus === "fulfilled") {
+              Swal.fire({
+                icon: "error",
+                text: `Error Message: ${error}`,
+                confirmButtonColor: "#5498FF",
+                confirmButtonText: "닫기",
+              });
+            }
+            Swal.fire("다음에 또 오세요 :)", "", "success");
+            router.push(ROUTES.LOGIN);
+          })
+          .catch(error => {
+            Swal.fire(`Error: ${error}`, "", "error");
+          });
+      }
+    });
   };
 
   const handleClickLogout = async () => {
@@ -92,12 +101,10 @@ const Sidebar: React.FC<SidebarProps> = ({
     const getNickname = async () => {
       const value = Array.isArray(param.value) ? param.value[0] : param.value;
 
-      if (typeof value === "string") {
-        getUserNickname(value).then(res => {
-          setNickname(res.data.data.nickname); // Nickname 인터페이스의 nickname 속성에 접근
-          console.info(res.data.data.nickname);
-        });
-      }
+      getUserNickname(value).then(res => {
+        setNickname(res.data.data.nickname); // Nickname 인터페이스의 nickname 속성에 접근
+        console.info(res.data.data.nickname);
+      });
     };
 
     getNickname();
