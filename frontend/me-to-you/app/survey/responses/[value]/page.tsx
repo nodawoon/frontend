@@ -130,6 +130,10 @@ const Page = () => {
     const selectedOptions = existingResponse ? existingResponse.response : [];
     const isOptionSelected = selectedOptions.includes(option);
 
+    if (!isOptionSelected && selectedOptions.length >= 12) {
+      return;
+    }
+
     const updatedResponse = isOptionSelected
       ? selectedOptions.filter(opt => opt !== option)
       : [...selectedOptions, option];

@@ -70,6 +70,16 @@ module.exports = {
             transform: "translateX(0)",
           },
         },
+        qrFadeIn: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(-20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
         clipboardFadeOut: {
           "0": {
             opacity: "1",
@@ -84,6 +94,7 @@ module.exports = {
         "fade-in": "fadeIn 0.5s ease-out forwards",
         "slide-up": "slideUp 0.8s ease-out forwards",
         "clipboard-fade-out": "clipboardFadeOut 1s ease-out forwards",
+        "qrcode-fade-in": "qrFadeIn 0.5s ease-out forwards",
       },
     },
   },
