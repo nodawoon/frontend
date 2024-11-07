@@ -178,7 +178,7 @@ const SignupPage: React.FC = () => {
   }, [isFirst, router]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <div className="w-[90%] m-auto flex flex-col items-center justify-center min-h-screen overflow-hidden">
       <p className="font-bold text-2xl h-[40px] mb-[80px]">
         <span className="text-primary">너</span>에게 <span className="text-primary">난</span>&nbsp;
         시작하기

@@ -120,7 +120,7 @@ const ProfilePage = () => {
   }, [dispatch, isEdit]);
 
   return (
-    <div className="flex flex-col items-center gap-8 mt-8">
+    <div className="w-[90%] mx-auto flex flex-col items-center gap-8 mt-8">
       <div className="flex flex-col">
         {isEdit ? (
           <ProfileImageUploader
