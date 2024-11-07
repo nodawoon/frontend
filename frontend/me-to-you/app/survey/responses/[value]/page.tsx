@@ -59,8 +59,7 @@ const Page = () => {
   }, [questionState, responseList, dispatch]);
 
   const handlerSubmit = async () => {
-    console.info(submitForm);
-    const checkResponse = responseList.some(response => {
+    const checkResponse = responseList.every(response => {
       if (
         response.response.length === 0 ||
         response.response[0] === "" ||
