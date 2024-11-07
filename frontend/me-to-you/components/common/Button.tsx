@@ -60,7 +60,7 @@ function Button({
       break;
     }
     case "lg": {
-      combinedClassName += "py-3 px-24 text-base";
+      combinedClassName += "py-3 px-20 text-base";
       break;
     }
   }
