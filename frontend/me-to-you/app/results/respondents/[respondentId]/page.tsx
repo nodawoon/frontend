@@ -12,6 +12,7 @@ const Page: React.FC = () => {
   const param = useParams();
   const [isCurrent, setIsCurrent] = useState(-1);
   const [isIndex, setIsIndex] = useState(false);
+  const [name, setName] = useState("");
   const dispatch = useAppDispatch();
 
   const { list } = useAppSelector(state => state.respondentDetail);
@@ -30,6 +31,7 @@ const Page: React.FC = () => {
     resList.forEach(e => {
       if (e.respondentId === Number(param.respondentId) && e.respondentNickname !== undefined) {
         setIsIndex(true);
+        setName(e.respondentNickname);
       }
     });
   }, [resList]);
@@ -47,11 +49,7 @@ const Page: React.FC = () => {
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-screen">
       <div className="flex flex-col w-[90%]">
-        <ProfileCard
-          className="mt-5 mb-7 w-full"
-          name={user.nickname}
-          date={list[0]?.createdDate}
-        />
+        <ProfileCard className="mt-5 mb-7 w-full" name={name} date={list[0]?.createdDate} />
         <div className="relative flex flex-wrap gap-3 mb-10">
           {questions.map((e, index) => {
             return (
