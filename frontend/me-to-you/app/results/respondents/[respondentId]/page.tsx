@@ -65,7 +65,7 @@ const Page: React.FC = () => {
                   </span>
                 </div>
                 {e.type !== "multi_select" ? (
-                  <div className="w-full bg-light-gray rounded-md px-5 py-2">
+                  <div className={"w-full bg-light-gray rounded-md px-5 py-2 " + flow(index)}>
                     {list[index]?.response}
                   </div>
                 ) : (
