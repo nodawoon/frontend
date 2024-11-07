@@ -29,7 +29,11 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
   },
   "/results/questions": {
     title: "결과 확인",
-    background: "bg-light-gray",
+    background: "bg-white",
+  },
+  "/results/respondents/": {
+    title: "결과 확인",
+    background: "bg-white",
   },
   "/results/respondents": {
     title: "결과 확인",
@@ -37,7 +41,7 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
   },
   "/results": {
     title: "결과 확인",
-    background: "bg-white",
+    background: "bg-light-gray",
   },
   "/responses": {
     title: "설문 응답",
@@ -49,6 +53,11 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
   },
   "/survey/invitation": {
     title: "설문 초대",
+    hideBackButton: true,
+    background: "bg-white",
+  },
+  "/survey/results": {
+    title: "설문 완료",
     hideBackButton: true,
     background: "bg-white",
   },
