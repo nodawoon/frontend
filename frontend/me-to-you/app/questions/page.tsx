@@ -8,6 +8,7 @@ import Script from "next/script";
 import { QRCodeCanvas } from "qrcode.react";
 
 const CLIENT_URL = process.env.NEXT_PUBLIC_CLIENT_URL;
+const API_KEY = process.env.NEXT_PUBLIC_KAKAO_API_KEY;
 
 const Page = () => {
   const [shareUrl, setShareUrl] = useState<string>("");
@@ -32,7 +33,6 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    const API_KEY = process.env.NEXT_PUBLIC_KAKAO_API_KEY;
     if (API_KEY && window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(API_KEY);
     }
