@@ -62,7 +62,7 @@ const Page = () => {
         <div className="font-bold text-[28px] text-center mt-2">
           <p>{nickname}님이 보낸</p>
           <p>
-            <span className="text-primary">소개</span> 요청이에요.
+            <span className="text-primary">설문지</span> 예요.
           </p>
         </div>
 

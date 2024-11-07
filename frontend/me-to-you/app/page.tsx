@@ -5,7 +5,7 @@ export default function Home() {
     <>
       <div className="flex flex-col mx-auto min-h-screen justify-start pt-[10%] bg-light-gray">
         <p className="text-center my-6 text-[26px] font-bold">
-          <span className="text-primary">남</span>이 보는 <span className="text-primary">내</span>{" "}
+          <span className="text-primary">타인</span>이 보는 <span className="text-primary">내</span>{" "}
           모습을 알아보세요.
         </p>
         <div className="flex flex-col mx-auto w-[80%]">
