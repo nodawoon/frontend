@@ -1,10 +1,8 @@
 "use client";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/common/Button";
 import survey from "../../public/survey.json";
-import Image from "next/image";
 import { loadRespondentList } from "@/slice/respondentsSlice";
 import StatisticsCard from "@/components/results/StatisticsCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -12,7 +10,6 @@ import { loadUser } from "@/slice/userSlice";
 
 const Page: React.FC = () => {
   const surveyList: ReactNode[] = [];
-  const combinedClassName: string = "h-auto border border-gray rounded-xl p-1 max-w-[30%] grow";
   const router = useRouter();
   // 기본 6개, show 활성화 시 전부 보여주기
   const nextPage = (e: number): undefined => {
