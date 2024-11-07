@@ -38,9 +38,7 @@ const Page = () => {
   };
 
   const handleChangeNickname = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const cleanedValue = e.target.value
-      .replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/g, "")
-      .replace(/\s/g, "");
+    const cleanedValue = e.target.value.replace(/\s/g, "");
     setNickname(cleanedValue);
   }, []);
 
