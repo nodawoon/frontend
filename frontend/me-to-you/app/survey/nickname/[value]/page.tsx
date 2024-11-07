@@ -37,10 +37,32 @@ const Page = () => {
     else setValidation("");
   };
 
-  const handleChangeNickname = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const cleanedValue = e.target.value.replace(/\s/g, "");
-    setNickname(cleanedValue);
-  }, []);
+  const handleChangeNickname = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const cleanedValue = e.target.value.replace(/\s/g, "");
+
+      const maxLen = () => {
+        if (/^[a-zA-Z]+$/.test(cleanedValue)) {
+          return 16;
+        } else if (
+          /[a-zA-Z]/.test(cleanedValue) &&
+          /[가-힣!@#$%^&*(),.?":{}|<>]/.test(cleanedValue)
+        ) {
+          return 12;
+        } else {
+          return 6;
+        }
+      };
+      const validatedValue = cleanedValue.slice(0, maxLen());
+
+      if (validatedValue.length > nickname.length) {
+        setNickname(validatedValue);
+      } else {
+        setNickname(prev => validatedValue);
+      }
+    },
+    [nickname]
+  );
 
   useEffect(() => {
     validationNickname(nickname);
@@ -59,6 +81,7 @@ const Page = () => {
           value={nickname}
           validationMessage={validation}
           handleChangeInput={e => handleChangeNickname(e)}
+          maxLength={16}
         />
       </div>
 
