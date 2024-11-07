@@ -52,33 +52,35 @@ const Page: React.FC = () => {
     );
   });
   return (
-    <div className="w-full flex flex-col items-center justify-center min-h-screen bg-light-gray">
-      <div className="flex flex-col w-[85%]">
-        <p className="text-[20px] mt-10 mb-5 w-full">
-          나의 설문에 응답한 사람{" "}
-          <span className="text-primary ">
-            {list[0]?.respondentNickname === undefined ? 0 : list?.length}{" "}
-          </span>
-          명
-        </p>
-        <div className="relative flex flex-wrap gap-3">
-          {list[0]?.respondentNickname === undefined ? (
-            <div className="text-gray mb-5">아직 응답자가 없어요...</div>
-          ) : (
-            <button
-              className="bg-white w-full h-14 rounded-md mb-10 hover:bg-gray"
-              onClick={() => {
-                router.push("results/respondents");
-              }}
-            >
-              <p className="flex justify-between px-5">
-                <span className="text-[20px]">응답자별 결과 보기</span>
-                <span className="self-center material-symbols-rounded text-icon text-[15px]">
-                  arrow_forward_ios
-                </span>
-              </p>
-            </button>
-          )}
+    <div className="w-full flex flex-col items-center justify-center min-h-screen">
+      <div className="w-full bg-light-gray">
+        <div className="flex flex-col w-[85%] bg-light-gray mx-auto">
+          <p className="text-[20px] mt-10 mb-5 w-full">
+            나의 설문에 응답한 사람{" "}
+            <span className="text-primary ">
+              {list[0]?.respondentNickname === undefined ? 0 : list?.length}{" "}
+            </span>
+            명
+          </p>
+          <div className="relative flex flex-wrap gap-3">
+            {list[0]?.respondentNickname === undefined ? (
+              <div className="text-gray mb-5">아직 응답자가 없어요...</div>
+            ) : (
+              <button
+                className="bg-white w-full h-14 rounded-md mb-10 hover:bg-gray"
+                onClick={() => {
+                  router.push("results/respondents");
+                }}
+              >
+                <p className="flex justify-between px-5">
+                  <span className="text-[20px]">응답자별 결과 보기</span>
+                  <span className="self-center material-symbols-rounded text-icon text-[15px]">
+                    arrow_forward_ios
+                  </span>
+                </p>
+              </button>
+            )}
+          </div>
         </div>
       </div>
       <div className="bg-light-gray w-full py-5">
