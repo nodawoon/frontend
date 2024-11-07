@@ -32,11 +32,11 @@ const Page = () => {
     fetchShareurl();
   }, []);
 
-  useEffect(() => {
+  const handleKakaoInit = () => {
     if (API_KEY && window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(API_KEY);
     }
-  }, []);
+  };
 
   const handleKakaoShare = () => {
     const invitationUrl = `${CLIENT_URL}/survey/invitation/${shareUrl}`;
@@ -87,7 +87,11 @@ const Page = () => {
 
   return (
     <>
-      <Script src="https://developers.kakao.com/sdk/js/kakao.js" strategy="afterInteractive" />
+      <Script
+        src="https://developers.kakao.com/sdk/js/kakao.js"
+        strategy="afterInteractive"
+        onLoad={handleKakaoInit}
+      />
       <div className="bg-light-gray text-center relative">
         <p className="px-10 py-8 text-sm font-bold">
           설문이 생성되었어요. 친구들에게 공유해보세요!
