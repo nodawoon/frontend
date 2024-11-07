@@ -33,21 +33,24 @@ const Page = () => {
 
   useEffect(() => {
     const API_KEY = process.env.NEXT_PUBLIC_KAKAO_API_KEY;
-    if (window.Kakao && !window.Kakao.isInitialized() && API_KEY) {
+    if (API_KEY && window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(API_KEY);
     }
   }, []);
 
   const handleKakaoShare = () => {
     const invitationUrl = `${CLIENT_URL}/survey/invitation/${shareUrl}`;
-    window.Kakao.Share.sendDefault({
-      objectType: "text",
-      text: "(너에게 난) 친구의 설문이 도착했어요! 답변하러 가볼까요?",
-      link: {
-        mobileWebUrl: invitationUrl,
-        webUrl: invitationUrl,
-      },
-    });
+
+    if (window.Kakao?.Share) {
+      window.Kakao.Share.sendDefault({
+        objectType: "text",
+        text: "(너에게 난) 친구의 설문이 도착했어요! 답변하러 가볼까요?",
+        link: {
+          mobileWebUrl: invitationUrl,
+          webUrl: invitationUrl,
+        },
+      });
+    }
   };
 
   const handleUrlShare = () => {
