@@ -13,7 +13,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     const isLogin = sessionStorage.getItem("isLogin");
     const isPublicPath = pathname.startsWith(ROUTES.LOGIN) || pathname.startsWith("/login");
-    const isSurvey = pathname.startsWith("/survey/invitation");
+    const isSurvey = pathname.startsWith("/survey");
 
     if (pathname === "/signup" && isLogin) {
       router.push("/");
