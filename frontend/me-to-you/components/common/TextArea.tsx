@@ -48,7 +48,7 @@ function TextArea({
         maxLength={maxLength}
         disabled={disabled}
       />
-      <div className="absolute right-4 bottom-[9px] w-[90%] text-xs z-10 bg-white text-right px-2 py-1 rounded-sm">
+      <div className="relative top-[-35px] right-[-40px] w-[90%] text-xs bg-white text-right px-2 py-1 rounded-sm">
         {value ? value.length + "/" + maxLength : ""}
       </div>
     </div>
