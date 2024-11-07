@@ -42,8 +42,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const handleClickNavProfile = () => {
-    router.push("/profile");
     setIsMenuOpen(false);
+    router.push("/profile");
   };
 
   const handleClickDeleteAccount = async () => {

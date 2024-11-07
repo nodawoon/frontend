@@ -3,18 +3,14 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setIsSideBarState } from "@/slice/questionSlice";
 import { PAGE_CONFIG, PageConfig } from "@/constants/pageConfig";
-import {ROUTES} from "@/constants/routes";
+import { ROUTES } from "@/constants/routes";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactUsOpen, setIsContactUsOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState("");
   const [scrollY, setScrollY] = useState(0);
-  const sideBarState = useAppSelector(state => state.question.isSideBarOpen);
-  const dispatch = useAppDispatch();
 
   const pathname = usePathname();
 
@@ -63,7 +59,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`w-full text-black ${
+      className={`w-full text-black z-10 ${
         isMenuOpen ? "absolute h-screen bg-white max-w-[460px]" : "relative h-14"
       } ${currentPageConfig.background}`}
     >

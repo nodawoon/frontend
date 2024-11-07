@@ -22,7 +22,7 @@ const BarChart: React.FC = () => {
   }, [dispatch]);
 
   return firstPercentList.length === 0 ? (
-    <p className="-mt-32" ref={ref}>
+    <p className="flex h-full items-center" ref={ref}>
       아직 응답한 사람이 없어요😥
     </p>
   ) : (
