@@ -28,6 +28,7 @@ const Page = () => {
   const id = params.value;
   const nickname: string | null = searchParams.get("nickname") ?? "";
   const [userName, setUserName] = useState("");
+  const [isSubmit, setIsSubmit] = useState(false);
 
   useEffect(() => {
     const getUesrName = async () => {
@@ -59,6 +60,8 @@ const Page = () => {
   }, [questionState, responseList, dispatch]);
 
   const handlerSubmit = async () => {
+    if (isSubmit) return;
+
     const checkResponse = responseList.every(response => {
       if (
         response.response.length === 0 ||
@@ -78,6 +81,7 @@ const Page = () => {
     });
 
     if (checkResponse) {
+      setIsSubmit(true);
       await createSurveyResponse(submitForm);
       Swal.fire({
         title: "설문 제출 성공!",
@@ -274,7 +278,7 @@ const Page = () => {
             다음
           </Button>
         ) : (
-          <Button size="md" className="w-[45%]" onClick={() => handlerSubmit()}>
+          <Button size="md" className="w-[45%]" onClick={() => handlerSubmit()} disabled={isSubmit}>
             제출
           </Button>
         )}
