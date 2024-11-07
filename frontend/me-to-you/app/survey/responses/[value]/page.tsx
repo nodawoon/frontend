@@ -199,11 +199,12 @@ const Page = () => {
                           {isCustomInputActive[question.id] && option === "직접 입력" && (
                             <div className="mt-[10px]">
                               <TextInput
-                                placeholder="10자 이내로 입력하세요."
+                                placeholder="20자 이내로 입력하세요."
                                 handleChangeInput={e =>
                                   handleCustomAnswerChange(question.id, e.target.value)
                                 }
                                 value={customAnswer[question.id] || ""}
+                                maxLength={20}
                               />
                             </div>
                           )}
@@ -229,7 +230,7 @@ const Page = () => {
                   ) : question.type === "short_answer" ? (
                     <div className="mt-2">
                       <TextInput
-                        placeholder="10자 이내로 입력하세요."
+                        placeholder="20자 이내로 입력하세요."
                         handleChangeInput={e =>
                           handlerSingleChoiceAnswer(question.id, e.target.value)
                         }
@@ -237,6 +238,7 @@ const Page = () => {
                           responseList.find(response => response.surveyQuestionId === question.id)
                             ?.response[0] || ""
                         }
+                        maxLength={20}
                       />
                     </div>
                   ) : question.type === "long_answer" ? (
