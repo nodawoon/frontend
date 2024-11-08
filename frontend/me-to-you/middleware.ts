@@ -10,7 +10,7 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("ME_TO_YOU_TOKEN")?.value;
 
   if (token) {
-    if (isAllowedPath) {
+    if (isAllowedPath && !pathname.startsWith("/survey")) {
       const homeUrl = req.nextUrl.clone();
       homeUrl.pathname = "/";
       return NextResponse.redirect(homeUrl);
