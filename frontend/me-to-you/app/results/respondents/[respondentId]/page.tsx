@@ -16,7 +16,7 @@ const Page: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const list = [...useAppSelector(state => state.respondentDetail).list].sort(
-    (a, b) => (a.surveyQuestionId % 10) - (b.surveyQuestionId % 10)
+    (a, b) => ((a.surveyQuestionId - 1) % 10) - ((b.surveyQuestionId - 1) % 10)
   );
   const { user } = useAppSelector(state => state.user);
   const resList = useAppSelector(state => state.respondents).list;
@@ -63,13 +63,25 @@ const Page: React.FC = () => {
                 <div className={"my-2 font-bold flex " + flow(index)}>
                   <span>{index + 1 + "."}</span>
                   <span className={"pl-1 " + flow(index)}>
-                    {questions[e.surveyQuestionId].emoji +
+                    {questions[
+                      e.surveyQuestionId > 10
+                        ? 10 + Math.floor(e.surveyQuestionId / 15)
+                        : e.surveyQuestionId - 1
+                    ].emoji +
                       " " +
                       (index !== 9 ? user.nickname : "") +
-                      questions[e.surveyQuestionId].question}
+                      questions[
+                        e.surveyQuestionId > 10
+                          ? 10 + Math.floor(e.surveyQuestionId / 15)
+                          : e.surveyQuestionId - 1
+                      ].question}
                   </span>
                 </div>
-                {questions[e.surveyQuestionId].type !== "multi_select" ? (
+                {questions[
+                  e.surveyQuestionId > 10
+                    ? 10 + Math.floor(e.surveyQuestionId / 15)
+                    : e.surveyQuestionId - 1
+                ].type !== "multi_select" ? (
                   <div className={"w-full bg-light-gray rounded-md px-5 py-2 " + flow(index)}>
                     {list[index]?.response}
                   </div>
