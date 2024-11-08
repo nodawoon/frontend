@@ -28,30 +28,15 @@ const CardButton: React.FC<CardButtonProps> = ({
       url += "results";
       break;
     case 3:
-      url += "chatbot";
+      url += "chat";
       break;
     case 4:
-      url += "chatbot/result";
+      url += "chat-history";
       break;
   }
 
-  const errorMessage = () => {
-    if (page === 1 || page === 2) return;
-    Swal.fire({
-      icon: "info",
-      title: "챗봇 개발 중!",
-      text: "조금만 기다려주세요..!",
-      confirmButtonColor: "#5498FF",
-      confirmButtonText: "닫기",
-    });
-  };
-
   return (
-    <Link
-      href={page === 1 || page === 2 ? url : ""}
-      className={`${combinedClassName} ${className}`}
-      onClick={errorMessage}
-    >
+    <Link href={url} className={`${combinedClassName} ${className}`}>
       <div className="flex w-full justify-between py-0.5 text-lg">
         <div className="w-auto">{title}</div>
         <span className="material-symbols-rounded text-icon">arrow_forward</span>
