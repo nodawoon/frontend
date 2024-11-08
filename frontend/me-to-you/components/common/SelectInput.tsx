@@ -18,6 +18,7 @@ const SelectInput: React.FC<SelectBoxProps> = ({ options, selectedOption, setSel
     <div className="relative w-full bg-white z-20 h-10">
       <div
         className={`p-2 flex justify-between items-center border border-gray ${isOpen ? "rounded-t-md rounded-b-none" : "rounded-md"}`}
+        onClick={handleClickOpen}
       >
         <p>{selectedOption ? selectedOption : "선택"}</p>
         {isOpen ? (
@@ -28,9 +29,7 @@ const SelectInput: React.FC<SelectBoxProps> = ({ options, selectedOption, setSel
             keyboard_arrow_up
           </span>
         ) : (
-          <span className="material-symbols-rounded text-icon" onClick={handleClickOpen}>
-            keyboard_arrow_down
-          </span>
+          <span className="material-symbols-rounded text-icon">keyboard_arrow_down</span>
         )}
       </div>
       {isOpen && (
