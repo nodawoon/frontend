@@ -23,7 +23,7 @@ const SurveyCard = () => {
 
   return (
     <div className="p-2 rounded-lg w-[85%] ml-auto mr-auto">
-      {survey.questions.map(question => (
+      {survey.questions.slice(0, 10).map(question => (
         <div key={question.id} className="mb-6 border border-none p-4 rounded-2xl bg-white">
           <div
             className="flex justify-between items-center"
@@ -95,7 +95,7 @@ const SurveyCard = () => {
               style={{ transformOrigin: "top", overflow: "hidden" }}
             >
               <div className="">
-                <TextInput placeholder="10자 이내로 입력하세요." disabled />
+                <TextInput placeholder="25자 이내로 입력하세요." disabled />
               </div>
             </div>
           )}

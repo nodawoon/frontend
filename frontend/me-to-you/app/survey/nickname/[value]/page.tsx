@@ -32,14 +32,34 @@ const Page = () => {
   }, [screenSize]);
 
   const validationNickname = (nickname: string) => {
-    if (nickname.length > 8 || nickname.length < 2)
-      setValidation("닉네임은 2자 이상 8자 이하로 설정해주세요.");
-    else setValidation("");
+    const minLen = 2;
+    const maxLenValue = maxLen(nickname);
+
+    if (nickname.length < minLen) {
+      setValidation("닉네임은 최소 2자 이상이어야 합니다.");
+    } else if (nickname.length > maxLenValue) {
+      setValidation(`닉네임은 최대 ${maxLenValue}자 이하여야 합니다.`);
+    } else {
+      setValidation("");
+    }
+  };
+
+  const maxLen = (value: string) => {
+    if (/^[a-zA-Z]+$/.test(value)) {
+      return 16;
+    } else if (/[a-zA-Z]/.test(value) && /[가-힣!@#$%^&*(),.?":{}|<>]/.test(value)) {
+      return 16;
+    } else {
+      return 8;
+    }
   };
 
   const handleChangeNickname = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const cleanedValue = e.target.value.replace(/\s/g, "");
-    setNickname(cleanedValue);
+    const maxLenValue = maxLen(cleanedValue);
+    const validatedValue = cleanedValue.slice(0, maxLenValue);
+
+    setNickname(validatedValue);
   }, []);
 
   useEffect(() => {
@@ -48,7 +68,9 @@ const Page = () => {
 
   return (
     <div
-      className={`overflow-y-hidden w-[90%] mx-auto flex flex-col justify-start relative ${screenSize === "large" ? "h-[90vh]" : screenSize === "medium" ? "h-[85vh]" : "h-[80vh]"}`}
+      className={`overflow-y-hidden w-[90%] mx-auto flex flex-col justify-start relative ${
+        screenSize === "large" ? "h-[90vh]" : screenSize === "medium" ? "h-[85vh]" : "h-[80vh]"
+      }`}
     >
       <div className="mt-10">
         <p className="font-bold text-[24px] mb-3">
@@ -59,26 +81,21 @@ const Page = () => {
           value={nickname}
           validationMessage={validation}
           handleChangeInput={e => handleChangeNickname(e)}
+          maxLength={16}
         />
       </div>
 
-      {nickname.length >= 2 && nickname.length <= 8 ? (
+      {validation === "" ? (
         <Link
           href={{ pathname: `../responses/${param.value}`, query: { nickname: nickname } }}
           className="w-full max-w-md mx-auto absolute bottom-5 left-0 right-0 text-center"
         >
           <Button size="lg">설문 입력하러 가기</Button>
         </Link>
-      ) : nickname.length > 8 ? (
-        <div className="w-full max-w-md mx-auto absolute bottom-5 left-0 right-0 text-center">
-          <Button size="lg" disabled={true}>
-            닉네임이 너무 길어요.
-          </Button>
-        </div>
       ) : (
         <div className="w-full max-w-md mx-auto absolute bottom-5 left-0 right-0 text-center">
           <Button size="lg" disabled={true}>
-            닉네임이 너무 짧아요.
+            {validation}
           </Button>
         </div>
       )}

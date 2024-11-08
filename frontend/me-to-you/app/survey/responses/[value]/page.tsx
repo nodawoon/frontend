@@ -28,7 +28,9 @@ const Page = () => {
   const id = params.value;
   const nickname: string | null = searchParams.get("nickname") ?? "";
   const [userName, setUserName] = useState("");
-  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  const [selectedOptionsCount, setSelectedOptionsCount] = useState(0);
 
   useEffect(() => {
     const getUesrName = async () => {
@@ -60,6 +62,8 @@ const Page = () => {
   }, [questionState, responseList, dispatch]);
 
   const handlerSubmit = async () => {
+    if (isSubmit) return;
+
     const checkResponse = responseList.every(response => {
       if (
         response.response.length === 0 ||
@@ -78,7 +82,7 @@ const Page = () => {
       }
     });
 
-    if (checkResponse && !isSubmit) {
+    if (checkResponse) {
       setIsSubmit(true);
       await createSurveyResponse(submitForm);
       Swal.fire({
@@ -139,6 +143,10 @@ const Page = () => {
       ? selectedOptions.filter(opt => opt !== option)
       : [...selectedOptions, option];
 
+    if (questionId === 2) {
+      setSelectedOptionsCount(updatedResponse.length);
+    }
+
     dispatch(
       addResponse({
         surveyQuestionId: questionId,
@@ -197,11 +205,12 @@ const Page = () => {
                           {isCustomInputActive[question.id] && option === "직접 입력" && (
                             <div className="mt-[10px]">
                               <TextInput
-                                placeholder="10자 이내로 입력하세요."
+                                placeholder="25자 이내로 입력하세요."
                                 handleChangeInput={e =>
                                   handleCustomAnswerChange(question.id, e.target.value)
                                 }
                                 value={customAnswer[question.id] || ""}
+                                maxLength={25}
                               />
                             </div>
                           )}
@@ -227,7 +236,7 @@ const Page = () => {
                   ) : question.type === "short_answer" ? (
                     <div className="mt-2">
                       <TextInput
-                        placeholder="10자 이내로 입력하세요."
+                        placeholder="25자 이내로 입력하세요."
                         handleChangeInput={e =>
                           handlerSingleChoiceAnswer(question.id, e.target.value)
                         }
@@ -235,6 +244,7 @@ const Page = () => {
                           responseList.find(response => response.surveyQuestionId === question.id)
                             ?.response[0] || ""
                         }
+                        maxLength={25}
                       />
                     </div>
                   ) : question.type === "long_answer" ? (
@@ -272,11 +282,17 @@ const Page = () => {
             size="md"
             className={`w-${questionState > 1 ? "[45%]" : "full"}`}
             onClick={() => handlerNextQuestion()}
+            disabled={
+              questionState === 2
+                ? selectedOptionsCount < 3
+                : !responseList.find(response => response.surveyQuestionId === questionState)
+                    ?.response[0]
+            }
           >
             다음
           </Button>
         ) : (
-          <Button type="submit" size="md" className="w-[45%]" onClick={() => handlerSubmit()}>
+          <Button size="md" className="w-[45%]" onClick={() => handlerSubmit()} disabled={isSubmit}>
             제출
           </Button>
         )}
