@@ -30,6 +30,8 @@ const Page = () => {
   const [userName, setUserName] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
 
+  const [selectedOptionsCount, setSelectedOptionsCount] = useState(0);
+
   useEffect(() => {
     const getUesrName = async () => {
       if (typeof id === "string") {
@@ -141,6 +143,10 @@ const Page = () => {
       ? selectedOptions.filter(opt => opt !== option)
       : [...selectedOptions, option];
 
+    if (questionId === 2) {
+      setSelectedOptionsCount(updatedResponse.length);
+    }
+
     dispatch(
       addResponse({
         surveyQuestionId: questionId,
@@ -199,12 +205,12 @@ const Page = () => {
                           {isCustomInputActive[question.id] && option === "직접 입력" && (
                             <div className="mt-[10px]">
                               <TextInput
-                                placeholder="20자 이내로 입력하세요."
+                                placeholder="25자 이내로 입력하세요."
                                 handleChangeInput={e =>
                                   handleCustomAnswerChange(question.id, e.target.value)
                                 }
                                 value={customAnswer[question.id] || ""}
-                                maxLength={20}
+                                maxLength={25}
                               />
                             </div>
                           )}
@@ -230,7 +236,7 @@ const Page = () => {
                   ) : question.type === "short_answer" ? (
                     <div className="mt-2">
                       <TextInput
-                        placeholder="20자 이내로 입력하세요."
+                        placeholder="25자 이내로 입력하세요."
                         handleChangeInput={e =>
                           handlerSingleChoiceAnswer(question.id, e.target.value)
                         }
@@ -238,7 +244,7 @@ const Page = () => {
                           responseList.find(response => response.surveyQuestionId === question.id)
                             ?.response[0] || ""
                         }
-                        maxLength={20}
+                        maxLength={25}
                       />
                     </div>
                   ) : question.type === "long_answer" ? (
@@ -276,6 +282,12 @@ const Page = () => {
             size="md"
             className={`w-${questionState > 1 ? "[45%]" : "full"}`}
             onClick={() => handlerNextQuestion()}
+            disabled={
+              questionState === 2
+                ? selectedOptionsCount < 3
+                : !responseList.find(response => response.surveyQuestionId === questionState)
+                    ?.response[0]
+            }
           >
             다음
           </Button>
