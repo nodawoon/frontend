@@ -67,21 +67,21 @@ const Page: React.FC = () => {
                       e.surveyQuestionId > 10
                         ? 10 + Math.floor(e.surveyQuestionId / 15)
                         : e.surveyQuestionId - 1
-                    ].emoji +
+                    ]?.emoji +
                       " " +
                       (index !== 9 ? user.nickname : "") +
                       questions[
                         e.surveyQuestionId > 10
                           ? 10 + Math.floor(e.surveyQuestionId / 15)
                           : e.surveyQuestionId - 1
-                      ].question}
+                      ]?.question}
                   </span>
                 </div>
                 {questions[
                   e.surveyQuestionId > 10
                     ? 10 + Math.floor(e.surveyQuestionId / 15)
                     : e.surveyQuestionId - 1
-                ].type !== "multi_select" ? (
+                ]?.type !== "multi_select" ? (
                   <div className={"w-full bg-light-gray rounded-md px-5 py-2 " + flow(index)}>
                     {list[index]?.response}
                   </div>
