@@ -52,4 +52,9 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     hideBackButton: true,
     background: "bg-white",
   },
+  "/survey/result": {
+    title: "",
+    hideBackButton: true,
+    background: "bg-white",
+  },
 };
