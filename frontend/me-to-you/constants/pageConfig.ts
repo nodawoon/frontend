@@ -35,10 +35,6 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     title: "결과 확인",
     background: "bg-white",
   },
-  "/results/respondents/": {
-    title: "결과 확인",
-    background: "bg-white",
-  },
   "/results/respondents": {
     title: "결과 확인",
     background: "bg-light-gray",
