@@ -75,17 +75,17 @@ export const userSlice = createSlice({
     builder
       .addCase(login.fulfilled, (state, action) => {
         const { email, oauthServerType, isFirst } = action.payload.data;
-        if (!isFirst) sessionStorage.setItem("isLogin", "yes");
         state.user.email = email;
         state.user.oauthServerType = oauthServerType;
         state.isFirst = isFirst;
         state.error = "";
+        state.loading = false;
       })
       .addCase(login.rejected, (state, action) => {
         state.error = action.error.message;
       })
-      .addCase(logout.fulfilled, () => {
-        sessionStorage.removeItem("isLogin");
+      .addCase(logout.fulfilled, state => {
+        state.loading = false;
       })
       .addCase(logout.rejected, (state, action) => {
         state.error = action.error.message;
@@ -102,8 +102,6 @@ export const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(signup.fulfilled, (state, action) => {
-        sessionStorage.setItem("isLogin", "yes");
-
         const { userId, birthday, gender, nickname, profileImage } = action.payload.data;
         state.user = {
           ...state.user,
@@ -115,6 +113,7 @@ export const userSlice = createSlice({
         };
         state.loading = false;
         state.error = undefined;
+        state.loading = false;
       })
       .addCase(signup.rejected, (state, action) => {
         state.error = action.error.message;
@@ -123,8 +122,8 @@ export const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(loadUser.fulfilled, (state, action) => {
-        state.loading = false;
         state.user = action.payload.data;
+        state.loading = false;
       })
       .addCase(loadUser.rejected, (state, action) => {
         state.error = action.error.message;
@@ -133,8 +132,8 @@ export const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(editUser.fulfilled, (state, action) => {
-        state.loading = false;
         state.user = action.payload.data;
+        state.loading = false;
       })
       .addCase(editUser.rejected, (state, action) => {
         state.error = action.error.message;
@@ -144,7 +143,6 @@ export const userSlice = createSlice({
       })
       .addCase(removeUser.fulfilled, state => {
         state.loading = false;
-        sessionStorage.removeItem("isLogin");
       })
       .addCase(removeUser.rejected, (state, action) => {
         state.error = action.error.message;

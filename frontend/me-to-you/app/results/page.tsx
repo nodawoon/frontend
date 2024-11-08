@@ -33,6 +33,7 @@ const Page: React.FC = () => {
 
   // survey 목록 불러오기
   survey.questions.forEach((e, index) => {
+    if (index > 9) return;
     surveyList.push(
       <div
         key={index}

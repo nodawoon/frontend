@@ -15,7 +15,9 @@ const Page: React.FC = () => {
   const [name, setName] = useState("");
   const dispatch = useAppDispatch();
 
-  const { list } = useAppSelector(state => state.respondentDetail);
+  const list = [...useAppSelector(state => state.respondentDetail).list].sort(
+    (a, b) => ((a.surveyQuestionId - 1) % 10) - ((b.surveyQuestionId - 1) % 10)
+  );
   const { user } = useAppSelector(state => state.user);
   const resList = useAppSelector(state => state.respondents).list;
 
@@ -51,7 +53,7 @@ const Page: React.FC = () => {
       <div className="flex flex-col w-[90%]">
         <ProfileCard className="mt-5 mb-7 w-full" name={name} date={list[0]?.createdDate} />
         <div className="relative flex flex-wrap gap-3 mb-10">
-          {questions.map((e, index) => {
+          {list?.map((e, index) => {
             return (
               <div
                 key={index}
@@ -61,10 +63,25 @@ const Page: React.FC = () => {
                 <div className={"my-2 font-bold flex " + flow(index)}>
                   <span>{index + 1 + "."}</span>
                   <span className={"pl-1 " + flow(index)}>
-                    {e.emoji + " " + (index !== 9 ? user.nickname : "") + e.question}
+                    {questions[
+                      e.surveyQuestionId > 10
+                        ? 10 + Math.floor(e.surveyQuestionId / 15)
+                        : e.surveyQuestionId - 1
+                    ]?.emoji +
+                      " " +
+                      (index !== 9 ? user.nickname : "") +
+                      questions[
+                        e.surveyQuestionId > 10
+                          ? 10 + Math.floor(e.surveyQuestionId / 15)
+                          : e.surveyQuestionId - 1
+                      ]?.question}
                   </span>
                 </div>
-                {e.type !== "multi_select" ? (
+                {questions[
+                  e.surveyQuestionId > 10
+                    ? 10 + Math.floor(e.surveyQuestionId / 15)
+                    : e.surveyQuestionId - 1
+                ]?.type !== "multi_select" ? (
                   <div className={"w-full bg-light-gray rounded-md px-5 py-2 " + flow(index)}>
                     {list[index]?.response}
                   </div>

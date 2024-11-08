@@ -2,7 +2,8 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Image from "next/image";
 import ReduxProvider from "./ReduxProvider";
-import AuthProvider from "@/app/AuthProvider";
+import { AuthProvider } from "@/context/AuthContext";
+import { cookies } from "next/headers";
 
 export const metadata: { description: string; title: string } = {
   title: "너에게 난",
@@ -14,11 +15,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const token = cookieStore.get("ME_TO_YOU_TOKEN")?.value;
+  let isLoggedIn = false;
+
+  if (token) {
+    try {
+      isLoggedIn = true;
+    } catch (error) {
+      isLoggedIn = false;
+    }
+  }
   return (
     <html lang="ko" className="h-[100%]">
       <body className="h-[100%] desktop:flex overflow-y-hidden">
         <ReduxProvider>
-          <AuthProvider>
+          <AuthProvider initialIsLoggedIn={isLoggedIn}>
             <section className="desktop:w-full max-w-[460px] w-full mx-auto h-[100%] overflow-y-scroll scrollbar-none">
               <Header />
               <section>{children}</section>
@@ -42,12 +54,6 @@ export default function RootLayout({
                   메인 색상인 파란색은 신뢰를 나타내며 고양이 캐릭터는 무의식을 의미합니다.
                 </p>
               </div>
-              {/*<Image*/}
-              {/*  src="/github.svg"*/}
-              {/*  alt="깃허브 로고"*/}
-              {/*  width="50"*/}
-              {/*  height="50"*/}
-              {/*/>*/}
               <p className="text-sm font-light text-dark-gray mt-10">
                 Copyright 2024. SSAFY. All rights reserved.
               </p>

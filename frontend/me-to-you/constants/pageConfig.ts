@@ -35,6 +35,10 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     title: "결과 확인",
     background: "bg-white",
   },
+  "/results/respondents/": {
+    title: "결과 확인",
+    background: "bg-white",
+  },
   "/results/respondents": {
     title: "결과 확인",
     background: "bg-light-gray",
@@ -56,8 +60,8 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     hideBackButton: true,
     background: "bg-white",
   },
-  "/survey/results": {
-    title: "설문 완료",
+  "/survey/result": {
+    title: "",
     hideBackButton: true,
     background: "bg-white",
   },
