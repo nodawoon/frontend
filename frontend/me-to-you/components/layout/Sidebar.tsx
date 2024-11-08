@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, Suspense, useContext, useEffect, useState } from "react";
 import ContactUs from "@/components/layout/ContactUs";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
@@ -10,6 +10,7 @@ import { logout, removeUser } from "@/slice/userSlice";
 import Swal from "sweetalert2";
 import { ROUTES } from "@/constants/routes";
 import { getUserNickname } from "@/services/share";
+import { AuthContext } from "@/context/AuthContext";
 
 interface SidebarProps {
   isContactUsOpen: boolean;
@@ -35,15 +36,22 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const dispatch = useAppDispatch();
 
+  const { isLoggedIn } = useContext(AuthContext);
+
   const handleChangeQuestion = (num: number) => {
     dispatch(setQuestionState(num));
     dispatch(setIsSideBarState(false));
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleClickNavProfile = () => {
+  const handleClickHome = () => {
+    router.push("/");
     setIsMenuOpen(false);
+  };
+
+  const handleClickNavProfile = () => {
     router.push("/profile");
+    setIsMenuOpen(false);
   };
 
   const handleClickDeleteAccount = async () => {
@@ -145,21 +153,35 @@ const Sidebar: React.FC<SidebarProps> = ({
       ))}
     </div>
   ) : (
-    <div className="absolute bg-white w-full h-screen pl-9 flex flex-col justify-center gap-28 z-10 max-w-[460px]">
-      <div className="flex flex-col gap-5">
-        <p className="text-xl font-medium text-button" onClick={handleClickNavProfile}>
-          프로필 보기
-        </p>
-        <p className="text-xl font-medium text-button" onClick={handleClickLogout}>
-          로그아웃
-        </p>
-        <p className="text-xl font-medium text-button" onClick={handleClickDeleteAccount}>
-          회원탈퇴
-        </p>
-      </div>
-      <p className="text-xl font-medium text-button" onClick={() => setIsContactUsOpen(true)}>
-        개발자 정보
-      </p>
+    <div className="absolute bg-white w-full h-screen pl-9 flex flex-col justify-center gap-5 z-10 max-w-[460px]">
+      {isLoggedIn ? (
+        <React.Fragment>
+          <p className="text-xl font-medium text-button" onClick={handleClickHome}>
+            너에게 난 🏡
+          </p>
+          <p className="text-xl font-medium text-button" onClick={handleClickNavProfile}>
+            프로필 보기
+          </p>
+          <p className="text-xl font-medium text-button" onClick={handleClickLogout}>
+            로그아웃
+          </p>
+          <p className="text-xl font-medium text-button" onClick={handleClickDeleteAccount}>
+            회원탈퇴
+          </p>
+          <p className="text-xl font-medium text-button" onClick={() => setIsContactUsOpen(true)}>
+            개발자 정보
+          </p>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <p className="text-xl font-medium text-button" onClick={handleClickNavProfile}>
+            너에게 난 🏡
+          </p>
+          <p className="text-xl font-medium text-button" onClick={() => setIsContactUsOpen(true)}>
+            개발자 정보
+          </p>
+        </React.Fragment>
+      )}
     </div>
   );
 };
