@@ -6,13 +6,12 @@ const initialState: chatState = {
 };
 
 const initialHistoryState: chatHistoryProps = {
-  list: [
+  content: [
     {
-      id: 0,
+      chatBotId: 0,
       question: undefined,
-      answer: undefined,
-      createdAt: undefined,
-      lastModifyDate: undefined,
+      response: undefined,
+      answerStatus: "",
     },
   ],
 };
@@ -36,22 +35,20 @@ const chatHistorySlice = createSlice({
     builder
       .addCase(loadChatHistory.fulfilled, (state, action) => {
         const chatHistoryList = action.payload.data as unknown as {
-          id: number;
+          chatBotId: number;
           question: string | undefined;
-          answer: string | undefined;
-          createdAt: string | undefined;
-          lastModifyDate: string | undefined;
+          response: string | undefined;
+          answerStatus: string;
         }[];
-        state.list = chatHistoryList;
+        state.content = chatHistoryList;
       })
       .addCase(loadChatHistory.rejected, (state, action) => {
-        state.list = [
+        state.content = [
           {
-            id: 0,
+            chatBotId: 0,
             question: undefined,
-            answer: undefined,
-            createdAt: undefined,
-            lastModifyDate: undefined,
+            response: undefined,
+            answerStatus: "",
           },
         ];
       });

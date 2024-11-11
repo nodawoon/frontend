@@ -9,7 +9,35 @@ import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
-  const { list } = useAppSelector(state => state.chatHistory);
+  const content = [
+    {
+      chatbotId: 0,
+      question: "질문입니다.",
+      response: "딥변입니다.",
+      answerStatus: "ANSWERED_BY_BOT",
+    },
+    {
+      chatbotId: 0,
+      question:
+        "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
+      response:
+        "ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
+      answerStatus: "ANSWERED_BY_BOT",
+    },
+    {
+      chatbotId: 0,
+      question: "질문입니다.",
+      response: "딥변입니다.",
+      answerStatus: "ANSWERED_BY_BOT",
+    },
+
+    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
+
+    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
+
+    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
+  ];
+  // const { content } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatState);
   const dispatch = useAppDispatch();
 
@@ -47,23 +75,28 @@ const Page: React.FC = () => {
           💬 답변 기다리는 중
         </Link>
       </div>
-      {list[0]?.question === undefined ? (
+      {content[0]?.question === undefined ? (
         <div className="text-gray mt-5 ">아직 대화 내용이 없어요..</div>
       ) : (
         <div className="my-6">
-          {list.map((e, index) => {
-            return (
-              <ChatResultCard
-                className="mb-2 font-medium"
-                question={e.question !== undefined ? e.question : ""}
-                answer={e.answer !== undefined ? e.answer : ""}
-                key={index}
-                index={index}
-                current={current}
-                onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
-                state={current === index ? "up" : "down"}
-              />
-            );
+          {content.map((e, index) => {
+            if (e.answerStatus === "ANSWERED_BY_BOT") {
+              return (
+                <ChatResultCard
+                  className="mb-2 font-medium"
+                  question={e.question !== undefined ? e.question : ""}
+                  answer={e.response !== undefined ? e.response : ""}
+                  key={index}
+                  index={index}
+                  current={current}
+                  onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
+                  state={current === index ? "up" : "down"}
+                  responser="smart_toy"
+                />
+              );
+            } else {
+              return;
+            }
           })}
         </div>
       )}
