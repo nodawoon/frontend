@@ -59,7 +59,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`w-full text-black z-10 ${
+      className={`w-full text-black z-50 ${
         isMenuOpen ? "absolute h-screen bg-white max-w-[460px]" : "relative h-14"
       } ${currentPageConfig.background}`}
     >
