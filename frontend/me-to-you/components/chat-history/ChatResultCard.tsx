@@ -30,11 +30,7 @@ const ChatResultCard: React.FC<CardProps> = ({
         <span className={"text-md grow " + (index !== current ? "truncate" : "")}>{question}</span>
         <span className="material-symbols-rounded text-icon w-6">{"keyboard_arrow_" + state}</span>
       </p>
-      <p
-        className={
-          "text-sm text-medium-gray mb-2 flex pl-0.5 " + (index !== current ? "hidden" : "")
-        }
-      >
+      <p className={"text-sm font-light mb-2 flex pl-0.5 " + (index !== current ? "hidden" : "")}>
         <span className="material-symbols-rounded text-icon self-right mr-1">{responser}</span>
         <span className="self-center">{answer}</span>
         <span className="material-symbols-rounded text-icon w-6">&nbsp;</span>
