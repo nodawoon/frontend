@@ -112,8 +112,8 @@ const ProfilePage = () => {
 
   useEffect(() => {
     validationNickname(inputs.nickname);
-    debouncedCheckNickname(inputs.nickname);
-  }, [debouncedCheckNickname, inputs.nickname, validationNickname]);
+    if (user.nickname !== inputs.nickname) debouncedCheckNickname(inputs.nickname);
+  }, [debouncedCheckNickname, inputs.nickname, user.nickname, validationNickname]);
 
   useEffect(() => {
     dispatch(loadUser());
@@ -146,7 +146,7 @@ const ProfilePage = () => {
         {isEdit ? (
           <TextInput
             placeholder="변경 할 닉네임을 입력해주세요(2-8자)"
-            value={inputs.nickname}
+            value={inputs.nickname === user.nickname ? user.nickname : inputs.nickname}
             handleChangeInput={handleChangeNickname}
             validationMessage={validationText}
           />

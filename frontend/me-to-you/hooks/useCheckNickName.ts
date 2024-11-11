@@ -12,7 +12,9 @@ export const useCheckNickName = () => {
 
   const validationNickname = useCallback(
     (nickname: string) => {
-      if (nickname.length < 2 || nickname.length > 7) {
+      if (!/^[가-힣a-zA-Z0-9\u318D·\s]*$/.test(nickname)) {
+        setValidationText("올바른 문자를 입력해주세요. (특수 문자 사용 불가)");
+      } else if (nickname.length < 2 || nickname.length > 7) {
         setValidationText("최소 2자에서 최대 7자로 입력해주세요.");
       } else if (isNicknameExist) {
         setValidationText("이미 사용 중인 닉네임 입니다.");
