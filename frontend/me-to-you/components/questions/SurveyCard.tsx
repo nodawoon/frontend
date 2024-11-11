@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadUser } from "@/slice/userSlice";
 
 const SurveyCard = () => {
-  const [openQuestionId, setOpenQuestionId] = useState<string | null>(null); // 열려 있는 질문 ID
+  const [openQuestionId, setOpenQuestionId] = useState<string | null>(null);
   const user = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
 
@@ -17,7 +17,6 @@ const SurveyCard = () => {
   }, [dispatch]);
 
   const handleClickOpen = (questionId: string) => {
-    // 현재 열려 있는 질문을 다시 클릭하면 닫히고, 다른 질문을 클릭하면 해당 질문이 열리도록 설정
     setOpenQuestionId(prev => (prev === questionId ? null : questionId));
   };
 
