@@ -31,7 +31,7 @@ const BarChart: React.FC = () => {
         {firstPercentList.map((obj, idx) => (
           <div
             key={idx}
-            className={`h-8 origin-left ${isInViewport ? "animate-slide-right" : ""} ${colors[idx]} ${
+            className={`h-8 origin-left ${isInViewport && "animate-slide-right"} ${colors[idx]} ${
               idx === 0 ? "rounded-l-lg" : ""
             } ${idx === firstPercentList.length - 1 ? "rounded-r-lg" : ""}`}
             style={{

@@ -3,7 +3,6 @@ import Header from "@/components/layout/Header";
 import Image from "next/image";
 import ReduxProvider from "./ReduxProvider";
 import { AuthProvider } from "@/context/AuthContext";
-import { cookies } from "next/headers";
 
 export const metadata: { description: string; title: string } = {
   title: "너에게 난",
@@ -15,22 +14,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("ME_TO_YOU_TOKEN")?.value;
-  let isLoggedIn = false;
-
-  if (token) {
-    try {
-      isLoggedIn = true;
-    } catch (error) {
-      isLoggedIn = false;
-    }
-  }
   return (
     <html lang="ko" className="h-[100%]">
       <body className="h-[100%] desktop:flex overflow-y-hidden">
         <ReduxProvider>
-          <AuthProvider initialIsLoggedIn={isLoggedIn}>
+          <AuthProvider>
             <section className="desktop:w-full max-w-[460px] w-full mx-auto h-[100%] overflow-y-scroll scrollbar-none">
               <Header />
               <section>{children}</section>
