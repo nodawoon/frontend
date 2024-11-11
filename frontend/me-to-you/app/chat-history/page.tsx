@@ -1,12 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
+import { is } from "date-fns/locale";
 
 const Page: React.FC = () => {
-  const list = [1, 2, 3];
   const [current, setCurrent] = useState(-1);
+  const [isExist, setIsExist] = useState(false);
+  const { list } = useAppSelector(state => state.chatHistory);
+  const { exist } = useAppSelector(state => state.chatState);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(loadChatHistory());
+    })();
+  }, [dispatch]);
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(loadChatState());
+      if (exist) {
+        setIsExist(true);
+      } else {
+        setIsExist(false);
+      }
+    })();
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log(isExist);
+  }, [isExist]);
 
   return (
     <div className="w-[90%] mx-auto">
@@ -21,22 +48,26 @@ const Page: React.FC = () => {
           💬 답변 기다리는 중
         </Link>
       </div>
-      <div className="my-6">
-        {list.map((e, index) => {
-          return (
-            <ChatResultCard
-              className="mb-2 font-medium"
-              question="질문입니다."
-              answer="답변입니다."
-              key={index}
-              index={index}
-              current={current}
-              onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
-              state={current === index ? "up" : "down"}
-            />
-          );
-        })}
-      </div>
+      {list[0]?.question === undefined ? (
+        <div className="text-gray mt-5 ">아직 대화 내용이 없어요..</div>
+      ) : (
+        <div className="my-6">
+          {list.map((e, index) => {
+            return (
+              <ChatResultCard
+                className="mb-2 font-medium"
+                question={e.question !== undefined ? e.question : ""}
+                answer={e.answer !== undefined ? e.answer : ""}
+                key={index}
+                index={index}
+                current={current}
+                onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
+                state={current === index ? "up" : "down"}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import Swal from "sweetalert2";
+import React, { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loadChatState } from "@/slice/chatHistorySlice";
 
 interface CardButtonProps {
   className?: string;
@@ -16,6 +19,35 @@ const CardButton: React.FC<CardButtonProps> = ({
   title,
   text,
 }: CardButtonProps) => {
+  const { exist } = useAppSelector(state => state.chatState);
+  const dispatch = useAppDispatch();
+  const [chatURL, setChatURL] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(loadChatState());
+    })();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (exist) {
+      setChatURL(url);
+    }
+  }, [exist]);
+
+  const errorMessage = () => {
+    if (page === 4 || page === 5) {
+      if (!exist) {
+        Swal.fire({
+          title: "챗봇 미학습",
+          text: "챗봇을 먼저 학습해주세요!",
+          icon: "error",
+          confirmButtonText: "확인",
+        });
+      }
+    }
+  };
+
   const combinedClassName =
     "flex flex-col justify-center h-20 px-3.5 text-base text-black bg-white font-bold break-words rounded-lg hover:bg-soft-gray";
   let url: string = "/";
@@ -33,10 +65,17 @@ const CardButton: React.FC<CardButtonProps> = ({
     case 4:
       url += "chat-history";
       break;
+    case 5:
+      url += "chat-history";
+      break;
   }
 
   return (
-    <Link href={url} className={`${combinedClassName} ${className}`}>
+    <Link
+      href={page === 1 || page === 2 || page === 3 ? url : chatURL}
+      className={`${combinedClassName} ${className}`}
+      onClick={errorMessage}
+    >
       <div className="flex w-full justify-between py-0.5 text-lg">
         <div className="w-auto">{title}</div>
         <span className="material-symbols-rounded text-icon">arrow_forward</span>
