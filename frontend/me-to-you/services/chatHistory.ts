@@ -13,7 +13,7 @@ export const getChatState = async () => {
 
 export const getChatHistory = async () => {
   return await clientInstance
-    .get<ApiResponseType<chatHistoryProps>>("/self-survey/list")
+    .get<ApiResponseType<chatHistoryProps>>("/chatbots")
     .then(response => {
       return response;
     })

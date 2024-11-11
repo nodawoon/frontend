@@ -3,11 +3,10 @@ interface chatState {
 }
 
 interface chatHistoryProps {
-  list: {
-    id: number;
+  content: {
+    chatBotId: number;
     question: string | undefined;
-    answer: string | undefined;
-    createdAt: string | undefined;
-    lastModifyDate: string | undefined;
+    response: string | undefined;
+    answerStatus: string;
   }[];
 }

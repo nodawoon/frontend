@@ -6,6 +6,7 @@ interface CardProps {
   current: number;
   onClick: () => void;
   state: string;
+  responser: string;
 }
 
 const ChatResultCard: React.FC<CardProps> = ({
@@ -16,6 +17,7 @@ const ChatResultCard: React.FC<CardProps> = ({
   current,
   onClick,
   state,
+  responser,
 }: CardProps) => {
   const combinedClassName =
     "bg-light-gray flex flex-col justify-evenly w-full rounded-md h-auto px-3 break-all " +
@@ -33,7 +35,7 @@ const ChatResultCard: React.FC<CardProps> = ({
           "text-sm text-medium-gray mb-2 flex pl-0.5 " + (index !== current ? "hidden" : "")
         }
       >
-        <span className="material-symbols-rounded text-icon self-right mr-1">smart_toy</span>
+        <span className="material-symbols-rounded text-icon self-right mr-1">{responser}</span>
         <span className="self-center">{answer}</span>
         <span className="material-symbols-rounded text-icon w-6">&nbsp;</span>
       </p>
