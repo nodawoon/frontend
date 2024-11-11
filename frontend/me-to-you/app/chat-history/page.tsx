@@ -5,7 +5,6 @@ import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
-import { is } from "date-fns/locale";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
@@ -36,7 +35,7 @@ const Page: React.FC = () => {
   }, [isExist]);
 
   return (
-    <div className="w-[90%] mx-auto">
+    <div className="w-[90%] mx-auto ">
       <div className="flex justify-around mt-4">
         <Link href="" className="text-primary text-md font-bold self-center">
           ✨ 챗봇 답변
