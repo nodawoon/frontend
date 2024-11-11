@@ -259,14 +259,14 @@
       {
         "id": 28,
         "emoji": "🎉",
-        "question": "특별한 날 이벤트는 어떤 게 좋아? (조용히 vs 화려하게)",
+        "question": "특별한 날 이벤트는 어떤 게 좋아?",
         "type": "multiple_choice",
         "options": ["조용하게 해주는 이벤트", "화려하게 해주는 이벤트"]
       },
       {
         "id": 29,
         "emoji": "🏨",
-        "question": "여행갈 때 어디서 자고 싶어? (호캉스 vs 게스트하우스)",
+        "question": "여행갈 때 어디서 자고 싶어?",
         "type": "multiple_choice",
         "options": ["편안하게 호캉스로~", "게스트 하우스에서 사람들과 즐기기!"]
       },
