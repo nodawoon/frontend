@@ -164,8 +164,8 @@ const Page = () => {
         .map(questions => (
           <div key={questions.categoryId} className="w-[90%] ml-auto mr-auto">
             <div className="text-[12px] text-dark-gray">
-              {CHATBOT_GUIDE.map(str => (
-                <p>{str}</p>
+              {CHATBOT_GUIDE.map((str, idx) => (
+                <p key={idx}>{str}</p>
               ))}
             </div>
             {questions.questions.map(question => (
