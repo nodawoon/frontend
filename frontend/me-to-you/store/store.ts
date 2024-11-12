@@ -8,6 +8,7 @@ import {
   respondentDetailReducer,
 } from "@/slice/respondentsSlice";
 import { statisticsReducer } from "@/slice/statisticsSlice";
+import { chatbotReducer } from "@/slice/chatbotSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     respondentsQuestion: respondentQuestionReducer,
     respondentDetail: respondentDetailReducer,
     statistics: statisticsReducer,
+    chatbot: chatbotReducer,
   },
 });
 

@@ -2,11 +2,13 @@
 
 import React, { ChangeEvent, useEffect, useRef, useState, useCallback } from "react";
 import TextInput from "@/components/chat/TextInput";
-import { ChatbotAnswerType } from "@/types/chatbot";
 import QuestionGuide from "@/components/chat/QuestionGuide";
 import WelcomeMessage from "@/components/chat/WelcomeMessage";
 import MessageBubble from "@/components/chat/MessageBubble";
 import { MESSAGES } from "@/constants/messages";
+import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { loadAllConversations } from "@/slice/chatbotSlice";
 
 interface AnswerType {
   response: string;
@@ -15,8 +17,8 @@ interface AnswerType {
 
 const ChatPage: React.FC = () => {
   const [isOpenWelcome, setIsOpenWelcome] = useState(true);
-  const [nickname, setNickname] = useState("김싸피");
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
+  const [page, setPage] = useState(0);
   const [question, setQuestion] = useState("");
   const [questions, setQuestions] = useState<string[]>([]);
   const [answers, setAnswers] = useState<AnswerType[]>([]);
@@ -24,6 +26,9 @@ const ChatPage: React.FC = () => {
   const [visibleActionButtons, setVisibleActionButtons] = useState<boolean[]>([]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const dispatch: AppDispatch = useDispatch();
+  const { targetUserNickname, targetUserId } = useSelector((state: RootState) => state.chatbot);
 
   const handleChangeQuestion = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setQuestion(e.target.value);
@@ -82,7 +87,7 @@ const ChatPage: React.FC = () => {
 
       addMessage(currentQuestion, { response: "...", answerStatus: null }, false);
 
-      const newAnswer = await fetchAnswer(nickname);
+      const newAnswer = await fetchAnswer(targetUserNickname);
 
       setAnswers(prev => {
         const updatedAnswers = [...prev];
@@ -99,7 +104,7 @@ const ChatPage: React.FC = () => {
 
       setIsInputDisabled(showActionButton);
     },
-    [question, nickname, fetchAnswer, addMessage]
+    [question, targetUserNickname, fetchAnswer, addMessage]
   );
 
   const handleRetryQuestion = useCallback(
@@ -117,7 +122,7 @@ const ChatPage: React.FC = () => {
         return updatedAnswers;
       });
 
-      const newAnswer = await fetchAnswer(nickname);
+      const newAnswer = await fetchAnswer(targetUserNickname);
 
       setAnswers(prev => {
         const updatedAnswers = [...prev];
@@ -134,7 +139,7 @@ const ChatPage: React.FC = () => {
 
       setIsInputDisabled(showActionButton);
     },
-    [nickname, fetchAnswer]
+    [targetUserNickname, fetchAnswer]
   );
 
   const handleWaitAnswer = useCallback(
@@ -146,7 +151,7 @@ const ChatPage: React.FC = () => {
       });
 
       const waitingMessage: AnswerType = {
-        response: `${nickname} 님의 답변을 기다리고 있어요...`,
+        response: `${targetUserNickname} 님의 답변을 기다리고 있어요...`,
         answerStatus: null,
       };
 
@@ -155,7 +160,7 @@ const ChatPage: React.FC = () => {
       setIsInputDisabled(true);
       setIsFirstQuestion(false);
     },
-    [nickname, addMessage]
+    [targetUserNickname, addMessage]
   );
 
   const handleAskAnotherQuestion = useCallback((questionIndex: number) => {
@@ -180,16 +185,15 @@ const ChatPage: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [questions, answers]);
 
-  // TODO : API 연동
   useEffect(() => {
-    setNickname("김싸피");
-  }, []);
+    dispatch(loadAllConversations({ targetUserId, page }));
+  }, [dispatch, page, targetUserNickname, targetUserId]);
 
   return (
     <div className="bg-light-gray w-full min-h-[92vh]">
       <div className="w-[90%] m-auto flex flex-col">
         <WelcomeMessage
-          nickname={nickname}
+          nickname={targetUserNickname}
           isOpen={isOpenWelcome}
           onToggle={() => setIsOpenWelcome(!isOpenWelcome)}
         />
