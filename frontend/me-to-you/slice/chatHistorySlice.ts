@@ -1,4 +1,9 @@
-import { getChatHistory, getChatState, updateChatbots } from "@/services/chatHistory";
+import {
+  getChatHistory,
+  getChatState,
+  updateChatbots,
+  updateResponse,
+} from "@/services/chatHistory";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState: chatHistoryProps = {
@@ -22,14 +27,26 @@ const chatHistorySlice = createSlice({
       .addCase(loadChatState.fulfilled, (state, action) => {
         state.exist = action.payload.data.exist;
       })
+      .addCase(loadChatState.rejected, state => {
+        state.exist = false;
+      })
       .addCase(loadChatHistory.fulfilled, (state, action) => {
         state.content = action.payload.data.content;
       })
       .addCase(loadChatHistory.rejected, state => {
         state.content = initialState.content;
       })
-      .addCase(updateChatHistory.fulfilled, state => {
-        console.log(state);
+      .addCase(updateChatbotPrompt.fulfilled, state => {
+        console.log("propmt 업데이트 성공");
+      })
+      .addCase(updateChatbotPrompt.rejected, state => {
+        console.log("propmt 업데이트 실패");
+      })
+      .addCase(updateChatResponse.fulfilled, state => {
+        console.log("response 업데이트 성공");
+      })
+      .addCase(updateChatResponse.rejected, state => {
+        console.log("response 업데이트 실패");
       });
   },
 });
@@ -47,10 +64,18 @@ export const loadChatHistory = createAsyncThunk(
   }
 );
 
-export const updateChatHistory = createAsyncThunk(
+export const updateChatbotPrompt = createAsyncThunk(
   "chatbot/updateChatHistory",
   async (params: { chatBotId: number }) => {
     const response = await updateChatbots(params);
+    return response.data;
+  }
+);
+
+export const updateChatResponse = createAsyncThunk(
+  "chatbot/updateChatResponse",
+  async (params: { chatBotId: number; params: { answer: string } }) => {
+    const response = await updateResponse(params.chatBotId, params.params);
     return response.data;
   }
 );

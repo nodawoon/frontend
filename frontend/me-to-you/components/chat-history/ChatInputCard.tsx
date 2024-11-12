@@ -3,9 +3,10 @@ interface CardProps {
   question: string;
   index: number;
   current: number;
-  onClick: (index: number) => void;
+  onClick: (index: number, id: number) => void;
   state: string;
   submit: (value: string) => void;
+  chatbotId: number;
 }
 
 const ChatInputCard: React.FC<CardProps> = ({
@@ -16,6 +17,7 @@ const ChatInputCard: React.FC<CardProps> = ({
   onClick,
   state,
   submit,
+  chatbotId,
 }: CardProps) => {
   const combinedClassName =
     "bg-light-gray flex flex-col justify-evenly w-full rounded-md h-auto px-3 py-2 break-all " +
@@ -31,7 +33,7 @@ const ChatInputCard: React.FC<CardProps> = ({
             "material-symbols-rounded text-icon w-auto ml-1 " +
             (state === "답변하기" ? "text-[10px] self-center text-center" : "h-6")
           }
-          onClick={() => onClick(index)}
+          onClick={() => onClick(index, chatbotId)}
         >
           {state}
         </span>

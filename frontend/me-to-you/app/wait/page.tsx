@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import ChatInputCard from "@/components/chat-history/ChatInputCard";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
+import { loadChatHistory, loadChatState, updateChatResponse } from "@/slice/chatHistorySlice";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
@@ -67,17 +67,21 @@ const Page: React.FC = () => {
     setSendMessage(value);
   };
 
-  const submit = (index: number) => {
+  const submit = (index: number, id: number) => {
     if (current === index) {
-      setCurrent(-1);
-      sendTheMessage();
+      if (sendMessage.length === 0) {
+        console.log("입력 해주세요");
+      } else {
+        setCurrent(-1);
+        sendTheMessage(id);
+      }
     } else {
       setCurrent(index);
     }
   };
 
-  const sendTheMessage = async () => {
-    console.log(sendMessage);
+  const sendTheMessage = async (id: number) => {
+    dispatch(updateChatResponse({ chatBotId: id, params: { answer: sendMessage } }));
   };
 
   return (
@@ -106,9 +110,10 @@ const Page: React.FC = () => {
                   key={index}
                   index={index}
                   current={current}
-                  onClick={index => submit(index)}
+                  onClick={() => submit(index, e.chatbotId)}
                   state={current === index ? "check" : "답변하기"}
                   submit={e => handleChange(e)}
+                  chatbotId={e.chatbotId}
                 />
               );
             } else {

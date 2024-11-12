@@ -25,7 +25,19 @@ export const getChatHistory = async (params: { status: string; page: number }) =
 // 프롬프트 추가
 export const updateChatbots = async (params: { chatBotId: number }) => {
   return await clientInstance
-    .patch(`"/chatbots/" + ${params.chatBotId} + "/prompt/add"`)
+    .patch(`/chatbots/${params.chatBotId}/prompt/add`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};
+
+// 사용자 응답 추가
+export const updateResponse = async (chatBotId: number, params: { answer: string }) => {
+  return await clientInstance
+    .patch(`/chatbots/${chatBotId}/response`, { params: params })
     .then(response => {
       return response;
     })

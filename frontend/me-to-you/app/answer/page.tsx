@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
+import { loadChatHistory, loadChatState, updateChatbotPrompt } from "@/slice/chatHistorySlice";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
@@ -70,6 +70,7 @@ const Page: React.FC = () => {
   }, [isExist]);
 
   const createPrompt = (id: number) => {
+    dispatch(updateChatbotPrompt({ chatBotId: id }));
     console.log(id);
   };
 
