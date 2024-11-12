@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppSelector } from "@/store/hooks";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import React, { useState, useEffect } from "react";
@@ -19,6 +20,9 @@ const CardButton: React.FC<CardButtonProps> = ({
   title,
   text,
 }: CardButtonProps) => {
+
+  const user = useAppSelector(state => state.user.user);
+
   const { exist } = useAppSelector(state => state.chatState);
   const dispatch = useAppDispatch();
   const [chatURL, setChatURL] = useState("");
@@ -60,7 +64,7 @@ const CardButton: React.FC<CardButtonProps> = ({
       url += "results";
       break;
     case 3:
-      url += "chat";
+      url += `self-survey/${user.userId}`;
       break;
     case 4:
       url += "chat-history";
@@ -69,6 +73,17 @@ const CardButton: React.FC<CardButtonProps> = ({
       url += "chat-history";
       break;
   }
+
+  const errorMessage = () => {
+    if (page !== 4) return;
+    Swal.fire({
+      icon: "info",
+      title: "챗봇 개발 중!",
+      text: "조금만 기다려주세요..!",
+      confirmButtonColor: "#5498FF",
+      confirmButtonText: "닫기",
+    });
+  };
 
   return (
     <Link

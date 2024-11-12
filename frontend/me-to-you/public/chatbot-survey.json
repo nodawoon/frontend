@@ -1,0 +1,282 @@
+[
+  {
+    "categoryId": 1,
+    "categoryName": "기본 질문",
+    "questions": [
+      {
+        "id": 1,
+        "emoji": "👥",
+        "question": "별명이 뭐야?",
+        "type": "short_answer"
+      },
+      {
+        "id": 2,
+        "emoji": "🎭",
+        "question": "성격이 어떤 것 같아? (최소 3개~ 최대 12개)",
+        "type": "multi_select",
+        "options": [
+          "활발한",
+          "차분한",
+          "외향적",
+          "내향적",
+          "신중한",
+          "사교\n적인",
+          "친절한",
+          "창의\n적인",
+          "긍정적",
+          "독립적",
+          "분석\n적인",
+          "감성\n적인",
+          "배려심\n많은",
+          "목표\n지향적",
+          "유머\n러스한",
+          "열정\n적인",
+          "공감\n능력",
+          "도전\n적인",
+          "끈기\n있는",
+          "유연성",
+          "성실함",
+          "분석력",
+          "사려\n깊은",
+          "주도성",
+          "결단력\n있는",
+          "협력\n적인",
+          "꼼꼼함",
+          "추진력\n있는",
+          "시간\n관리",
+          "인내심\n있는",
+          "통찰력\n있는",
+          "문제\n해결",
+          "책임감"
+        ],
+        "min_selection": 3
+      },
+      {
+        "id": 3,
+        "emoji": "🤫",
+        "question": "아무도 모르는 나만의 비밀 한 가지 알려줘!",
+        "type": "long_answer"
+      },
+      {
+        "id": 4,
+        "emoji": "💭",
+        "question": "가장 많이 쓰는 이모티콘이나 자주 쓰는 말이 뭐야?",
+        "type": "short_answer"
+      },
+      {
+        "id": 5,
+        "emoji": "🌈",
+        "question": "요즘 어떻게 지내?",
+        "type": "long_answer"
+      }
+    ]
+  },
+  {
+    "categoryId": 2,
+    "categoryName": "선물 관련",
+    "questions": [
+      {
+        "id": 6,
+        "emoji": "🚫",
+        "question": "절대 받기 싫은 선물 뭐야?",
+        "type": "short_answer"
+      },
+      {
+        "id": 7,
+        "emoji": "🎁",
+        "question": "받고 싶은 선물 있어?",
+        "type": "short_answer"
+      },
+      {
+        "id": 8,
+        "emoji": "🎂",
+        "question": "좋아하는 케이크는?",
+        "type": "multiple_choice",
+        "options": [
+          "초코 케이크",
+          "생크림 케이크",
+          "고구마 케이크",
+          "아이스크림 케이크",
+          "캐릭터 케이크",
+          "커스텀 케이크"
+        ]
+      },
+      {
+        "id": 9,
+        "emoji": "😋",
+        "question": "제일 좋아하는 음식이 뭐야?",
+        "type": "short_answer"
+      },
+      {
+        "id": 10,
+        "emoji": "🤢",
+        "question": "못 먹는 음식은?",
+        "type": "short_answer"
+      },
+      {
+        "id": 11,
+        "emoji": "🎨",
+        "question": "좋아하는 색깔이 뭐야?",
+        "type": "short_answer"
+      }
+    ]
+  },
+  {
+    "categoryId": 3,
+    "categoryName": "취미, 좋아하는 것이 뭐야?",
+    "questions": [
+      {
+        "id": 12,
+        "emoji": "🎵",
+        "question": "어떤 음악 장르 좋아해?",
+        "type": "short_answer"
+      },
+      {
+        "id": 13,
+        "emoji": "⭐",
+        "question": "요즘 최애 연예인이 누구야?",
+        "type": "short_answer"
+      },
+      {
+        "id": 14,
+        "emoji": "🎬",
+        "question": "인생 영화나 드라마는 뭐야?",
+        "type": "short_answer"
+      },
+      {
+        "id": 15,
+        "emoji": "✨",
+        "question": "여가 시간에 주로 뭐해?",
+        "type": "long_answer"
+      },
+      {
+        "id": 16,
+        "emoji": "✈️",
+        "question": "가보고 싶은 여행지 어디야?",
+        "type": "short_answer"
+      }
+    ]
+  },
+  {
+    "categoryId": 4,
+    "categoryName": "마음 관리, 미래",
+    "questions": [
+      {
+        "id": 17,
+        "emoji": "💝",
+        "question": "힘들 때 넌 어떻게 해?",
+        "type": "long_answer"
+      },
+      {
+        "id": 18,
+        "emoji": "🎯",
+        "question": "지금 이루고 싶은 게 뭐야?",
+        "type": "short_answer"
+      },
+      {
+        "id": 19,
+        "emoji": "💫",
+        "question": "나중에 어떤 사람이 되고 싶어?",
+        "type": "long_answer"
+      },
+      {
+        "id": 20,
+        "emoji": "😊",
+        "question": "최근에 제일 행복했던 일이 뭐야?",
+        "type": "long_answer"
+      },
+      {
+        "id": 21,
+        "emoji": "💌",
+        "question": "요즘 누구한테 제일 고마워?",
+        "type": "short_answer"
+      },
+      {
+        "id": 22,
+        "emoji": "💪",
+        "question": "어떤 말 들으면 제일 힘이 나?",
+        "type": "short_answer"
+      }
+    ]
+  },
+  {
+    "categoryId": 5,
+    "categoryName": "연애, 사랑",
+    "questions": [
+      {
+        "id": 23,
+        "emoji": "💘",
+        "question": "네 이상형은 어떤 사람이야? (애인 있으면 애인은 어떤 사람이야?)",
+        "type": "long_answer"
+      },
+      {
+        "id": 24,
+        "emoji": "💖",
+        "question": "첫사랑 얘기 좀 들려줘!",
+        "type": "long_answer"
+      },
+      {
+        "id": 25,
+        "emoji": "💑",
+        "question": "어떤 데이트가 제일 좋아?",
+        "type": "short_answer"
+      },
+      {
+        "id": 26,
+        "emoji": "💔",
+        "question": "만약 애인이랑 헤어지면 넌 어떻게 할 것 같아?",
+        "type": "long_answer"
+      },
+      {
+        "id": 27,
+        "emoji": "🧡",
+        "question": "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!",
+        "type": "multi_select",
+        "options": [
+          "얼굴",
+          "몸매",
+          "성격",
+          "직업",
+          "경제력",
+          "가치관",
+          "가족\n관계",
+          "건강",
+          "종교",
+          "나이",
+          "이성\n관계",
+          "연애\n횟수",
+          "취미",
+          "사주\n궁합"
+        ],
+        "min_selection": 1
+      }
+    ]
+  },
+  {
+    "categoryId": 6,
+    "categoryName": "너 나를 얼마나 아니?",
+    "questions": [
+      {
+        "id": 28,
+        "emoji": "🎉",
+        "question": "특별한 날 이벤트는 어떤 게 좋아?",
+        "type": "multiple_choice",
+        "options": ["조용하게 해주는 이벤트", "화려하게 해주는 이벤트"]
+      },
+      {
+        "id": 29,
+        "emoji": "🏨",
+        "question": "여행갈 때 어디서 자고 싶어?",
+        "type": "multiple_choice",
+        "options": ["편안하게 호캉스로~", "게스트 하우스에서 사람들과 즐기기!"]
+      },
+      {
+        "id": 30,
+        "emoji": "🌅",
+        "question": "너는 아침형 인간이야, 저녁형 인간이야?",
+        "type": "multiple_choice",
+        "options": ["아침형 인간", "저녁형 인간"]
+      }
+    ]
+  }
+]

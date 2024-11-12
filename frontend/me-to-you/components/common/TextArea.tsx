@@ -39,7 +39,7 @@ function TextArea({
         ref={textareaRef}
         value={value} // 부모 컴포넌트의 상태 값 사용
         onChange={handleInputChange}
-        className="resize-none border-2 border-gray rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray mt-2"
+        className="resize-none border border-gray rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray mt-2"
         placeholder={placeholder}
         style={{
           width: "100%",
