@@ -39,8 +39,8 @@ const ChatInputCard: React.FC<CardProps> = ({
       <div className={"text-sm font-light flex pl-0.5 mb-1 " + (index !== current ? "hidden" : "")}>
         <textarea
           className="resize-none rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray w-full pb-3 mt-1"
-          maxLength={100}
-          placeholder="100자 이내로 작성해주세요."
+          maxLength={300}
+          placeholder="300자 이내로 작성해주세요."
           onChange={e => submit(e.target.value)}
         />
       </div>
