@@ -65,4 +65,8 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     title: "너에게 난 챗봇",
     background: "bg-light-gray",
   },
+  "/search": {
+    title: "친구 찾기",
+    background: "bg-light-gray",
+  },
 };

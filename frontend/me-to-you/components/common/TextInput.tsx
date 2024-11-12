@@ -21,7 +21,6 @@ function TextInput({
 }: textInputProps) {
   const [isFocused, setIsFocused] = useState(false);
 
-  // 포커스가 없고 값이 없을 때만 라벨을 표시
   const shouldShowLabel = isFocused || value === "";
 
   return (
@@ -29,7 +28,7 @@ function TextInput({
       <input
         type="text"
         value={value}
-        onChange={handleChangeInput}
+        onChange={handleChangeInput || (() => {})}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         className={`h-10 w-full border border-gray p-2 rounded-md outline-none focus:ring-1 focus:ring-primary transition-all`}
