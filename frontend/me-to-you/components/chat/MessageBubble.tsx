@@ -1,5 +1,5 @@
 import React from "react";
-import { ChatbotAnswerType } from "@/types/chatbot";
+import { ChatbotAnswerType } from "@/types/selfSurvey";
 
 interface MessageBubbleProps {
   text: string;
