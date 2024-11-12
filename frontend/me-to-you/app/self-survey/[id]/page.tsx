@@ -53,40 +53,45 @@ const Page = () => {
     if (isSubmit) return;
 
     const checkResponse = chatbotResoponseList.every(
-      (response: { response: string | any[]; question: string }) => {
-        if (
-          response.response.length === 0 ||
-          response.response === "" ||
-          (response.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)" &&
-            response.response.length < 3) ||
-          (response.question === "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!" &&
-            response.response.length !== 3)
-        ) {
-          Swal.fire({
-            title: `작성하지 않은 답이 있어요.`,
-            text: "작성하고 오세요!",
-            icon: "warning",
-            showConfirmButton: true,
-          });
+      (response: { response: string; question: string }) => {
+        if (!response.response || response.response.length === 0) {
           return false;
-        } else {
-          return true;
         }
+
+        if (response.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)") {
+          const selectedOptions = response.response.split(", ");
+          return selectedOptions.length >= 3;
+        }
+
+        if (response.question === "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!") {
+          const selectedOptions = response.response.split(", ");
+          return selectedOptions.length === 3;
+        }
+
+        return true;
       }
     );
 
-    if (checkResponse) {
-      setIsSubmit(true);
-      await createChatbotResponse(submitForm.responses);
+    if (!checkResponse) {
       Swal.fire({
-        title: "설문 제출 성공!",
-        text: "이 답변을 토대로, 챗봇이 생성될거에요.",
-        icon: "success",
+        title: `작성하지 않은 답이 있어요.`,
+        text: "작성하고 오세요!",
+        icon: "warning",
         showConfirmButton: true,
-      }).then(() => {
-        router.push("/self-survey/result");
       });
+      return;
     }
+
+    setIsSubmit(true);
+    await createChatbotResponse(submitForm.responses);
+    Swal.fire({
+      title: "설문 제출 성공!",
+      text: "이 답변을 토대로, 챗봇이 생성될 거에요.",
+      icon: "success",
+      showConfirmButton: true,
+    }).then(() => {
+      router.push("/self-survey/result");
+    });
   };
 
   useEffect(() => {
