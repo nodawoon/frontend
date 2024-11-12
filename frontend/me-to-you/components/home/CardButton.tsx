@@ -21,7 +21,7 @@ const CardButton: React.FC<CardButtonProps> = ({
 }: CardButtonProps) => {
   const user = useAppSelector(state => state.user.user);
 
-  const { exist } = useAppSelector(state => state.chatState);
+  const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
   const [chatURL, setChatURL] = useState("");
 

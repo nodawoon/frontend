@@ -10,7 +10,7 @@ const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
   //   const { content } = useAppSelector(state => state.chatHistory);
-  const { exist } = useAppSelector(state => state.chatState);
+  const { exist } = useAppSelector(state => state.chatHistory);
   const content = [
     {
       chatbotId: 1,

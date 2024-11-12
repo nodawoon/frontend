@@ -38,7 +38,7 @@ const Page: React.FC = () => {
     { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
   ];
   // const { content } = useAppSelector(state => state.chatHistory);
-  const { exist } = useAppSelector(state => state.chatState);
+  const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
