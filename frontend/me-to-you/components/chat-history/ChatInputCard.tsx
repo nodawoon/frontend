@@ -29,16 +29,16 @@ const ChatInputCard: React.FC<CardProps> = ({
         <span
           className={
             "material-symbols-rounded text-icon w-auto ml-1 " +
-            (state === "답변하기" ? "text-[11px] self-center text-center" : "h-8")
+            (state === "답변하기" ? "text-[11px] self-center text-center" : "h-6")
           }
           onClick={() => onClick(index)}
         >
           {state}
         </span>
       </p>
-      <div className={"text-sm font-light flex pl-0.5 " + (index !== current ? "hidden" : "")}>
+      <div className={"text-sm font-light flex pl-0.5 mb-1 " + (index !== current ? "hidden" : "")}>
         <textarea
-          className="resize-none rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray mt-2 w-full"
+          className="resize-none rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none scrollbar-thin scrollbar-thumb-gray scrollbar-track-soft-gray w-full pb-3 mt-1"
           maxLength={100}
           placeholder="100자 이내로 작성해주세요."
           onChange={e => submit(e.target.value)}
