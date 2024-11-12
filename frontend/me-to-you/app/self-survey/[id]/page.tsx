@@ -10,7 +10,7 @@ import TextInput from "@/components/common/TextInput";
 import TextArea from "@/components/common/TextArea";
 import Button from "@/components/common/Button";
 import Swal from "sweetalert2";
-import { createChatbotResponse } from "@/services/chatbot";
+import { createChatbotResponse } from "@/services/selfSurvey";
 import { useRouter } from "next/navigation";
 import { setCategoryState } from "@/slice/chatbotQuestionSlice";
 import { CHATBOT_GUIDE } from "@/constants/chatbot";
