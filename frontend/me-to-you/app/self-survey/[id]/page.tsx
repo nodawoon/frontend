@@ -205,7 +205,7 @@ const Page = () => {
                               !selectedOptions[question.id - 1]?.includes(option) &&
                               selectedOptions[question.id - 1]?.length >= 3)
                           }
-                          className="h-12 whitespace-pre-line break-words"
+                          className="h-10 whitespace-pre-line break-words"
                         >
                           {option}
                         </SelectButton>
