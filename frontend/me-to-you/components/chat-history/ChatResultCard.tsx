@@ -24,16 +24,18 @@ const ChatResultCard: React.FC<CardProps> = ({
     className;
 
   return (
-    <div className={combinedClassName} key={index} onClick={() => onClick()}>
+    <div className={combinedClassName} key={index}>
       <p className="flex justify-between my-2 ml-2">
         <span>Q.&nbsp;</span>
         <span className={"text-md grow " + (index !== current ? "truncate" : "")}>{question}</span>
-        <span className="material-symbols-rounded text-icon w-6">{"keyboard_arrow_" + state}</span>
+        <span className="material-symbols-rounded text-icon w-6 ml-1" onClick={() => onClick()}>
+          {"keyboard_arrow_" + state}
+        </span>
       </p>
       <p className={"text-sm font-light mb-2 flex pl-0.5 " + (index !== current ? "hidden" : "")}>
         <span className="material-symbols-rounded text-icon self-right mr-1">{responser}</span>
         <span className="self-center">{answer}</span>
-        <span className="material-symbols-rounded text-icon w-6">&nbsp;</span>
+        <span className="material-symbols-rounded text-icon w-6 ml-1">&nbsp;</span>
       </p>
     </div>
   );
