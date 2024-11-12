@@ -44,7 +44,7 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(loadChatHistory());
+      await dispatch(loadChatHistory({ status: "unanswer-bot", page: 0 }));
     })();
   }, [dispatch]);
 

@@ -50,7 +50,7 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(loadChatHistory());
+      await dispatch(loadChatHistory({ status: "answer-user", page: 0 }));
     })();
   }, [dispatch]);
 

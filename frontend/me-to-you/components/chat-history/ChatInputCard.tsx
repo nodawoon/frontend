@@ -29,7 +29,7 @@ const ChatInputCard: React.FC<CardProps> = ({
         <span
           className={
             "material-symbols-rounded text-icon w-auto ml-1 " +
-            (state === "답변하기" ? "text-[11px] self-center text-center" : "h-6")
+            (state === "답변하기" ? "text-[10px] self-center text-center" : "h-6")
           }
           onClick={() => onClick(index)}
         >

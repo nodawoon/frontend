@@ -11,9 +11,9 @@ export const getChatState = async () => {
     });
 };
 
-export const getChatHistory = async () => {
+export const getChatHistory = async (params: { status: string; page: number }) => {
   return await clientInstance
-    .get<ApiResponseType<chatHistoryProps>>("/chatbots")
+    .get<ApiResponseType<chatHistoryProps>>("/chatbots", { params: params })
     .then(response => {
       return response;
     })

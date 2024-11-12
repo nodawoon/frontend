@@ -60,10 +60,13 @@ export const loadChatState = createAsyncThunk("respondent/getChatState", async (
   return response.data;
 });
 
-export const loadChatHistory = createAsyncThunk("respondent/getChatHistory", async () => {
-  const response = await getChatHistory();
-  return response.data;
-});
+export const loadChatHistory = createAsyncThunk(
+  "respondent/getChatHistory",
+  async (params: { status: string; page: number }) => {
+    const response = await getChatHistory(params);
+    return response.data;
+  }
+);
 
 export const chatStateReducer = chatStateSlice.reducer;
 export const chatHistoryReducer = chatHistorySlice.reducer;
