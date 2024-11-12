@@ -60,7 +60,7 @@ const Header: React.FC = () => {
   return (
     <header
       className={`w-full text-black z-10 ${
-        isMenuOpen ? "absolute h-screen bg-white max-w-[460px]" : "relative h-14"
+        isMenuOpen ? "absolute h-screen bg-white max-w-[460px]" : "relative h-[8vh]"
       } ${currentPageConfig.background}`}
     >
       <div className="flex justify-between items-center p-4">
