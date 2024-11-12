@@ -167,22 +167,24 @@ const Sidebar: React.FC<SidebarProps> = ({
     <div className="w-full h-[100%] overflow-y-auto scrollbar-hide px-2 pt-4 pb-20 bg-white z-50">
       {chatbot.map(category =>
         category.questions.map(question => {
-          const isCompleted = chatbotResponseList.some(response => {
-            if (
-              question.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)" &&
-              response.question === question.question
-            ) {
-              return response.response.length >= 13;
-            }
+          const isCompleted = chatbotResponseList.some(
+            (response: { question: string; response: string | any[] }) => {
+              if (
+                question.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)" &&
+                response.question === question.question
+              ) {
+                return response.response.length >= 13;
+              }
 
-            if (
-              question.question === "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!" &&
-              response.question === question.question
-            ) {
-              return response.response.length >= 10;
+              if (
+                question.question === "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!" &&
+                response.question === question.question
+              ) {
+                return response.response.length >= 10;
+              }
+              return response.question === question.question && response.response.length > 0;
             }
-            return response.question === question.question && response.response.length > 0;
-          });
+          );
 
           return (
             <div
