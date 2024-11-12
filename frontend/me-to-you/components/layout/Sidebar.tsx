@@ -5,12 +5,14 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { setIsSideBarState, setQuestionState } from "@/slice/questionSlice";
 import survey from "../../public/survey.json";
+import chatbot from "../../public/chatbot-survey.json";
 import Image from "next/image";
 import { logout, removeUser } from "@/slice/userSlice";
 import Swal from "sweetalert2";
 import { ROUTES } from "@/constants/routes";
 import { getUserNickname } from "@/services/share";
 import { AuthContext } from "@/context/AuthContext";
+import { setCategoryState } from "@/slice/chatbotQuestionSlice";
 
 interface SidebarProps {
   isContactUsOpen: boolean;
@@ -28,15 +30,24 @@ const Sidebar: React.FC<SidebarProps> = ({
   const pathname = usePathname();
   const router = useRouter();
   const param = useParams();
+  const id = pathname?.split("self-survey/")[1];
 
   const questionNumber = useAppSelector(state => state.question.questionNumber);
   const responseList = useAppSelector(state => state.surveyResponse.surveyResponseRequestList);
+  const chatbotResponseList = useAppSelector(state => state.chatbotResponse.responses);
 
   const { error } = useAppSelector(state => state.user);
 
   const dispatch = useAppDispatch();
 
   const { isLoggedIn } = useContext(AuthContext);
+
+  const handleChangeChatbotQuestion = (categoryId: number) => {
+    console.info("여기여기");
+    dispatch(setCategoryState(categoryId));
+    dispatch(setIsSideBarState(false));
+    setIsMenuOpen(false);
+  };
 
   const handleChangeQuestion = (num: number) => {
     dispatch(setQuestionState(num));
@@ -151,6 +162,52 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </button>
       ))}
+    </div>
+  ) : id && pathname.startsWith(`/self-survey/${id}`) ? (
+    <div className="w-full h-[100%] overflow-y-auto scrollbar-hide px-2 pt-4 pb-20 bg-white z-50">
+      {chatbot.map(category =>
+        category.questions.map(question => {
+          const isCompleted = chatbotResponseList.some(response => {
+            if (
+              question.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)" &&
+              response.question === question.question
+            ) {
+              return response.response.length >= 13;
+            }
+
+            if (
+              question.question === "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!" &&
+              response.question === question.question
+            ) {
+              return response.response.length >= 10;
+            }
+            return response.question === question.question && response.response.length > 0;
+          });
+
+          return (
+            <div
+              key={question.id}
+              className="flex text-center items-center cursor-pointer text-sm ml-6 mb-2"
+              onClick={() => handleChangeChatbotQuestion(category.categoryId)}
+            >
+              <div className="w-[20px] h-[20px] mr-2">
+                {isCompleted ? (
+                  <Image
+                    src="/check_circle.svg"
+                    width={15}
+                    height={15}
+                    alt="check"
+                    className="mt-0.5"
+                  />
+                ) : (
+                  <span className="mr-2">{question.id}.</span>
+                )}
+              </div>
+              <span className="truncate">{question.question}</span>
+            </div>
+          );
+        })
+      )}
     </div>
   ) : (
     <div className="absolute bg-white w-full h-screen pl-9 flex flex-col justify-center gap-5 z-10 max-w-[460px]">

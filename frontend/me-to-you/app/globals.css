@@ -44,7 +44,6 @@
   font-style: normal;
 }
 
-
 body {
   margin: 0;
   padding: 0;
@@ -81,7 +80,8 @@ input[type="radio"]:checked {
   text-overflow: ellipsis;
 }
 
-a:hover, .text-button:hover {
+a:hover,
+.text-button:hover {
   color: #777777;
   cursor: pointer;
 }
@@ -89,11 +89,20 @@ a:hover, .text-button:hover {
 .rounded-image {
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain
+  background-size: contain;
 }
 
 @layer utilities {
   .intro-section-desktop {
     @apply flex flex-col w-1/2 items-start justify-between bg-white h-screen overflow-hidden p-10;
   }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

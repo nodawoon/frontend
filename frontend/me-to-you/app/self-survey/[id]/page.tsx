@@ -12,17 +12,38 @@ import Button from "@/components/common/Button";
 import Swal from "sweetalert2";
 import { createChatbotResponse } from "@/services/chatbot";
 import { useRouter } from "next/navigation";
+import { setCategoryState } from "@/slice/chatbotQuestionSlice";
 
 const Page = () => {
-  const [questionNumber, setQuestionNumber] = useState(1);
+  const categoryState = useAppSelector(state => state.chatbotQuestion.categoryNumber);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<{ [key: number]: string[] }>({});
   const dispatch = useAppDispatch();
-  const chatbotQuestions = useAppSelector(state => state.chatbotQuestion);
   const chatbotResoponseList = useAppSelector(state => state.chatbotResponse.responses);
   const submitForm = useAppSelector(state => state.chatbotResponse);
   const [isSubmit, setIsSubmit] = useState(false);
   const router = useRouter();
+
+  const isCategoryCompleted = (categoryId: number) => {
+    const category = chatbot.find(category => category.categoryId === categoryId);
+    if (!category) return false;
+
+    return category.questions.every(question => {
+      const response = chatbotResoponseList.find(res => res.question === question.question);
+
+      if (!response || response.response.length === 0) return false;
+
+      if (question.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)") {
+        return response.response.split(", ").length >= 3;
+      }
+
+      if (question.question === "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!") {
+        return response.response.split(", ").length === 3;
+      }
+
+      return true;
+    });
+  };
 
   const handlerSubmit = async () => {
     if (isSubmit) return;
@@ -53,7 +74,7 @@ const Page = () => {
       await createChatbotResponse(submitForm.responses);
       Swal.fire({
         title: "설문 제출 성공!",
-        text: "답변이 친구에게로 전달 될거에요.",
+        text: "이 답변을 토대로, 챗봇이 생성될거에요.",
         icon: "success",
         showConfirmButton: true,
       }).then(() => {
@@ -63,14 +84,14 @@ const Page = () => {
   };
 
   const handleNextQuestion = () => {
-    if (questionNumber < 6) {
-      setQuestionNumber(prev => prev + 1);
+    if (categoryState < 6) {
+      dispatch(setCategoryState(categoryState + 1));
     }
   };
 
   const handlePrevQuestion = () => {
-    if (questionNumber > 1) {
-      setQuestionNumber(prev => prev - 1);
+    if (categoryState > 1) {
+      dispatch(setCategoryState(categoryState - 1));
     }
   };
 
@@ -106,14 +127,14 @@ const Page = () => {
     <div className="w-full">
       <div className="mt-4 w-[90%] ml-auto mr-auto">
         <ProgressBar
-          progress={Math.round(questionNumber * 16.666666666)}
+          progress={Math.round(categoryState * 16.666666666)}
           width={100}
           className="h-2 mb-6"
           questionNum={6}
         />
       </div>
       {chatbot
-        .filter(category => category.categoryId === questionNumber)
+        .filter(category => category.categoryId === categoryState)
         .map(questions => (
           <div key={questions.categoryId} className="w-[90%] ml-auto mr-auto">
             {questions.questions.map(question => (
@@ -197,13 +218,18 @@ const Page = () => {
         ))}
 
       <div className="mt-10 mb-3">
-        {questionNumber === 1 ? (
+        {categoryState === 1 ? (
           <div className="w-full flex justify-center">
-            <Button size="md" className="w-[90%]" onClick={() => handleNextQuestion()}>
+            <Button
+              size="md"
+              className="w-[90%]"
+              onClick={() => handleNextQuestion()}
+              disabled={!isCategoryCompleted(categoryState)}
+            >
               다음
             </Button>
           </div>
-        ) : questionNumber === 6 ? (
+        ) : categoryState === 6 ? (
           <div className="flex">
             <div className="w-full flex justify-center">
               <Button
@@ -216,7 +242,12 @@ const Page = () => {
               </Button>
             </div>
             <div className="w-full flex justify-center">
-              <Button size="md" className="w-[90%]" onClick={() => handlerSubmit()}>
+              <Button
+                size="md"
+                className="w-[90%]"
+                onClick={() => handlerSubmit()}
+                disabled={!isCategoryCompleted(categoryState)}
+              >
                 제출
               </Button>
             </div>
@@ -234,7 +265,12 @@ const Page = () => {
               </Button>
             </div>
             <div className="w-full flex justify-center">
-              <Button size="md" className="w-[90%]" onClick={() => handleNextQuestion()}>
+              <Button
+                size="md"
+                className="w-[90%]"
+                onClick={() => handleNextQuestion()}
+                disabled={!isCategoryCompleted(categoryState)}
+              >
                 다음
               </Button>
             </div>
