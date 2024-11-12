@@ -33,27 +33,53 @@ const PieChart: React.FC = () => {
       const startAngle = cumulativePercent * circumference;
       const endAngle = (cumulativePercent + percent / 100) * circumference;
 
-      const largeArcFlag = percent > 50 ? 1 : 0;
+      let pathData = "";
+      let largeArcFlag = 0;
 
-      const startX = center + radius * Math.cos(startAngle - Math.PI / 2);
-      const startY = center + radius * Math.sin(startAngle - Math.PI / 2);
+      if (percent < 100) {
+        largeArcFlag = percent > 50 ? 1 : 0;
 
-      const endX = center + radius * Math.cos(endAngle - Math.PI / 2);
-      const endY = center + radius * Math.sin(endAngle - Math.PI / 2);
+        const startX = center + radius * Math.cos(startAngle - Math.PI / 2);
+        const startY = center + radius * Math.sin(startAngle - Math.PI / 2);
 
-      const pathData = `
+        const endX = center + radius * Math.cos(endAngle - Math.PI / 2);
+        const endY = center + radius * Math.sin(endAngle - Math.PI / 2);
+
+        pathData = `
         M ${center} ${center}
         L ${startX} ${startY}
         A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}
         Z
       `;
 
-      const midAngle = startAngle + (endAngle - startAngle) / 2;
-      const textRadius = radius * 0.6;
-      const textX = center + textRadius * Math.cos(midAngle - Math.PI / 2);
-      const textY = center + textRadius * Math.sin(midAngle - Math.PI / 2);
+        cumulativePercent += percent / 100;
+      } else if (percent === 100) {
+        const startX = center;
+        const startY = center - radius;
 
-      cumulativePercent += percent / 100;
+        const endX = center;
+        const endY = center + radius;
+
+        pathData = `
+        M ${center} ${center}
+        L ${startX} ${startY}
+        A ${radius} ${radius} 0 1 1 ${endX} ${endY}
+        A ${radius} ${radius} 0 1 1 ${startX} ${startY}
+        Z
+      `;
+      }
+
+      let textX = center;
+      let textY = center;
+      if (percent < 100) {
+        const midAngle = startAngle + (endAngle - startAngle) / 2;
+        const textRadius = radius * 0.6;
+        textX = center + textRadius * Math.cos(midAngle - Math.PI / 2);
+        textY = center + textRadius * Math.sin(midAngle - Math.PI / 2);
+      } else {
+        textX = center;
+        textY = center;
+      }
 
       return (
         <g key={index}>
@@ -71,18 +97,15 @@ const PieChart: React.FC = () => {
               y={textY}
               textAnchor="middle"
               dominantBaseline="middle"
-              className={`text-sm text-white font-light ${
-                isInViewport ? "animate-fade-in" : "opacity-0"
-              }`}
+              className="text-sm text-white font-light"
             >
-              {percent.toFixed(1)}%
+              {percent < 100 ? `${percent.toFixed(1)}%` : "100%"}
             </text>
           )}
         </g>
       );
     });
   };
-
   useEffect(() => {
     dispatch(loadTimePercent());
   }, [dispatch]);
@@ -92,8 +115,8 @@ const PieChart: React.FC = () => {
       아직 응답한 사람이 없어요😥
     </p>
   ) : (
-    <div className="w-full flex items-center gap-2 justify-between" ref={ref}>
-      <div>
+    <div className="w-full flex items-center gap-2 justify-between">
+      <div ref={ref}>
         <svg width={size} height={size} className="block">
           {renderSlices()}
         </svg>

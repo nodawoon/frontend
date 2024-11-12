@@ -42,6 +42,7 @@ const PodiumChart: React.FC = () => {
         sortedValues.map((obj, idx) => (
           <div
             key={idx}
+            ref={ref}
             className={`${isInViewport} flex flex-col items-center justify-end mt-8 ${isInViewport && "animate-slide-up"}`}
           >
             <p className="text-sm">{obj.count}표</p>

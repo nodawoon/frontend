@@ -1,3 +1,4 @@
+// hooks/useScrollAnimation.tsx
 "use client";
 
 import { useEffect, useState, RefObject } from "react";
@@ -18,7 +19,7 @@ const useScrollAnimation = (ref: RefObject<HTMLElement>) => {
       });
     };
 
-    const options = { root: null, rootMargin: "0px", threshold: 0 };
+    const options = { root: null, rootMargin: "0px", threshold: 0.1 };
     const observer = new IntersectionObserver(callback, options);
     observer.observe(ref.current);
 

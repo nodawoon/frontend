@@ -51,6 +51,11 @@ const Page: React.FC = () => {
   });
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-screen">
+      <div className="bg-white w-full flex flex-col gap-7 mt-8 mb-14">
+        <StatisticsCard type="first" />
+        <StatisticsCard type="keyword" />
+        <StatisticsCard type="time" />
+      </div>
       <div className="w-full bg-light-gray">
         <div className="flex flex-col w-[85%] bg-light-gray mx-auto">
           <p className="text-[20px] mt-10 mb-5 w-full">
@@ -89,11 +94,6 @@ const Page: React.FC = () => {
           </p>
           {surveyList}
         </div>
-      </div>
-      <div className="bg-white w-full flex flex-col gap-7 mt-8 mb-14">
-        <StatisticsCard type="first" />
-        <StatisticsCard type="keyword" />
-        <StatisticsCard type="time" />
       </div>
     </div>
   );
