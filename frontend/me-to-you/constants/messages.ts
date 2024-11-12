@@ -6,4 +6,6 @@ export const MESSAGES = {
   INVALID_SIGNUP_FORM: "모든 값을 입력해주세요!",
   NICKNAME_LENGTH: "닉네임은 2자 이상, 8자 이하로 설정해주세요!",
   WELCOME: (nickname: string) => `${nickname}님 환영합니다 :)`,
+  UNANSWERED_BY_BOT: (nickname: string) =>
+    `죄송해요, 이 질문에 대해서는 제가 답변을 드릴 수 없어요😥\n하지만 다시 질문해주시면 좀 더 고민해볼게요!\n${nickname}님의 답변을 기다리시려면 '기다린다'를 선택해 주세요.\n'기다린다'를 선택하시면 ${nickname}님이 답변하실 때까지\n다른 질문을 하실 수 없으니 참고해 주세요!`,
 };
