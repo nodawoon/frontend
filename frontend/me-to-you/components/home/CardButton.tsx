@@ -71,7 +71,6 @@ const CardButton: React.FC<CardButtonProps> = ({
       url += "chat-history";
       break;
   }
-
   return (
     <Link
       href={page === 1 || page === 2 || page === 3 ? url : chatURL}
