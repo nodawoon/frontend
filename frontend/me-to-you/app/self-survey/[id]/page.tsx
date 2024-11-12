@@ -1,7 +1,7 @@
 "use client";
 
 import ProgressBar from "@/components/common/ProgressBar";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import chatbot from "@/public/chatbot-survey.json";
 import SelectButton from "@/components/common/SelectButton";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -13,23 +13,27 @@ import Swal from "sweetalert2";
 import { createChatbotResponse } from "@/services/chatbot";
 import { useRouter } from "next/navigation";
 import { setCategoryState } from "@/slice/chatbotQuestionSlice";
+import { CHATBOT_GUIDE } from "@/constants/chatbot";
 
 const Page = () => {
   const categoryState = useAppSelector(state => state.chatbotQuestion.categoryNumber);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<{ [key: number]: string }>({});
   const [selectedOptions, setSelectedOptions] = useState<{ [key: number]: string[] }>({});
   const dispatch = useAppDispatch();
   const chatbotResoponseList = useAppSelector(state => state.chatbotResponse.responses);
   const submitForm = useAppSelector(state => state.chatbotResponse);
   const [isSubmit, setIsSubmit] = useState(false);
   const router = useRouter();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const isCategoryCompleted = (categoryId: number) => {
     const category = chatbot.find(category => category.categoryId === categoryId);
     if (!category) return false;
 
     return category.questions.every(question => {
-      const response = chatbotResoponseList.find(res => res.question === question.question);
+      const response = chatbotResoponseList.find(
+        (res: { question: string }) => res.question === question.question
+      );
 
       if (!response || response.response.length === 0) return false;
 
@@ -48,55 +52,77 @@ const Page = () => {
   const handlerSubmit = async () => {
     if (isSubmit) return;
 
-    const checkResponse = chatbotResoponseList.every(response => {
-      if (
-        response.response.length === 0 ||
-        response.response === "" ||
-        (response.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)" &&
-          response.response.length < 3) ||
-        (response.question === "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!" &&
-          response.response.length !== 3)
-      ) {
-        Swal.fire({
-          title: `작성하지 않은 답이 있어요.`,
-          text: "작성하고 오세요!",
-          icon: "warning",
-          showConfirmButton: true,
-        });
-        return false;
-      } else {
+    const checkResponse = chatbotResoponseList.every(
+      (response: { response: string; question: string }) => {
+        if (!response.response || response.response.length === 0) {
+          return false;
+        }
+
+        if (response.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)") {
+          const selectedOptions = response.response.split(", ");
+          return selectedOptions.length >= 3;
+        }
+
+        if (response.question === "이성을 만날 때 제일 중요하게 생각하는 거 3개만 골라줘!") {
+          const selectedOptions = response.response.split(", ");
+          return selectedOptions.length === 3;
+        }
+
         return true;
       }
-    });
+    );
 
-    if (checkResponse) {
-      setIsSubmit(true);
-      await createChatbotResponse(submitForm.responses);
+    if (!checkResponse) {
       Swal.fire({
-        title: "설문 제출 성공!",
-        text: "이 답변을 토대로, 챗봇이 생성될거에요.",
-        icon: "success",
+        title: `작성하지 않은 답이 있어요.`,
+        text: "작성하고 오세요!",
+        icon: "warning",
         showConfirmButton: true,
-      }).then(() => {
-        router.push("/self-survey/result");
       });
+      return;
+    }
+
+    setIsSubmit(true);
+    await createChatbotResponse(submitForm.responses);
+    Swal.fire({
+      title: "설문 제출 성공!",
+      text: "이 답변을 토대로, 챗봇이 생성될 거에요.",
+      icon: "success",
+      showConfirmButton: true,
+    }).then(() => {
+      router.push("/self-survey/result");
+    });
+  };
+
+  useEffect(() => {
+    scrollTop();
+  }, [categoryState]);
+
+  const scrollTop = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const handleNextQuestion = () => {
     if (categoryState < 6) {
       dispatch(setCategoryState(categoryState + 1));
+      setTimeout(() => scrollTop(), 100);
     }
   };
 
   const handlePrevQuestion = () => {
     if (categoryState > 1) {
       dispatch(setCategoryState(categoryState - 1));
+      setTimeout(() => scrollTop(), 100);
     }
   };
 
   const handleSingleSelect = (option: string, idx: number, question: string) => {
-    setSelectedOption(option);
+    setSelectedOption(prev => ({
+      ...prev,
+      [idx]: option,
+    }));
     dispatch(addResponse({ idx, question: question, response: option }));
   };
 
@@ -124,7 +150,7 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full h-[90vh] overflow-y-auto scrollbar-hide" ref={scrollContainerRef}>
       <div className="mt-4 w-[90%] ml-auto mr-auto">
         <ProgressBar
           progress={Math.round(categoryState * 16.666666666)}
@@ -137,6 +163,11 @@ const Page = () => {
         .filter(category => category.categoryId === categoryState)
         .map(questions => (
           <div key={questions.categoryId} className="w-[90%] ml-auto mr-auto">
+            <div className="text-[12px] text-dark-gray">
+              {CHATBOT_GUIDE.map(str => (
+                <p>{str}</p>
+              ))}
+            </div>
             {questions.questions.map(question => (
               <div key={question.id}>
                 <div className="mt-8 font-bold text-xl">
@@ -150,7 +181,7 @@ const Page = () => {
                           onClick={() =>
                             handleSingleSelect(option, question.id - 1, question.question)
                           }
-                          isSelected={selectedOption?.includes(option)}
+                          isSelected={selectedOption[question.id - 1] === option}
                           className="w-full text-left py-2"
                         >
                           {option}
@@ -158,7 +189,7 @@ const Page = () => {
                       </div>
                     ))
                   ) : question.type === "multi_select" ? (
-                    <div className="grid grid-cols-4 gap-1 mt-2.5 ">
+                    <div className="flex flex-wrap gap-x-1">
                       {question.options?.map((option, idx) => (
                         <SelectButton
                           key={idx}
@@ -174,7 +205,7 @@ const Page = () => {
                               !selectedOptions[question.id - 1]?.includes(option) &&
                               selectedOptions[question.id - 1]?.length >= 3)
                           }
-                          className="h-12 whitespace-pre-line break-words"
+                          className="h-10 whitespace-pre-line break-words"
                         >
                           {option}
                         </SelectButton>
@@ -190,7 +221,8 @@ const Page = () => {
                         }
                         value={
                           chatbotResoponseList.find(
-                            response => response.question === question.question
+                            (response: { question: string }) =>
+                              response.question === question.question
                           )?.response || ""
                         }
                       />
@@ -205,7 +237,8 @@ const Page = () => {
                         }
                         value={
                           chatbotResoponseList.find(
-                            response => response.question === question.question
+                            (response: { question: string }) =>
+                              response.question === question.question
                           )?.response || ""
                         }
                       />
