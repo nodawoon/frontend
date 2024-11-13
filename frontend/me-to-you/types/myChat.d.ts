@@ -5,28 +5,30 @@ interface Sort {
 }
 
 interface Pageable {
-  offset: number;
-  sort: Sort;
-  paged: boolean;
   pageNumber: number;
   pageSize: number;
+  offset: number;
+  paged: boolean;
   unpaged: boolean;
+  sort: Sort;
 }
 
 interface ChatRoom {
-  id: number;
-  name: string;
-  lastMessage: string;
-  createdAt: string;
-  updatedAt: string;
+  targetUserId: number;
+  chatBotId: number;
+  nickname: string;
+  profileImageUrl: string;
+  lastChatBotAnswer: string;
+  answerStatus: string;
+  isNew: boolean;
 }
 
-interface ApiResponse<T> {
+interface ChatRoomResponse {
+  content: ChatRoom[];
+  pageable: Pageable;
   size: number;
-  content: T[][];
   number: number;
   sort: Sort;
-  pageable: Pageable;
   numberOfElements: number;
   first: boolean;
   last: boolean;
