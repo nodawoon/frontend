@@ -83,7 +83,7 @@ const Page: React.FC = () => {
         <Link href="/chat-history" className="text-gray text-sm self-center">
           ✨ 챗봇 답변
         </Link>
-        <Link href="/answer" className="text-gray text-sm self-center">
+        <Link href="/chat-history/answer" className="text-gray text-sm self-center">
           💡 직접 답변
         </Link>
         <Link href="" className="text-primary text-md font-bold self-center">
