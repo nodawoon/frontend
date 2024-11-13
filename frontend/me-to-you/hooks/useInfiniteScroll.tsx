@@ -1,16 +1,19 @@
 import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 
 interface UseInfiniteScrollOptions {
   hasMore: boolean;
+  loading: boolean;
   onLoadMore: () => void;
   targetId: string;
 }
 
-export const useInfiniteScroll = ({ hasMore, onLoadMore, targetId }: UseInfiniteScrollOptions) => {
+export const useInfiniteScroll = ({
+  hasMore,
+  loading,
+  onLoadMore,
+  targetId,
+}: UseInfiniteScrollOptions) => {
   const observer = useRef<IntersectionObserver | null>(null);
-  const { loading } = useSelector((state: RootState) => state.chatbot);
 
   useEffect(() => {
     if (observer.current) observer.current.disconnect();
