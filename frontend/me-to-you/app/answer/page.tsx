@@ -1,11 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ChatResultCard from "@/components/chat-history/ChatResultCard";
-import Link from "next/link";
 import Swal from "sweetalert2";
+import Link from "next/link";
+import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loadChatHistory, loadChatState, updateChatbotPrompt } from "@/slice/chatHistorySlice";
+import {
+  loadChatHistory,
+  loadChatState,
+  updateChatbotPrompt,
+  updateChatbotPromptRemove,
+} from "@/slice/chatHistorySlice";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
@@ -35,15 +40,25 @@ const Page: React.FC = () => {
     console.log(isExist);
   }, [isExist]);
 
-  const createPrompt = async (id: number) => {
-    await dispatch(updateChatbotPrompt({ chatBotId: id }));
+  const createPrompt = async (id: number, key: string) => {
+    if (key === "add") {
+      await dispatch(updateChatbotPrompt({ chatBotId: id }));
+      Swal.fire({
+        title: "학습 완료",
+        text: "나의 챗봇이 해당 답변을 학습했어요!",
+        icon: "success",
+        confirmButtonText: "확인",
+      });
+    } else if (key === "remove") {
+      await dispatch(updateChatbotPromptRemove({ chatBotId: id }));
+      Swal.fire({
+        title: "학습 취소",
+        text: "나의 챗봇이 해당 답변을 잊었어요!",
+        icon: "success",
+        confirmButtonText: "확인",
+      });
+    }
     await dispatch(loadChatHistory({ status: "answer-user", page: 0 }));
-    Swal.fire({
-      title: "학습 완료",
-      text: "나의 챗봇이 해당 답변을 학습했어요!",
-      icon: "success",
-      confirmButtonText: "확인",
-    });
   };
 
   return (
@@ -91,7 +106,13 @@ const Page: React.FC = () => {
                         "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
                       }
                     >
-                      학습을 완료한 답변이에요!
+                      학습을 완료했어요!{" "}
+                      <span
+                        className="text-pink"
+                        onClick={() => createPrompt(e.chatBotId, "remove")}
+                      >
+                        취소하기
+                      </span>
                     </p>
                   ) : (
                     <p
@@ -100,7 +121,10 @@ const Page: React.FC = () => {
                       }
                     >
                       이 대화를 챗봇에 추가 학습 시키시려면{" "}
-                      <span className="text-primary" onClick={() => createPrompt(e.chatBotId)}>
+                      <span
+                        className="text-primary"
+                        onClick={() => createPrompt(e.chatBotId, "add")}
+                      >
                         여기
                       </span>
                       를 클릭하세요.

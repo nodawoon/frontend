@@ -3,6 +3,7 @@ import {
   getChatState,
   updateChatbots,
   updateResponse,
+  updateChatbotsRemove,
 } from "@/services/chatHistory";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -42,6 +43,12 @@ const chatHistorySlice = createSlice({
       .addCase(updateChatbotPrompt.rejected, state => {
         console.log("propmt 업데이트 실패");
       })
+      .addCase(updateChatbotPromptRemove.fulfilled, state => {
+        console.log("propmt 업데이트 삭제 성공");
+      })
+      .addCase(updateChatbotPromptRemove.rejected, state => {
+        console.log("propmt 업데이트 삭제 실패");
+      })
       .addCase(updateChatResponse.fulfilled, state => {
         console.log("response 업데이트 성공");
       })
@@ -68,6 +75,14 @@ export const updateChatbotPrompt = createAsyncThunk(
   "chatbot/updateChatHistory",
   async (params: { chatBotId: number }) => {
     const response = await updateChatbots(params);
+    return response.data;
+  }
+);
+
+export const updateChatbotPromptRemove = createAsyncThunk(
+  "chatbot/updateChatHistoryRemove",
+  async (params: { chatBotId: number }) => {
+    const response = await updateChatbotsRemove(params);
     return response.data;
   }
 );

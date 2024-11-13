@@ -34,6 +34,18 @@ export const updateChatbots = async (params: { chatBotId: number }) => {
     });
 };
 
+// 프롬프트 제거
+export const updateChatbotsRemove = async (params: { chatBotId: number }) => {
+  return await clientInstance
+    .patch(`/chatbots/${params.chatBotId}/prompt/remove`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};
+
 // 사용자 응답 추가
 export const updateResponse = async (chatBotId: number, param: { answer: string }) => {
   return await clientInstance
