@@ -41,7 +41,7 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
   },
   "/results": {
     title: "결과 확인",
-    background: "bg-light-gray",
+    background: "bg-white",
   },
   "/responses": {
     title: "설문 응답",
@@ -63,6 +63,10 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
   },
   "/chat": {
     title: "너에게 난 챗봇",
+    background: "bg-light-gray",
+  },
+  "/search": {
+    title: "친구 찾기",
     background: "bg-light-gray",
   },
 };

@@ -4,7 +4,7 @@ import { Size } from "@/types/common";
 // 나중에 여기 값만 바꾸면, 크기 변경 가능함!
 const Size_Info = {
   sm: "py-1 px-2 text-sm",
-  md: "py-1 px-4 text-sm",
+  md: "py-1 px-3 text-sm",
   lg: "py-1 px-6 text-base",
 };
 
