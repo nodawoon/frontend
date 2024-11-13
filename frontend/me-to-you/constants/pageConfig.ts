@@ -74,4 +74,8 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     title: "친구 찾기",
     background: "bg-light-gray",
   },
+  "/my-chat": {
+    title: "내가 참여한 채팅",
+    background: "bg-light-gray",
+  },
 };

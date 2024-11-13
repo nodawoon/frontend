@@ -68,7 +68,7 @@ const CardButton: React.FC<CardButtonProps> = ({
       url += "chat-history";
       break;
     case 5:
-      url += "chat";
+      url += "my-chat";
       break;
   }
   return (
