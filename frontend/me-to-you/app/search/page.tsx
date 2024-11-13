@@ -41,7 +41,7 @@ const Page = () => {
     const userId = response.data.data.userId;
     console.info(userId);
 
-    router.push(`/chat/${userId}`);
+    router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
   };
 
   return (
