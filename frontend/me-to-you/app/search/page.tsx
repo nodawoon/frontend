@@ -4,6 +4,7 @@ import { getUserId, getUserNickname } from "@/services/search";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useSearchNickname } from "@/hooks/useSearchNickname";
 
 interface User {
   nickname: string;
@@ -13,6 +14,7 @@ const Page = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const [keyword, setKeyword] = useState<string>("");
   const router = useRouter();
+  const debounceSearchText = useSearchNickname(keyword, 300);
 
   const getUserName = async (keyword: string) => {
     try {
@@ -20,7 +22,7 @@ const Page = () => {
       const data = response.data;
 
       if (response.data.success) {
-        setUserList(data.data);
+        setUserList(data.data.slice(0, 5));
       } else {
         setUserList([]);
       }
@@ -33,20 +35,21 @@ const Page = () => {
   useEffect(() => {
     if (keyword !== "") {
       getUserName(keyword);
+    } else {
+      setUserList([]);
     }
-  }, [keyword]);
+  }, [debounceSearchText]);
 
   const handleMoveChatRoom = async (nickname: string) => {
     const response = await getUserId(nickname);
     const userId = response.data.data.userId;
-    console.info(userId);
 
     router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
   };
 
   return (
-    <div className="bg-light-gray h-[90vh] w-full overflow-y-auto scrollbar-hide">
-      <div className="w-[90%] ml-auto mr-auto pt-6">
+    <div className="bg-light-gray h-[92vh] w-full overflow-hidden">
+      <div className="w-[90%] ml-auto mr-auto pt-6 pb-6">
         <input
           placeholder="친구의 닉네임을 입력해주세요."
           className="p-2 rounded-md w-full"
@@ -55,7 +58,7 @@ const Page = () => {
         />
 
         <div className="mt-6">
-          {userList.length > 0 ? (
+          {userList.length > 0 && keyword.length !== 0 ? (
             <ul>
               {userList.map((user, index) => (
                 <li
