@@ -10,7 +10,7 @@ const Page: React.FC = () => {
           <span className="text-primary">너</span>에게 <span className="text-primary">난</span>
         </p>
         <Image
-          src="/character.svg"
+          src="/images/character.svg"
           alt="로고이미지"
           width="150"
           height="130"

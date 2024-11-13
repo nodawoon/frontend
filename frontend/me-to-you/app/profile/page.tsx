@@ -133,7 +133,7 @@ const ProfilePage = () => {
           <div
             className="rounded-image border border-gray rounded-full w-24 h-24 flex justify-center"
             style={{
-              backgroundImage: `url(${user.profileImage || inputs.profileImage || "/character.svg"})`,
+              backgroundImage: `url(${user.profileImage || inputs.profileImage || "/images/character.svg"})`,
             }}
           />
         )}

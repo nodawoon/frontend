@@ -18,7 +18,7 @@ const ProfileImageUploader: React.FC<ProfileImageUploaderProps> = ({
       className="rounded-image w-24 h-24 m-auto rounded-full border border-gray"
       onClick={handleClickProfileImage}
       style={{
-        backgroundImage: `url(${profileImage ? profileImage : "/character.svg"})`,
+        backgroundImage: `url(${profileImage ? profileImage : "/images/character.svg"})`,
       }}
     >
       <input

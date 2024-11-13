@@ -13,7 +13,7 @@ const Page = () => {
     <div className="overflow-y-hidden">
       <div className="flex flex-col min-h-[90%] justify-center items-center mt-[25%]">
         <Image
-          src="/character.svg"
+          src="/images/character.svg"
           alt="로고"
           width={175}
           height={175}
