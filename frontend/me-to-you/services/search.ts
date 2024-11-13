@@ -4,8 +4,10 @@ interface User {
   nickname: string;
 }
 
-interface UserId {
-  shareUrl: string;
+interface UserInfo {
+  userId: number;
+  nickname: string;
+  profileImageUrl: string;
 }
 
 export const getUserNickname = async (keyword: string) => {
@@ -21,7 +23,7 @@ export const getUserNickname = async (keyword: string) => {
 
 export const getUserId = async (nickname: string) => {
   return await clientInstance
-    .get<ApiResponseType<UserId>>(`/users/return-userinfo/${nickname}`)
+    .get<ApiResponseType<UserInfo>>(`/users/return-userinfo/${nickname}`)
     .then(response => {
       return response;
     })

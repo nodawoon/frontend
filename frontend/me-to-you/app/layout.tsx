@@ -27,7 +27,7 @@ export default function RootLayout({
             <section className="desktop:intro-section-desktop hidden">
               <div className="h-1/2"></div>
               <Image
-                src="/logo.svg"
+                src="/images/logo.svg"
                 alt="'너에게 난' 로고"
                 width="350"
                 height="80"
