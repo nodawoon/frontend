@@ -31,7 +31,7 @@ const Page: React.FC = () => {
               return (
                 <div key={index} className="flex flex-col grow max-w-[30%]">
                   <Image
-                    src="/character.svg"
+                    src="/images/character.svg"
                     alt="로고이미지"
                     width="100"
                     height="100"
