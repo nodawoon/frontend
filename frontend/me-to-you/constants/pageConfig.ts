@@ -47,8 +47,13 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     title: "설문 응답",
     background: "bg-white",
   },
-  "/chatbot": {
+  "/self-survey": {
     title: "챗봇 생성",
+    background: "bg-white",
+  },
+  "/self-survey/result": {
+    title: "",
+    hideBackButton: true,
     background: "bg-white",
   },
   "/survey/invitation": {

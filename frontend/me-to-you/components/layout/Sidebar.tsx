@@ -163,12 +163,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         </button>
       ))}
     </div>
-  ) : id && pathname.startsWith(`/self-survey/${id}`) ? (
+  ) : id && pathname.startsWith(`/self-survey/${id}`) && !pathname.includes("result") ? (
     <div className="w-full h-[100%] overflow-y-auto scrollbar-hide px-2 pt-4 pb-20 bg-white z-50">
       {chatbot.map(category =>
         category.questions.map(question => {
           const isCompleted = chatbotResponseList.some(
-            (response: { question: string; response: string | any[] }) => {
+            (response: { question: string; response: string }) => {
               if (
                 question.question === "성격이 어떤 것 같아? (최소 3개~ 최대 12개)" &&
                 response.question === question.question
