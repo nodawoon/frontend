@@ -35,9 +35,9 @@ export const updateChatbots = async (params: { chatBotId: number }) => {
 };
 
 // 사용자 응답 추가
-export const updateResponse = async (chatBotId: number, params: { answer: string }) => {
+export const updateResponse = async (chatBotId: number, param: { answer: string }) => {
   return await clientInstance
-    .patch(`/chatbots/${chatBotId}/response`, { params: params })
+    .patch(`/chatbots/${chatBotId}/response`, param)
     .then(response => {
       return response;
     })

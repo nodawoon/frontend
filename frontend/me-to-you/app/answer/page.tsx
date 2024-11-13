@@ -9,43 +9,43 @@ import { loadChatHistory, loadChatState, updateChatbotPrompt } from "@/slice/cha
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
-  //   const { content } = useAppSelector(state => state.chatHistory);
+  const { content } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
-  const content = [
-    {
-      chatbotId: 1,
-      question:
-        "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      response:
-        "딥변입니다.ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 2,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 3,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
+  // const content = [
+  //   {
+  //     chatbotId: 1,
+  //     question:
+  //       "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
+  //     response:
+  //       "딥변입니다.ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+  //     answerStatus: "ANSWERED_BY_BOT",
+  //   },
+  //   {
+  //     chatbotId: 2,
+  //     question: "질문입니다.",
+  //     response: "딥변입니다.",
+  //     answerStatus: "ANSWERED_BY_BOT",
+  //   },
+  //   {
+  //     chatbotId: 3,
+  //     question: "질문입니다.",
+  //     response: "딥변입니다.",
+  //     answerStatus: "ANSWERED_BY_BOT",
+  //   },
 
-    {
-      chatbotId: 4,
-      question:
-        "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      response:
-        "딥변입ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ니다.",
-      answerStatus: "chatBot",
-    },
+  //   {
+  //     chatbotId: 4,
+  //     question:
+  //       "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
+  //     response:
+  //       "딥변입ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ니다.",
+  //     answerStatus: "chatBot",
+  //   },
 
-    { chatbotId: 5, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
+  //   { chatbotId: 5, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
 
-    { chatbotId: 6, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-  ];
+  //   { chatbotId: 6, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
+  // ];
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -91,37 +91,42 @@ const Page: React.FC = () => {
         <div className="text-gray mt-5 ">아직 대화 내용이 없어요..</div>
       ) : (
         <div className="my-6">
-          {content.map((e, index) => {
-            if (e.answerStatus !== "ANSWERED_BY_BOT") {
-              return (
-                <div className="mb-3" key={index}>
-                  <ChatResultCard
-                    className="mb-1 font-medium"
-                    question={e.question !== undefined ? e.question : ""}
-                    answer={e.response !== undefined ? e.response : ""}
-                    index={index}
-                    current={current}
-                    onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
-                    state={current === index ? "up" : "down"}
-                    responser="face"
-                  />
-                  <p
-                    className={
-                      "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
-                    }
-                  >
-                    이 대화를 챗봇에 추가 학습 시키시려면{" "}
-                    <span className="text-primary" onClick={() => createPrompt(e.chatbotId)}>
-                      여기
-                    </span>
-                    를 클릭하세요.
-                  </p>
-                </div>
-              );
-            } else {
-              return;
+          {content.map(
+            (
+              e: { chatBotId: number; question: string; response: string; answerStatus: string },
+              index: number
+            ) => {
+              if (e.answerStatus !== "ANSWERED_BY_BOT") {
+                return (
+                  <div className="mb-3" key={index}>
+                    <ChatResultCard
+                      className="mb-1 font-medium"
+                      question={e.question !== undefined ? e.question : ""}
+                      answer={e.response !== undefined ? e.response : ""}
+                      index={index}
+                      current={current}
+                      onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
+                      state={current === index ? "up" : "down"}
+                      responser="face"
+                    />
+                    <p
+                      className={
+                        "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
+                      }
+                    >
+                      이 대화를 챗봇에 추가 학습 시키시려면{" "}
+                      <span className="text-primary" onClick={() => createPrompt(e.chatBotId)}>
+                        여기
+                      </span>
+                      를 클릭하세요.
+                    </p>
+                  </div>
+                );
+              } else {
+                return;
+              }
             }
-          })}
+          )}
         </div>
       )}
     </div>

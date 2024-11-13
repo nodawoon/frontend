@@ -10,35 +10,35 @@ const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
-  const content = [
-    {
-      chatbotId: 0,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 0,
-      question:
-        "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      response:
-        "ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 0,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
+  // const content = [
+  //   {
+  //     chatbotId: 0,
+  //     question: "질문입니다.",
+  //     response: "딥변입니다.",
+  //     answerStatus: "ANSWERED_BY_BOT",
+  //   },
+  //   {
+  //     chatbotId: 0,
+  //     question:
+  //       "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
+  //     response:
+  //       "ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
+  //     answerStatus: "ANSWERED_BY_BOT",
+  //   },
+  //   {
+  //     chatbotId: 0,
+  //     question: "질문입니다.",
+  //     response: "딥변입니다.",
+  //     answerStatus: "ANSWERED_BY_BOT",
+  //   },
 
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
+  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
 
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
+  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
 
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-  ];
-  // const { content } = useAppSelector(state => state.chatHistory);
+  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
+  // ];
+  const { content } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
@@ -81,7 +81,7 @@ const Page: React.FC = () => {
   };
 
   const sendTheMessage = async (id: number) => {
-    dispatch(updateChatResponse({ chatBotId: id, params: { answer: sendMessage } }));
+    await dispatch(updateChatResponse({ chatBotId: id, params: { answer: sendMessage } }));
   };
 
   return (
@@ -101,8 +101,11 @@ const Page: React.FC = () => {
         <div className="text-gray mt-5 ">아직 대화 내용이 없어요..</div>
       ) : (
         <div className="my-6">
-          {content.map((e, index) => {
-            if (e.answerStatus === "ANSWERED_BY_BOT") {
+          {content.map(
+            (
+              e: { chatBotId: number; question: string; response: string; answerStatus: string },
+              index: number
+            ) => {
               return (
                 <ChatInputCard
                   className="mb-2 font-medium"
@@ -110,16 +113,14 @@ const Page: React.FC = () => {
                   key={index}
                   index={index}
                   current={current}
-                  onClick={() => submit(index, e.chatbotId)}
+                  onClick={() => submit(index, e.chatBotId)}
                   state={current === index ? "check" : "답변하기"}
                   submit={e => handleChange(e)}
-                  chatbotId={e.chatbotId}
+                  chatbotId={e.chatBotId}
                 />
               );
-            } else {
-              return;
             }
-          })}
+          )}
         </div>
       )}
     </div>

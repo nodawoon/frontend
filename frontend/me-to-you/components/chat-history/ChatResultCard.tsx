@@ -22,7 +22,6 @@ const ChatResultCard: React.FC<CardProps> = ({
   const combinedClassName =
     "bg-light-gray flex flex-col justify-evenly w-full rounded-md h-auto px-3 break-all " +
     className;
-
   return (
     <div className={combinedClassName} key={index}>
       <p className="flex justify-between my-2 ml-2">
