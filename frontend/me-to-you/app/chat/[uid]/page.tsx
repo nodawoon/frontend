@@ -4,7 +4,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useSearchParams } from "next/navigation";
 import { AppDispatch, RootState } from "@/store/store";
-import { addQuestion, loadAllConversations } from "@/slice/chatbotSlice";
+import { addQuestion, loadAllConversations, retryQuestion } from "@/slice/chatbotSlice";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import TextInput from "@/components/chat/TextInput";
 import QuestionGuide from "@/components/chat/QuestionGuide";
@@ -50,6 +50,7 @@ const ChatPage: React.FC = () => {
 
   const handleSendQuestion = useCallback(
     async (questionText?: string) => {
+      setShowActionButton(false);
       const currentQuestion = questionText ?? question;
       if (currentQuestion.trim() === "") return;
 
@@ -65,9 +66,9 @@ const ChatPage: React.FC = () => {
     (questionIndex: number) => {
       setShowActionButton(false);
       setIsInputDisabled(true);
-      dispatch(addQuestion({ targetUserId, question: content[questionIndex].question }));
+      dispatch(retryQuestion({ chatBotId: content[questionIndex].chatBotId }));
     },
-    [dispatch, targetUserId, content]
+    [dispatch, content]
   );
 
   const handleWaitAnswer = useCallback(

@@ -24,7 +24,7 @@ export const createQuestion = async (targetUserId: number, question: string) => 
     });
 };
 
-export const updateRequest = async (chatbotId: string) => {
+export const updateRequest = async (chatbotId: number) => {
   return await clientInstance
     .patch<ApiResponseType<ChatbotResponse>>(`/chatbots/${chatbotId}/request`)
     .then(response => {

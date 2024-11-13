@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createQuestion, getAllConversations } from "@/services/chatbot";
+import { createQuestion, getAllConversations, updateRequest } from "@/services/chatbot";
 import { MESSAGES } from "@/constants/messages";
 
 const initialState: ChatbotState = {
@@ -36,6 +36,14 @@ export const addQuestion = createAsyncThunk(
   }
 );
 
+export const retryQuestion = createAsyncThunk(
+  "chatbot/updateRequest",
+  async ({ chatBotId }: { chatBotId: number }) => {
+    const response = await updateRequest(chatBotId);
+    return response.data;
+  }
+);
+
 export const chatbotSlice = createSlice({
   name: "user",
   initialState,
@@ -68,9 +76,6 @@ export const chatbotSlice = createSlice({
       .addCase(loadAllConversations.rejected, (state, action) => {
         state.error = action.error.message;
       })
-      .addCase(addQuestion.pending, state => {
-        // state.loading = true;
-      })
       .addCase(addQuestion.fulfilled, (state, action) => {
         state.chatbot =
           action.payload.data.answerStatus === "UNANSWERED_BY_BOT"
@@ -79,6 +84,16 @@ export const chatbotSlice = createSlice({
         state.loading = false;
       })
       .addCase(addQuestion.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(retryQuestion.fulfilled, (state, action) => {
+        state.chatbot =
+          action.payload.data.answerStatus === "UNANSWERED_BY_BOT"
+            ? { ...action.payload.data, response: MESSAGES.UNANSWERED_BY_BOT }
+            : action.payload.data;
+        state.loading = false;
+      })
+      .addCase(retryQuestion.rejected, (state, action) => {
         state.error = action.error.message;
       });
   },
