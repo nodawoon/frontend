@@ -5,39 +5,12 @@ import ChatInputCard from "@/components/chat-history/ChatInputCard";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState, updateChatResponse } from "@/slice/chatHistorySlice";
+import Swal from "sweetalert2";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
-  // const content = [
-  //   {
-  //     chatbotId: 0,
-  //     question: "질문입니다.",
-  //     response: "딥변입니다.",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-  //   {
-  //     chatbotId: 0,
-  //     question:
-  //       "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-  //     response:
-  //       "ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-  //   {
-  //     chatbotId: 0,
-  //     question: "질문입니다.",
-  //     response: "딥변입니다.",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-
-  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-  // ];
   const { content } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
@@ -70,7 +43,12 @@ const Page: React.FC = () => {
   const submit = (index: number, id: number) => {
     if (current === index) {
       if (sendMessage.length === 0) {
-        console.log("입력 해주세요");
+        Swal.fire({
+          title: "답변 미등록",
+          text: "답변을 채워주세요!",
+          icon: "warning",
+          confirmButtonText: "확인",
+        });
       } else {
         setCurrent(-1);
         sendTheMessage(id);
@@ -82,6 +60,13 @@ const Page: React.FC = () => {
 
   const sendTheMessage = async (id: number) => {
     await dispatch(updateChatResponse({ chatBotId: id, params: { answer: sendMessage } }));
+    await dispatch(loadChatHistory({ status: "unanswer-bot", page: 0 }));
+    Swal.fire({
+      title: "답변 등록",
+      text: "답변이 등록되었어요!",
+      icon: "success",
+      confirmButtonText: "확인",
+    });
   };
 
   return (
@@ -103,7 +88,12 @@ const Page: React.FC = () => {
         <div className="my-6">
           {content.map(
             (
-              e: { chatBotId: number; question: string; response: string; answerStatus: string },
+              e: {
+                chatBotId: number;
+                question: string;
+                response: string;
+                isQuestionIncluded: boolean;
+              },
               index: number
             ) => {
               return (

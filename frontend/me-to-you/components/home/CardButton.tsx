@@ -43,7 +43,7 @@ const CardButton: React.FC<CardButtonProps> = ({
         Swal.fire({
           title: "챗봇 미학습",
           text: "챗봇을 먼저 학습해주세요!",
-          icon: "error",
+          icon: "warning",
           confirmButtonText: "확인",
         });
       }

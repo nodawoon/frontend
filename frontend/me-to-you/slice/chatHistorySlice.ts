@@ -13,7 +13,7 @@ const initialState: chatHistoryProps = {
       chatBotId: 0,
       question: undefined,
       response: undefined,
-      answerStatus: "",
+      isQuestionIncluded: false,
     },
   ],
 };

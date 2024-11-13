@@ -5,47 +5,13 @@ import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState, updateChatbotPrompt } from "@/slice/chatHistorySlice";
+import Swal from "sweetalert2";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
   const { content } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
-  // const content = [
-  //   {
-  //     chatbotId: 1,
-  //     question:
-  //       "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-  //     response:
-  //       "딥변입니다.ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-  //   {
-  //     chatbotId: 2,
-  //     question: "질문입니다.",
-  //     response: "딥변입니다.",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-  //   {
-  //     chatbotId: 3,
-  //     question: "질문입니다.",
-  //     response: "딥변입니다.",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-
-  //   {
-  //     chatbotId: 4,
-  //     question:
-  //       "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-  //     response:
-  //       "딥변입ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ니다.",
-  //     answerStatus: "chatBot",
-  //   },
-
-  //   { chatbotId: 5, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-  //   { chatbotId: 6, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-  // ];
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -69,9 +35,14 @@ const Page: React.FC = () => {
     console.log(isExist);
   }, [isExist]);
 
-  const createPrompt = (id: number) => {
-    dispatch(updateChatbotPrompt({ chatBotId: id }));
-    console.log(id);
+  const createPrompt = async (id: number) => {
+    await dispatch(updateChatbotPrompt({ chatBotId: id }));
+    Swal.fire({
+      title: "학습 완료",
+      text: "나의 챗봇이 해당 답변을 학습했어요!",
+      icon: "success",
+      confirmButtonText: "확인",
+    });
   };
 
   return (
@@ -93,22 +64,35 @@ const Page: React.FC = () => {
         <div className="my-6">
           {content.map(
             (
-              e: { chatBotId: number; question: string; response: string; answerStatus: string },
+              e: {
+                chatBotId: number;
+                question: string;
+                response: string;
+                isQuestionIncluded: boolean;
+              },
               index: number
             ) => {
-              if (e.answerStatus !== "ANSWERED_BY_BOT") {
-                return (
-                  <div className="mb-3" key={index}>
-                    <ChatResultCard
-                      className="mb-1 font-medium"
-                      question={e.question !== undefined ? e.question : ""}
-                      answer={e.response !== undefined ? e.response : ""}
-                      index={index}
-                      current={current}
-                      onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
-                      state={current === index ? "up" : "down"}
-                      responser="face"
-                    />
+              return (
+                <div className="mb-3" key={index}>
+                  <ChatResultCard
+                    className="mb-1 font-medium"
+                    question={e.question !== undefined ? e.question : ""}
+                    answer={e.response !== undefined ? e.response : ""}
+                    index={index}
+                    current={current}
+                    onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
+                    state={current === index ? "up" : "down"}
+                    responser="face"
+                  />
+                  {e.isQuestionIncluded ? (
+                    <p
+                      className={
+                        "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
+                      }
+                    >
+                      학습을 완료한 답변이에요!
+                    </p>
+                  ) : (
                     <p
                       className={
                         "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
@@ -120,11 +104,9 @@ const Page: React.FC = () => {
                       </span>
                       를 클릭하세요.
                     </p>
-                  </div>
-                );
-              } else {
-                return;
-              }
+                  )}
+                </div>
+              );
             }
           )}
         </div>

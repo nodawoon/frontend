@@ -4,6 +4,6 @@ interface chatHistoryProps {
     chatBotId: number;
     question: string | undefined;
     response: string | undefined;
-    answerStatus: string;
+    isQuestionIncluded: boolean;
   }>;
 }

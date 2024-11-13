@@ -9,34 +9,6 @@ import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
-  // const content = [
-  //   {
-  //     chatbotId: 0,
-  //     question: "질문입니다.",
-  //     response: "딥변입니다.",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-  //   {
-  //     chatbotId: 0,
-  //     question:
-  //       "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-  //     response:
-  //       "ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-  //   {
-  //     chatbotId: 0,
-  //     question: "질문입니다.",
-  //     response: "딥변입니다.",
-  //     answerStatus: "ANSWERED_BY_BOT",
-  //   },
-
-  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-  //   { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-  // ];
   const { content } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
@@ -81,26 +53,27 @@ const Page: React.FC = () => {
         <div className="my-6">
           {content.map(
             (
-              e: { chatBotId: number; question: string; response: string; answerStatus: string },
+              e: {
+                chatBotId: number;
+                question: string;
+                response: string;
+                isQuestionIncluded: boolean;
+              },
               index: number
             ) => {
-              if (e.answerStatus === "ANSWERED_BY_BOT") {
-                return (
-                  <ChatResultCard
-                    className="mb-2 font-medium"
-                    question={e.question !== undefined ? e.question : ""}
-                    answer={e.response !== undefined ? e.response : ""}
-                    key={index}
-                    index={index}
-                    current={current}
-                    onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
-                    state={current === index ? "up" : "down"}
-                    responser="smart_toy"
-                  />
-                );
-              } else {
-                return;
-              }
+              return (
+                <ChatResultCard
+                  className="mb-2 font-medium"
+                  question={e.question !== undefined ? e.question : ""}
+                  answer={e.response !== undefined ? e.response : ""}
+                  key={index}
+                  index={index}
+                  current={current}
+                  onClick={() => (index === current ? setCurrent(-1) : setCurrent(index))}
+                  state={current === index ? "up" : "down"}
+                  responser="smart_toy"
+                />
+              );
             }
           )}
         </div>
