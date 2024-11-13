@@ -33,10 +33,6 @@ const Page: React.FC = () => {
     })();
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(isExist);
-  }, [isExist]);
-
   const handleChange = (value: string) => {
     setSendMessage(value);
   };
@@ -75,10 +71,10 @@ const Page: React.FC = () => {
   };
 
   useInfiniteScroll({
-    loading: isLoading, // 로딩 상태 값
-    hasMore: !last, // 더 불러올 데이터가 있는지
-    onLoadMore: handleLoadMore, // 데이터 불러오는 함수
-    targetId: "load-more", // target 요소의 div
+    loading: isLoading,
+    hasMore: !last,
+    onLoadMore: handleLoadMore,
+    targetId: "load-more",
   });
 
   return (

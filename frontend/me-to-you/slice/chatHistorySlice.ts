@@ -64,24 +64,6 @@ const chatHistorySlice = createSlice({
         state.content = initialState.content;
         state.last = initialState.last;
         state.number = initialState.number;
-      })
-      .addCase(updateChatbotPrompt.fulfilled, state => {
-        console.log("propmt 업데이트 성공");
-      })
-      .addCase(updateChatbotPrompt.rejected, state => {
-        console.log("propmt 업데이트 실패");
-      })
-      .addCase(updateChatbotPromptRemove.fulfilled, state => {
-        console.log("propmt 업데이트 삭제 성공");
-      })
-      .addCase(updateChatbotPromptRemove.rejected, state => {
-        console.log("propmt 업데이트 삭제 실패");
-      })
-      .addCase(updateChatResponse.fulfilled, state => {
-        console.log("response 업데이트 성공");
-      })
-      .addCase(updateChatResponse.rejected, state => {
-        console.log("response 업데이트 실패");
       });
   },
 });

@@ -37,19 +37,15 @@ const Page: React.FC = () => {
     })();
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(isExist);
-  }, [isExist]);
-
   const handleLoadMore = async () => {
     await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
   };
 
   useInfiniteScroll({
-    loading: isLoading, // 로딩 상태 값
-    hasMore: !last, // 더 불러올 데이터가 있는지
-    onLoadMore: handleLoadMore, // 데이터 불러오는 함수
-    targetId: "load-more", // target 요소의 div
+    loading: isLoading,
+    hasMore: !last,
+    onLoadMore: handleLoadMore,
+    targetId: "load-more",
   });
 
   const createPrompt = async (id: number, key: string) => {
