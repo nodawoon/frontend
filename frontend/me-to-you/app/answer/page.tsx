@@ -1,16 +1,22 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ChatResultCard from "@/components/chat-history/ChatResultCard";
-import Link from "next/link";
 import Swal from "sweetalert2";
+import Link from "next/link";
+import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loadChatHistory, loadChatState, updateChatbotPrompt } from "@/slice/chatHistorySlice";
+import {
+  loadChatHistory,
+  loadChatState,
+  updateChatbotPrompt,
+  updateChatbotPromptRemove,
+} from "@/slice/chatHistorySlice";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
-  const { content } = useAppSelector(state => state.chatHistory);
+  const { content, isLoading, number, last } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
@@ -31,19 +37,36 @@ const Page: React.FC = () => {
     })();
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(isExist);
-  }, [isExist]);
+  const handleLoadMore = async () => {
+    await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
+  };
 
-  const createPrompt = async (id: number) => {
-    await dispatch(updateChatbotPrompt({ chatBotId: id }));
+  useInfiniteScroll({
+    loading: isLoading,
+    hasMore: !last,
+    onLoadMore: handleLoadMore,
+    targetId: "load-more",
+  });
+
+  const createPrompt = async (id: number, key: string) => {
+    if (key === "add") {
+      await dispatch(updateChatbotPrompt({ chatBotId: id }));
+      Swal.fire({
+        title: "학습 완료",
+        text: "나의 챗봇이 해당 답변을 학습했어요!",
+        icon: "success",
+        confirmButtonText: "확인",
+      });
+    } else if (key === "remove") {
+      await dispatch(updateChatbotPromptRemove({ chatBotId: id }));
+      Swal.fire({
+        title: "학습 취소",
+        text: "나의 챗봇이 해당 답변을 잊었어요!",
+        icon: "success",
+        confirmButtonText: "확인",
+      });
+    }
     await dispatch(loadChatHistory({ status: "answer-user", page: 0 }));
-    Swal.fire({
-      title: "학습 완료",
-      text: "나의 챗봇이 해당 답변을 학습했어요!",
-      icon: "success",
-      confirmButtonText: "확인",
-    });
   };
 
   return (
@@ -91,7 +114,14 @@ const Page: React.FC = () => {
                         "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
                       }
                     >
-                      학습을 완료한 답변이에요!
+                      <span className="font-medium">완료된 학습</span>입니다. 취소하려면{" "}
+                      <span
+                        className="text-pink font-medium"
+                        onClick={() => createPrompt(e.chatBotId, "remove")}
+                      >
+                        취소
+                      </span>
+                      를 클릭하세요.
                     </p>
                   ) : (
                     <p
@@ -100,7 +130,10 @@ const Page: React.FC = () => {
                       }
                     >
                       이 대화를 챗봇에 추가 학습 시키시려면{" "}
-                      <span className="text-primary" onClick={() => createPrompt(e.chatBotId)}>
+                      <span
+                        className="text-primary font-medium"
+                        onClick={() => createPrompt(e.chatBotId, "add")}
+                      >
                         여기
                       </span>
                       를 클릭하세요.
@@ -112,6 +145,7 @@ const Page: React.FC = () => {
           )}
         </div>
       )}
+      <div id="load-more">{isLoading ? "..." : ""}</div>
     </div>
   );
 };

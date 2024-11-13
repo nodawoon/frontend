@@ -6,12 +6,13 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState, updateChatResponse } from "@/slice/chatHistorySlice";
 import Swal from "sweetalert2";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
-  const { content } = useAppSelector(state => state.chatHistory);
+  const { content, isLoading, number, last } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
@@ -31,10 +32,6 @@ const Page: React.FC = () => {
       }
     })();
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log(isExist);
-  }, [isExist]);
 
   const handleChange = (value: string) => {
     setSendMessage(value);
@@ -68,6 +65,17 @@ const Page: React.FC = () => {
       confirmButtonText: "확인",
     });
   };
+
+  const handleLoadMore = async () => {
+    await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
+  };
+
+  useInfiniteScroll({
+    loading: isLoading,
+    hasMore: !last,
+    onLoadMore: handleLoadMore,
+    targetId: "load-more",
+  });
 
   return (
     <div className="w-[90%] mx-auto ">
@@ -113,6 +121,7 @@ const Page: React.FC = () => {
           )}
         </div>
       )}
+      <div id="load-more">{isLoading ? "..." : ""}</div>
     </div>
   );
 };

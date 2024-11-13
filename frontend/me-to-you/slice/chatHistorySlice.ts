@@ -3,6 +3,7 @@ import {
   getChatState,
   updateChatbots,
   updateResponse,
+  updateChatbotsRemove,
 } from "@/services/chatHistory";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -16,6 +17,10 @@ const initialState: chatHistoryProps = {
       isQuestionIncluded: false,
     },
   ],
+  first: true,
+  last: true,
+  number: 0,
+  isLoading: false,
 };
 
 const chatHistorySlice = createSlice({
@@ -31,22 +36,34 @@ const chatHistorySlice = createSlice({
         state.exist = false;
       })
       .addCase(loadChatHistory.fulfilled, (state, action) => {
-        state.content = action.payload.data.content;
+        state.isLoading = false;
+        state.first = action.payload.data.first;
+        if (state.first) {
+          state.content = action.payload.data.content;
+        } else {
+          action.payload.data.content.forEach(
+            (e: {
+              chatBotId: number;
+              question: string;
+              response: string;
+              isQuestionIncluded: boolean;
+            }) => {
+              state.content.push(e);
+            }
+          );
+        }
+        state.last = action.payload.data.last;
+        state.number = action.payload.data.number;
+      })
+      .addCase(loadChatHistory.pending, state => {
+        state.isLoading = true;
       })
       .addCase(loadChatHistory.rejected, state => {
+        state.isLoading = false;
+        state.first = initialState.first;
         state.content = initialState.content;
-      })
-      .addCase(updateChatbotPrompt.fulfilled, state => {
-        console.log("propmt 업데이트 성공");
-      })
-      .addCase(updateChatbotPrompt.rejected, state => {
-        console.log("propmt 업데이트 실패");
-      })
-      .addCase(updateChatResponse.fulfilled, state => {
-        console.log("response 업데이트 성공");
-      })
-      .addCase(updateChatResponse.rejected, state => {
-        console.log("response 업데이트 실패");
+        state.last = initialState.last;
+        state.number = initialState.number;
       });
   },
 });
@@ -68,6 +85,14 @@ export const updateChatbotPrompt = createAsyncThunk(
   "chatbot/updateChatHistory",
   async (params: { chatBotId: number }) => {
     const response = await updateChatbots(params);
+    return response.data;
+  }
+);
+
+export const updateChatbotPromptRemove = createAsyncThunk(
+  "chatbot/updateChatHistoryRemove",
+  async (params: { chatBotId: number }) => {
+    const response = await updateChatbotsRemove(params);
     return response.data;
   }
 );

@@ -6,4 +6,8 @@ interface chatHistoryProps {
     response: string | undefined;
     isQuestionIncluded: boolean;
   }>;
+  first: boolean;
+  last: boolean;
+  number: number;
+  isLoading: boolean;
 }
