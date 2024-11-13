@@ -17,6 +17,10 @@ const initialState: chatHistoryProps = {
       isQuestionIncluded: false,
     },
   ],
+  first: true,
+  last: true,
+  number: 0,
+  isLoading: false,
 };
 
 const chatHistorySlice = createSlice({
@@ -32,10 +36,34 @@ const chatHistorySlice = createSlice({
         state.exist = false;
       })
       .addCase(loadChatHistory.fulfilled, (state, action) => {
-        state.content = action.payload.data.content;
+        state.isLoading = false;
+        state.first = action.payload.data.first;
+        if (state.first) {
+          state.content = action.payload.data.content;
+        } else {
+          action.payload.data.content.forEach(
+            (e: {
+              chatBotId: number;
+              question: string;
+              response: string;
+              isQuestionIncluded: boolean;
+            }) => {
+              state.content.push(e);
+            }
+          );
+        }
+        state.last = action.payload.data.last;
+        state.number = action.payload.data.number;
+      })
+      .addCase(loadChatHistory.pending, state => {
+        state.isLoading = true;
       })
       .addCase(loadChatHistory.rejected, state => {
+        state.isLoading = false;
+        state.first = initialState.first;
         state.content = initialState.content;
+        state.last = initialState.last;
+        state.number = initialState.number;
       })
       .addCase(updateChatbotPrompt.fulfilled, state => {
         console.log("propmt 업데이트 성공");

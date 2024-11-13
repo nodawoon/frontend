@@ -5,11 +5,12 @@ import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
-  const { content } = useAppSelector(state => state.chatHistory);
+  const { content, last, number, isLoading } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
@@ -33,6 +34,17 @@ const Page: React.FC = () => {
   useEffect(() => {
     console.log(isExist);
   }, [isExist]);
+
+  const handleLoadMore = async () => {
+    await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
+  };
+
+  useInfiniteScroll({
+    loading: isLoading, // 로딩 상태 값
+    hasMore: !last, // 더 불러올 데이터가 있는지
+    onLoadMore: handleLoadMore, // 데이터 불러오는 함수
+    targetId: "load-more", // target 요소의 div
+  });
 
   return (
     <div className="w-[90%] mx-auto ">
@@ -78,6 +90,7 @@ const Page: React.FC = () => {
           )}
         </div>
       )}
+      <div id="load-more">{isLoading ? "..." : ""}</div>
     </div>
   );
 };

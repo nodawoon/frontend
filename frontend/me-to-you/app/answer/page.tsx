@@ -11,11 +11,12 @@ import {
   updateChatbotPrompt,
   updateChatbotPromptRemove,
 } from "@/slice/chatHistorySlice";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
-  const { content } = useAppSelector(state => state.chatHistory);
+  const { content, isLoading, number, last } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
@@ -39,6 +40,17 @@ const Page: React.FC = () => {
   useEffect(() => {
     console.log(isExist);
   }, [isExist]);
+
+  const handleLoadMore = async () => {
+    await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
+  };
+
+  useInfiniteScroll({
+    loading: isLoading, // 로딩 상태 값
+    hasMore: !last, // 더 불러올 데이터가 있는지
+    onLoadMore: handleLoadMore, // 데이터 불러오는 함수
+    targetId: "load-more", // target 요소의 div
+  });
 
   const createPrompt = async (id: number, key: string) => {
     if (key === "add") {
@@ -106,13 +118,14 @@ const Page: React.FC = () => {
                         "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
                       }
                     >
-                      학습을 완료했어요!{" "}
+                      <span className="font-medium">완료된 학습</span>입니다. 취소하려면{" "}
                       <span
-                        className="text-pink"
+                        className="text-pink font-medium"
                         onClick={() => createPrompt(e.chatBotId, "remove")}
                       >
-                        취소하기
+                        취소
                       </span>
+                      를 클릭하세요.
                     </p>
                   ) : (
                     <p
@@ -122,7 +135,7 @@ const Page: React.FC = () => {
                     >
                       이 대화를 챗봇에 추가 학습 시키시려면{" "}
                       <span
-                        className="text-primary"
+                        className="text-primary font-medium"
                         onClick={() => createPrompt(e.chatBotId, "add")}
                       >
                         여기
@@ -136,6 +149,7 @@ const Page: React.FC = () => {
           )}
         </div>
       )}
+      <div id="load-more">{isLoading ? "..." : ""}</div>
     </div>
   );
 };
