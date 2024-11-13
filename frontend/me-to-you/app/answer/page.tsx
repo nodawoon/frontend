@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from "react";
 import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import Link from "next/link";
+import Swal from "sweetalert2";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState, updateChatbotPrompt } from "@/slice/chatHistorySlice";
-import Swal from "sweetalert2";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
@@ -37,6 +37,7 @@ const Page: React.FC = () => {
 
   const createPrompt = async (id: number) => {
     await dispatch(updateChatbotPrompt({ chatBotId: id }));
+    await dispatch(loadChatHistory({ status: "answer-user", page: 0 }));
     Swal.fire({
       title: "학습 완료",
       text: "나의 챗봇이 해당 답변을 학습했어요!",
