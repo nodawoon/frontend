@@ -59,7 +59,7 @@ export const chatbotSlice = createSlice({
         state.chatInfo.first = first;
         state.chatInfo.last = last;
 
-        state.contentList = content.reverse().map(con => {
+        const newContent = content.reverse().map(con => {
           return {
             chatBotId: con.chatBotId,
             question: con.question,
@@ -70,6 +70,8 @@ export const chatbotSlice = createSlice({
             answerStatus: con.answerStatus,
           };
         });
+
+        state.contentList = [...newContent, ...state.contentList];
 
         state.loading = false;
       })

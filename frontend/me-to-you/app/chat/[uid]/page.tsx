@@ -18,24 +18,24 @@ const ChatPage: React.FC = () => {
     (state: RootState) => state.chatbot
   );
 
-  const [isOpenWelcome, setIsOpenWelcome] = useState(true);
+  const [isOpenWelcome, setIsOpenWelcome] = useState(false);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [question, setQuestion] = useState("");
   const [content, setContent] = useState<ChatbotResponse[]>(contentList);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
-  const [showActionButton, setShowActionButton] = useState(true);
+  const [showActionButton, setShowActionButton] = useState(false);
   const [page, setPage] = useState(0);
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
+  const messagesStartRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const params = useSearchParams();
 
   const targetUserNickname = params.get("nickname");
   const targetUserId = parseInt(pathname.split("/")[2]);
-
-  const handleChangeQuestion = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuestion(e.target.value);
-  }, []);
 
   const handleLoadMore = useCallback(() => {
     setPage(prev => prev + 1);
@@ -43,14 +43,21 @@ const ChatPage: React.FC = () => {
 
   useInfiniteScroll({
     loading,
-    hasMore: !chatInfo.first,
+    hasMore: !chatInfo.last,
     onLoadMore: handleLoadMore,
     targetId: "load-more",
   });
 
+  const handleClickToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleChangeQuestion = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuestion(e.target.value);
+  }, []);
+
   const handleSendQuestion = useCallback(
     async (questionText?: string) => {
-      setShowActionButton(false);
       const currentQuestion = questionText ?? question;
       if (currentQuestion.trim() === "") return;
 
@@ -64,7 +71,6 @@ const ChatPage: React.FC = () => {
 
   const handleRetryQuestion = useCallback(
     (questionIndex: number) => {
-      setShowActionButton(false);
       setIsInputDisabled(true);
       dispatch(retryQuestion({ chatBotId: content[questionIndex].chatBotId }));
     },
@@ -82,7 +88,6 @@ const ChatPage: React.FC = () => {
         answerStatus: null,
       };
       setContent(prev => [...prev, waitingMessage]);
-      setShowActionButton(false);
       setIsInputDisabled(true);
       setIsFirstQuestion(false);
     },
@@ -90,29 +95,73 @@ const ChatPage: React.FC = () => {
   );
 
   const handleAskAnotherQuestion = useCallback(() => {
-    setShowActionButton(false);
     setIsFirstQuestion(true);
     setIsInputDisabled(false);
   }, []);
 
   useEffect(() => {
+    if (isFirstRender && page === 0 && content.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+      setIsFirstRender(false);
+    }
+  }, [content, page, isFirstRender]);
+
+  useEffect(() => {
+    if (chatbot.response === "") return;
+
     setContent(prev => [...prev, chatbot]);
+
     const showActionButton = chatbot.answerStatus === "UNANSWERED_BY_BOT";
+
     setShowActionButton(showActionButton);
     setIsInputDisabled(showActionButton);
-  }, [chatbot]);
+  }, [chatbot, page, isFirstRender]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [content]);
+    if (isFirstRender) {
+      dispatch(loadAllConversations({ targetUserId, page: 0 }));
+    } else {
+      dispatch(loadAllConversations({ targetUserId, page }));
+    }
+  }, [dispatch, isFirstRender, page, targetUserId]);
 
   useEffect(() => {
-    dispatch(loadAllConversations({ targetUserId, page }));
-  }, [dispatch, page, targetUserId]);
+    if (page === 0) {
+      setContent(contentList);
+    } else {
+      const scrollContainer = scrollContainerRef.current;
+      const oldScrollHeight = scrollContainer?.scrollHeight || 0;
+
+      setContent(prevContent => [...contentList, ...prevContent]);
+
+      setTimeout(() => {
+        if (scrollContainer) {
+          const newScrollHeight = scrollContainer.scrollHeight;
+          scrollContainer.scrollTop = newScrollHeight - oldScrollHeight;
+        }
+      }, 0);
+    }
+  }, [contentList, page]);
 
   useEffect(() => {
-    setContent(contentList);
-  }, [contentList]);
+    const handleScroll = () => {
+      if (scrollContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+        setShowScrollToBottom(scrollHeight - scrollTop - clientHeight > 100);
+      }
+    };
+
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   const renderMessages = () =>
     content.map((con, index) => (
@@ -128,26 +177,14 @@ const ChatPage: React.FC = () => {
           onRetry={() => handleRetryQuestion(index)}
           onWait={() => handleWaitAnswer(index)}
           onAskAnother={handleAskAnotherQuestion}
-          showActionButtons={showActionButton}
+          showActionButtons={showActionButton && index === content.length - 1}
         />
       </React.Fragment>
     ));
 
   return (
     <div className="bg-light-gray w-full min-h-[92vh]">
-      {loading ? <Loading /> : <div id="load-more" />}
-      <div className="w-[90%] m-auto flex flex-col">
-        <WelcomeMessage
-          nickname={targetUserNickname ?? ""}
-          isOpen={isOpenWelcome}
-          onToggle={() => setIsOpenWelcome(!isOpenWelcome)}
-        />
-        <div
-          className={`${isFirstQuestion ? "h-[73vh]" : "h-[81vh]"} flex flex-col mt-3 overflow-y-auto scrollbar-hide`}
-        >
-          {renderMessages()}
-          <div ref={messagesEndRef} />
-        </div>
+      <div className="w-[90%] m-auto flex flex-col-reverse">
         <div className="sticky bottom-4">
           {(isFirstQuestion || content.length === 0) && (
             <QuestionGuide handleClickQuestionItem={handleSendQuestion} />
@@ -160,6 +197,29 @@ const ChatPage: React.FC = () => {
             disabled={isInputDisabled}
           />
         </div>
+
+        <div
+          ref={scrollContainerRef}
+          className={`${isFirstQuestion ? "h-[73vh]" : "h-[81vh]"} flex flex-col mt-3 overflow-y-auto scrollbar-hide relative`}
+        >
+          {loading ? <Loading /> : <div id="load-more" ref={messagesStartRef} />}
+          {renderMessages()}
+          <div ref={messagesEndRef} />
+          {showScrollToBottom && (
+            <span
+              className="material-symbols-rounded text-4xl text-dark-gray cursor-pointer sticky bottom-2 left-full w-fit z-10"
+              onClick={handleClickToBottom}
+            >
+              arrow_downward
+            </span>
+          )}
+        </div>
+
+        <WelcomeMessage
+          nickname={targetUserNickname ?? ""}
+          isOpen={isOpenWelcome}
+          onToggle={() => setIsOpenWelcome(!isOpenWelcome)}
+        />
       </div>
     </div>
   );
