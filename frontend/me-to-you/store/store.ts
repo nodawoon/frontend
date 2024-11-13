@@ -10,6 +10,7 @@ import {
   respondentDetailReducer,
 } from "@/slice/respondentsSlice";
 import { statisticsReducer } from "@/slice/statisticsSlice";
+import { chatbotReducer } from "@/slice/chatbotSlice";
 import { chatHistoryReducer } from "@/slice/chatHistorySlice";
 
 export const store = configureStore({
@@ -21,6 +22,7 @@ export const store = configureStore({
     respondentsQuestion: respondentQuestionReducer,
     respondentDetail: respondentDetailReducer,
     statistics: statisticsReducer,
+    chatbot: chatbotReducer,
     chatbotQuestion: chatbotQuestionReducer,
     chatbotResponse: chatbotResponseReducer,
     chatHistory: chatHistoryReducer,
