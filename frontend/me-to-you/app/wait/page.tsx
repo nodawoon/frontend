@@ -4,47 +4,20 @@ import React, { useState, useEffect } from "react";
 import ChatInputCard from "@/components/chat-history/ChatInputCard";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
+import { loadChatHistory, loadChatState, updateChatResponse } from "@/slice/chatHistorySlice";
+import Swal from "sweetalert2";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
-  const content = [
-    {
-      chatbotId: 0,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 0,
-      question:
-        "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      response:
-        "ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 0,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-  ];
-  // const { content } = useAppSelector(state => state.chatHistory);
-  const { exist } = useAppSelector(state => state.chatState);
+  const { content } = useAppSelector(state => state.chatHistory);
+  const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
-      await dispatch(loadChatHistory());
+      await dispatch(loadChatHistory({ status: "unanswer-bot", page: 0 }));
     })();
   }, [dispatch]);
 
@@ -67,17 +40,33 @@ const Page: React.FC = () => {
     setSendMessage(value);
   };
 
-  const submit = (index: number) => {
+  const submit = (index: number, id: number) => {
     if (current === index) {
-      setCurrent(-1);
-      sendTheMessage();
+      if (sendMessage.length === 0) {
+        Swal.fire({
+          title: "답변 미등록",
+          text: "답변을 채워주세요!",
+          icon: "warning",
+          confirmButtonText: "확인",
+        });
+      } else {
+        setCurrent(-1);
+        sendTheMessage(id);
+      }
     } else {
       setCurrent(index);
     }
   };
 
-  const sendTheMessage = async () => {
-    console.log(sendMessage);
+  const sendTheMessage = async (id: number) => {
+    await dispatch(updateChatResponse({ chatBotId: id, params: { answer: sendMessage } }));
+    await dispatch(loadChatHistory({ status: "unanswer-bot", page: 0 }));
+    Swal.fire({
+      title: "답변 등록",
+      text: "답변이 등록되었어요!",
+      icon: "success",
+      confirmButtonText: "확인",
+    });
   };
 
   return (
@@ -97,8 +86,16 @@ const Page: React.FC = () => {
         <div className="text-gray mt-5 ">아직 대화 내용이 없어요..</div>
       ) : (
         <div className="my-6">
-          {content.map((e, index) => {
-            if (e.answerStatus === "ANSWERED_BY_BOT") {
+          {content.map(
+            (
+              e: {
+                chatBotId: number;
+                question: string;
+                response: string;
+                isQuestionIncluded: boolean;
+              },
+              index: number
+            ) => {
               return (
                 <ChatInputCard
                   className="mb-2 font-medium"
@@ -106,15 +103,14 @@ const Page: React.FC = () => {
                   key={index}
                   index={index}
                   current={current}
-                  onClick={index => submit(index)}
+                  onClick={() => submit(index, e.chatBotId)}
                   state={current === index ? "check" : "답변하기"}
                   submit={e => handleChange(e)}
+                  chatbotId={e.chatBotId}
                 />
               );
-            } else {
-              return;
             }
-          })}
+          )}
         </div>
       )}
     </div>

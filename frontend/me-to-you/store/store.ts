@@ -10,7 +10,7 @@ import {
   respondentDetailReducer,
 } from "@/slice/respondentsSlice";
 import { statisticsReducer } from "@/slice/statisticsSlice";
-import { chatStateReducer, chatHistoryReducer } from "@/slice/chatHistorySlice";
+import { chatHistoryReducer } from "@/slice/chatHistorySlice";
 
 export const store = configureStore({
   reducer: {
@@ -23,7 +23,6 @@ export const store = configureStore({
     statistics: statisticsReducer,
     chatbotQuestion: chatbotQuestionReducer,
     chatbotResponse: chatbotResponseReducer,
-    chatState: chatStateReducer,
     chatHistory: chatHistoryReducer,
   },
 });

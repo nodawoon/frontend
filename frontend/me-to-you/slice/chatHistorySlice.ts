@@ -1,69 +1,83 @@
-import { getChatHistory, getChatState } from "@/services/chatHistory";
+import {
+  getChatHistory,
+  getChatState,
+  updateChatbots,
+  updateResponse,
+} from "@/services/chatHistory";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const initialState: chatState = {
+const initialState: chatHistoryProps = {
   exist: false,
-};
-
-const initialHistoryState: chatHistoryProps = {
   content: [
     {
       chatBotId: 0,
       question: undefined,
       response: undefined,
-      answerStatus: "",
+      isQuestionIncluded: false,
     },
   ],
 };
 
-const chatStateSlice = createSlice({
-  name: "chatState",
+const chatHistorySlice = createSlice({
+  name: "chatHistory",
   initialState: initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(loadChatState.fulfilled, (state, action) => {
-      state.exist = action.payload.data.exist;
-    });
-  },
-});
-
-const chatHistorySlice = createSlice({
-  name: "chatHistory",
-  initialState: initialHistoryState,
-  reducers: {},
-  extraReducers: builder => {
     builder
-      .addCase(loadChatHistory.fulfilled, (state, action) => {
-        const chatHistoryList = action.payload.data as unknown as {
-          chatBotId: number;
-          question: string | undefined;
-          response: string | undefined;
-          answerStatus: string;
-        }[];
-        state.content = chatHistoryList;
+      .addCase(loadChatState.fulfilled, (state, action) => {
+        state.exist = action.payload.data.exist;
       })
-      .addCase(loadChatHistory.rejected, (state, action) => {
-        state.content = [
-          {
-            chatBotId: 0,
-            question: undefined,
-            response: undefined,
-            answerStatus: "",
-          },
-        ];
+      .addCase(loadChatState.rejected, state => {
+        state.exist = false;
+      })
+      .addCase(loadChatHistory.fulfilled, (state, action) => {
+        state.content = action.payload.data.content;
+      })
+      .addCase(loadChatHistory.rejected, state => {
+        state.content = initialState.content;
+      })
+      .addCase(updateChatbotPrompt.fulfilled, state => {
+        console.log("propmt 업데이트 성공");
+      })
+      .addCase(updateChatbotPrompt.rejected, state => {
+        console.log("propmt 업데이트 실패");
+      })
+      .addCase(updateChatResponse.fulfilled, state => {
+        console.log("response 업데이트 성공");
+      })
+      .addCase(updateChatResponse.rejected, state => {
+        console.log("response 업데이트 실패");
       });
   },
 });
 
-export const loadChatState = createAsyncThunk("respondent/getChatState", async () => {
+export const loadChatState = createAsyncThunk("chatbot/getChatState", async () => {
   const response = await getChatState();
   return response.data;
 });
 
-export const loadChatHistory = createAsyncThunk("respondent/getChatHistory", async () => {
-  const response = await getChatHistory();
-  return response.data;
-});
+export const loadChatHistory = createAsyncThunk(
+  "chatbot/getChatHistory",
+  async (params: { status: string; page: number }) => {
+    const response = await getChatHistory(params);
+    return response.data;
+  }
+);
 
-export const chatStateReducer = chatStateSlice.reducer;
+export const updateChatbotPrompt = createAsyncThunk(
+  "chatbot/updateChatHistory",
+  async (params: { chatBotId: number }) => {
+    const response = await updateChatbots(params);
+    return response.data;
+  }
+);
+
+export const updateChatResponse = createAsyncThunk(
+  "chatbot/updateChatResponse",
+  async (params: { chatBotId: number; params: { answer: string } }) => {
+    const response = await updateResponse(params.chatBotId, params.params);
+    return response.data;
+  }
+);
+
 export const chatHistoryReducer = chatHistorySlice.reducer;

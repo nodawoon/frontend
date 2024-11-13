@@ -3,54 +3,20 @@
 import React, { useState, useEffect } from "react";
 import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import Link from "next/link";
+import Swal from "sweetalert2";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
+import { loadChatHistory, loadChatState, updateChatbotPrompt } from "@/slice/chatHistorySlice";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
-  //   const { content } = useAppSelector(state => state.chatHistory);
-  const { exist } = useAppSelector(state => state.chatState);
-  const content = [
-    {
-      chatbotId: 1,
-      question:
-        "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      response:
-        "딥변입니다.ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 2,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 3,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-
-    {
-      chatbotId: 4,
-      question:
-        "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      response:
-        "딥변입ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ니다.",
-      answerStatus: "chatBot",
-    },
-
-    { chatbotId: 5, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-    { chatbotId: 6, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-  ];
+  const { content } = useAppSelector(state => state.chatHistory);
+  const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
-      await dispatch(loadChatHistory());
+      await dispatch(loadChatHistory({ status: "answer-user", page: 0 }));
     })();
   }, [dispatch]);
 
@@ -69,8 +35,15 @@ const Page: React.FC = () => {
     console.log(isExist);
   }, [isExist]);
 
-  const createPrompt = (id: number) => {
-    console.log(id);
+  const createPrompt = async (id: number) => {
+    await dispatch(updateChatbotPrompt({ chatBotId: id }));
+    await dispatch(loadChatHistory({ status: "answer-user", page: 0 }));
+    Swal.fire({
+      title: "학습 완료",
+      text: "나의 챗봇이 해당 답변을 학습했어요!",
+      icon: "success",
+      confirmButtonText: "확인",
+    });
   };
 
   return (
@@ -90,8 +63,16 @@ const Page: React.FC = () => {
         <div className="text-gray mt-5 ">아직 대화 내용이 없어요..</div>
       ) : (
         <div className="my-6">
-          {content.map((e, index) => {
-            if (e.answerStatus !== "ANSWERED_BY_BOT") {
+          {content.map(
+            (
+              e: {
+                chatBotId: number;
+                question: string;
+                response: string;
+                isQuestionIncluded: boolean;
+              },
+              index: number
+            ) => {
               return (
                 <div className="mb-3" key={index}>
                   <ChatResultCard
@@ -104,23 +85,31 @@ const Page: React.FC = () => {
                     state={current === index ? "up" : "down"}
                     responser="face"
                   />
-                  <p
-                    className={
-                      "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
-                    }
-                  >
-                    이 대화를 챗봇에 추가 학습 시키시려면{" "}
-                    <span className="text-primary" onClick={() => createPrompt(e.chatbotId)}>
-                      여기
-                    </span>
-                    를 클릭하세요.
-                  </p>
+                  {e.isQuestionIncluded ? (
+                    <p
+                      className={
+                        "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
+                      }
+                    >
+                      학습을 완료한 답변이에요!
+                    </p>
+                  ) : (
+                    <p
+                      className={
+                        "text-[12px] text-right font-light " + (current === index ? "" : "hidden")
+                      }
+                    >
+                      이 대화를 챗봇에 추가 학습 시키시려면{" "}
+                      <span className="text-primary" onClick={() => createPrompt(e.chatBotId)}>
+                        여기
+                      </span>
+                      를 클릭하세요.
+                    </p>
+                  )}
                 </div>
               );
-            } else {
-              return;
             }
-          })}
+          )}
         </div>
       )}
     </div>

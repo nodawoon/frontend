@@ -30,7 +30,7 @@ const Page: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    resList.forEach(e => {
+    resList.forEach((e: { respondentId: number; respondentNickname: string }) => {
       if (e.respondentId === Number(param.respondentId) && e.respondentNickname !== undefined) {
         setIsIndex(true);
         setName(e.respondentNickname);
@@ -87,7 +87,7 @@ const Page: React.FC = () => {
                   </div>
                 ) : (
                   <div className="w-full flex flex-wrap bg-light-gray rounded-md px-5 py-2">
-                    {list[index]?.response.split(",").map((e, i) => {
+                    {list[index]?.response.split(",").map((e: string, i: number) => {
                       return (
                         <div
                           key={i}

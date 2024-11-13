@@ -26,7 +26,7 @@ const Page: React.FC = () => {
           {list[0]?.respondentNickname === undefined ? (
             <div className="text-gray mb-5">아직 응답자가 없어요...</div>
           ) : (
-            list.map((e, index) => {
+            list.map((e: { respondentId: number; respondentNickname: string }, index: number) => {
               if (e.respondentNickname === undefined) return;
               return (
                 <div key={index} className="flex flex-col grow max-w-[30%]">

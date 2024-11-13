@@ -21,7 +21,7 @@ const CardButton: React.FC<CardButtonProps> = ({
 }: CardButtonProps) => {
   const user = useAppSelector(state => state.user.user);
 
-  const { exist } = useAppSelector(state => state.chatState);
+  const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
   const [chatURL, setChatURL] = useState("");
 
@@ -43,7 +43,7 @@ const CardButton: React.FC<CardButtonProps> = ({
         Swal.fire({
           title: "챗봇 미학습",
           text: "챗봇을 먼저 학습해주세요!",
-          icon: "error",
+          icon: "warning",
           confirmButtonText: "확인",
         });
       }
@@ -68,7 +68,7 @@ const CardButton: React.FC<CardButtonProps> = ({
       url += "chat-history";
       break;
     case 5:
-      url += "chat-history";
+      url += "chat";
       break;
   }
   return (

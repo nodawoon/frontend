@@ -9,41 +9,13 @@ import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
-  const content = [
-    {
-      chatbotId: 0,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 0,
-      question:
-        "질문입니다kkkkkkkkkkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      response:
-        "ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-    {
-      chatbotId: 0,
-      question: "질문입니다.",
-      response: "딥변입니다.",
-      answerStatus: "ANSWERED_BY_BOT",
-    },
-
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-
-    { chatbotId: 0, question: "질문입니다.", response: "딥변입니다.", answerStatus: "chatBot" },
-  ];
-  // const { content } = useAppSelector(state => state.chatHistory);
-  const { exist } = useAppSelector(state => state.chatState);
+  const { content } = useAppSelector(state => state.chatHistory);
+  const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
-      await dispatch(loadChatHistory());
+      await dispatch(loadChatHistory({ status: "answer-bot", page: 0 }));
     })();
   }, [dispatch]);
 
@@ -79,8 +51,16 @@ const Page: React.FC = () => {
         <div className="text-gray mt-5 ">아직 대화 내용이 없어요..</div>
       ) : (
         <div className="my-6">
-          {content.map((e, index) => {
-            if (e.answerStatus === "ANSWERED_BY_BOT") {
+          {content.map(
+            (
+              e: {
+                chatBotId: number;
+                question: string;
+                response: string;
+                isQuestionIncluded: boolean;
+              },
+              index: number
+            ) => {
               return (
                 <ChatResultCard
                   className="mb-2 font-medium"
@@ -94,10 +74,8 @@ const Page: React.FC = () => {
                   responser="smart_toy"
                 />
               );
-            } else {
-              return;
             }
-          })}
+          )}
         </div>
       )}
     </div>
