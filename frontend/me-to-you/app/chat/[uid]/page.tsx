@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent, useEffect, useRef, useState, useCallback } from "react";
 import TextInput from "@/components/chat/TextInput";
-import { ChatbotAnswerType } from "@/types/chatbot";
+import { ChatbotAnswerType } from "@/types/selfSurvey";
 import QuestionGuide from "@/components/chat/QuestionGuide";
 import WelcomeMessage from "@/components/chat/WelcomeMessage";
 import MessageBubble from "@/components/chat/MessageBubble";
