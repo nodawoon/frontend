@@ -4,30 +4,8 @@ import { getAllConversations } from "@/services/chatbot";
 const initialState: ChatbotState = {
   loading: false,
   error: undefined,
-  targetUserId: 7,
-  targetUserNickname: "거니",
-  chatList: {
-    content: [
-      {
-        chatBotId: 0,
-        question: "",
-        response: "",
-        isQuestionIncluded: false,
-        limitCount: 0,
-        answerStatus: null,
-        questionerProfile: {
-          userId: 0,
-          email: "string",
-          nickname: "string",
-          gender: "MAN",
-          birthday: "2024-11-12",
-          shareUrl: "string",
-          mbti: "INTJ",
-          profileImage: "string",
-          oauthServerType: "KAKAO",
-        },
-      },
-    ],
+  contentList: [],
+  chatInfo: {
     first: false,
     last: false,
   },
@@ -71,9 +49,20 @@ export const chatbotSlice = createSlice({
       })
       .addCase(loadAllConversations.fulfilled, (state, action) => {
         const { content, first, last } = action.payload.data;
-        state.chatList.content = content;
-        state.chatList.first = first;
-        state.chatList.last = last;
+
+        state.chatInfo.first = first;
+        state.chatInfo.last = last;
+
+        state.contentList = content.map(con => {
+          return {
+            question: con.question,
+            response: con.response,
+            isQuestionIncluded: con.isQuestionIncluded,
+            limitCount: con.limitCount,
+            answerStatus: con.answerStatus,
+          };
+        });
+
         state.loading = false;
       })
       .addCase(loadAllConversations.rejected, (state, action) => {

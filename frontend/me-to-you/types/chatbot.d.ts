@@ -3,9 +3,11 @@ type ChatbotAnswerType = "ANSWERED_BY_BOT" | "UNANSWERED_BY_BOT" | "ANSWERED_BY_
 interface ChatbotState {
   loading: boolean;
   error: string | undefined;
-  targetUserId: number;
-  targetUserNickname: string;
-  chatList: ChatRoomResponse;
+  contentList: ChatContent[];
+  chatInfo: {
+    first: boolean;
+    last: boolean;
+  };
   chatbot: ChatbotResponse;
 }
 
@@ -17,6 +19,14 @@ interface ChatbotResponse {
   limitCount: number;
   answerStatus: ChatbotAnswerType;
   questionerProfile: QuestionerType;
+}
+
+interface ChatContent {
+  question: string;
+  response: string;
+  isQuestionIncluded: boolean;
+  limitCount: number;
+  answerStatus: ChatbotAnswerType;
 }
 
 interface ChatRoomResponse {

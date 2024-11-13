@@ -9,68 +9,90 @@ import { MESSAGES } from "@/constants/messages";
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAllConversations } from "@/slice/chatbotSlice";
-
-interface AnswerType {
-  response: string;
-  answerStatus: ChatbotAnswerType | null;
-}
+import { usePathname } from "next/navigation";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import Loading from "@/components/common/Loading";
 
 const ChatPage: React.FC = () => {
+  const { chatInfo, contentList, loading } = useSelector((state: RootState) => state.chatbot);
+
   const [isOpenWelcome, setIsOpenWelcome] = useState(true);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
-  const [page, setPage] = useState(0);
   const [question, setQuestion] = useState("");
-  const [questions, setQuestions] = useState<string[]>([]);
-  const [answers, setAnswers] = useState<AnswerType[]>([]);
+  const [content, setContent] = useState<ChatContent[]>(contentList);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
   const [visibleActionButtons, setVisibleActionButtons] = useState<boolean[]>([]);
 
+  const [page, setPage] = useState(0);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const dispatch: AppDispatch = useDispatch();
-  const { targetUserNickname, targetUserId } = useSelector((state: RootState) => state.chatbot);
+
+  const targetUserNickname = "거니";
+  const targetUserId = parseInt(pathname.split("/")[2]);
 
   const handleChangeQuestion = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setQuestion(e.target.value);
   }, []);
 
+  const handleLoadMore = () => {
+    setPage(prev => prev + 1);
+  };
+
+  useInfiniteScroll({
+    hasMore: !chatInfo.first,
+    onLoadMore: handleLoadMore,
+    targetId: "load-more",
+  });
+
   // TODO : API 연동
-  const fetchAnswer = useCallback(async (nickname: string): Promise<AnswerType> => {
-    const answerStatuses: ChatbotAnswerType[] = [
-      "ANSWERED_BY_BOT",
-      "UNANSWERED_BY_BOT",
-      "ANSWERED_BY_USER",
-    ];
-    const randomStatus = answerStatuses[Math.floor(Math.random() * answerStatuses.length)];
+  const fetchAnswer = useCallback(
+    async (nickname: string): Promise<ChatContent> => {
+      const answerStatuses: ChatbotAnswerType[] = [
+        "ANSWERED_BY_BOT",
+        "UNANSWERED_BY_BOT",
+        "ANSWERED_BY_USER",
+      ];
+      const randomStatus = answerStatuses[Math.floor(Math.random() * answerStatuses.length)];
 
-    let mockResponse = "";
-    switch (randomStatus) {
-      case "ANSWERED_BY_BOT":
-        mockResponse = "나는 치킨을 좋아해!";
-        break;
-      case "UNANSWERED_BY_BOT":
-        mockResponse = MESSAGES.UNANSWERED_BY_BOT(nickname);
-        break;
-      case "ANSWERED_BY_USER":
-        mockResponse = `흠.. 생각해본 적 없는 질문인데 내가 직접 답변을 하자면 나는 뇨끼를 좋아해!`;
-        break;
-      default:
-        break;
-    }
+      let mockResponse = "";
+      switch (randomStatus) {
+        case "ANSWERED_BY_BOT":
+          mockResponse = "나는 치킨을 좋아해!";
+          break;
+        case "UNANSWERED_BY_BOT":
+          mockResponse = MESSAGES.UNANSWERED_BY_BOT(nickname);
+          break;
+        case "ANSWERED_BY_USER":
+          mockResponse = `흠.. 생각해본 적 없는 질문인데 내가 직접 답변을 하자면 나는 뇨끼를 좋아해!`;
+          break;
+        default:
+          break;
+      }
 
-    // TODO : API 연동
-    await new Promise(resolve => setTimeout(resolve, 1000));
+      // TODO : API 연동
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-    return {
-      response: mockResponse,
-      answerStatus: randomStatus,
-    };
-  }, []);
+      return {
+        ...content[content.length - 1],
+        response: mockResponse,
+        isQuestionIncluded: false,
+        limitCount: 0,
+        answerStatus: randomStatus,
+      };
+    },
+    [content]
+  );
 
   const addMessage = useCallback(
-    (newQuestion: string, newAnswer: AnswerType, showActionButton: boolean) => {
-      setQuestions(prev => [...prev, newQuestion]);
-      setAnswers(prev => [...prev, newAnswer]);
+    (newQuestion: string, newContent: ChatContent, showActionButton: boolean) => {
+      const questionContent: ChatContent = {
+        ...newContent,
+        question: newQuestion,
+      };
+      setContent(prev => [...prev, questionContent]);
       setVisibleActionButtons(prev => [...prev, showActionButton]);
     },
     []
@@ -85,17 +107,29 @@ const ChatPage: React.FC = () => {
       setIsFirstQuestion(false);
       setQuestion("");
 
-      addMessage(currentQuestion, { response: "...", answerStatus: null }, false);
+      const initialContent: ChatContent = {
+        question: currentQuestion,
+        response: "...",
+        isQuestionIncluded: false,
+        limitCount: 0,
+        answerStatus: null,
+      };
 
-      const newAnswer = await fetchAnswer(targetUserNickname);
+      addMessage(currentQuestion, initialContent, false);
 
-      setAnswers(prev => {
-        const updatedAnswers = [...prev];
-        updatedAnswers[updatedAnswers.length - 1] = newAnswer;
-        return updatedAnswers;
+      const newContent = await fetchAnswer(targetUserNickname);
+
+      setContent(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          ...updated[updated.length - 1],
+          response: newContent.response,
+          answerStatus: newContent.answerStatus,
+        };
+        return updated;
       });
 
-      const showActionButton = newAnswer.answerStatus === "UNANSWERED_BY_BOT";
+      const showActionButton = newContent.answerStatus === "UNANSWERED_BY_BOT";
       setVisibleActionButtons(prev => {
         const updated = [...prev];
         updated[updated.length - 1] = showActionButton;
@@ -116,15 +150,21 @@ const ChatPage: React.FC = () => {
       });
       setIsInputDisabled(true);
 
-      setAnswers(prev => {
+      setContent(prev => {
         const updatedAnswers = [...prev];
-        updatedAnswers[questionIndex] = { response: "...", answerStatus: null };
+        updatedAnswers[questionIndex] = {
+          isQuestionIncluded: false,
+          limitCount: 0,
+          question: content[questionIndex].question,
+          response: "...",
+          answerStatus: null,
+        };
         return updatedAnswers;
       });
 
       const newAnswer = await fetchAnswer(targetUserNickname);
 
-      setAnswers(prev => {
+      setContent(prev => {
         const updatedAnswers = [...prev];
         updatedAnswers[questionIndex] = newAnswer;
         return updatedAnswers;
@@ -139,7 +179,7 @@ const ChatPage: React.FC = () => {
 
       setIsInputDisabled(showActionButton);
     },
-    [targetUserNickname, fetchAnswer]
+    [fetchAnswer, targetUserNickname, content]
   );
 
   const handleWaitAnswer = useCallback(
@@ -150,7 +190,10 @@ const ChatPage: React.FC = () => {
         return updated;
       });
 
-      const waitingMessage: AnswerType = {
+      const waitingMessage: ChatContent = {
+        isQuestionIncluded: false,
+        limitCount: 0,
+        question: content[questionIndex].question,
         response: `${targetUserNickname} 님의 답변을 기다리고 있어요...`,
         answerStatus: null,
       };
@@ -160,7 +203,7 @@ const ChatPage: React.FC = () => {
       setIsInputDisabled(true);
       setIsFirstQuestion(false);
     },
-    [targetUserNickname, addMessage]
+    [content, targetUserNickname, addMessage]
   );
 
   const handleAskAnotherQuestion = useCallback((questionIndex: number) => {
@@ -183,14 +226,15 @@ const ChatPage: React.FC = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [questions, answers]);
+  }, [content]);
 
   useEffect(() => {
     dispatch(loadAllConversations({ targetUserId, page }));
-  }, [dispatch, page, targetUserNickname, targetUserId]);
+  }, [dispatch, page, setPage, targetUserId]);
 
   return (
     <div className="bg-light-gray w-full min-h-[92vh]">
+      {loading ? <Loading /> : <div id="load-more" />}
       <div className="w-[90%] m-auto flex flex-col">
         <WelcomeMessage
           nickname={targetUserNickname}
@@ -203,14 +247,14 @@ const ChatPage: React.FC = () => {
             isFirstQuestion ? "h-[73vh]" : "h-[81vh]"
           } flex flex-col mt-3 overflow-y-auto scrollbar-hide`}
         >
-          {questions.map((q, index) => (
+          {content.map((con, index) => (
             <React.Fragment key={index}>
-              <MessageBubble text={q} isUser={true} />
+              <MessageBubble text={con.question} isUser={true} />
 
               <MessageBubble
-                text={answers[index]?.response || "..."}
+                text={con.response || "..."}
                 isUser={false}
-                answerStatus={answers[index]?.answerStatus}
+                answerStatus={con.answerStatus}
                 onRetry={() => handleRetryQuestion(index)}
                 onWait={() => handleWaitAnswer(index)}
                 onAskAnother={() => handleAskAnotherQuestion(index)}
@@ -222,7 +266,7 @@ const ChatPage: React.FC = () => {
         </div>
 
         <div className="sticky bottom-4">
-          {(isFirstQuestion || questions.length === 0) && (
+          {(isFirstQuestion || content.length === 0) && (
             <QuestionGuide handleClickQuestionItem={handleClickQuestionItem} />
           )}
           <TextInput

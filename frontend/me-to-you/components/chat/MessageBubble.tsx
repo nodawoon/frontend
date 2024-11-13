@@ -1,5 +1,4 @@
 import React from "react";
-import { ChatbotAnswerType } from "@/types/chatbot";
 
 interface MessageBubbleProps {
   text: string;
@@ -22,7 +21,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
 }) => {
   return (
     <div className={`w-fit ${isUser ? "ml-auto" : "mr-auto"} mb-4`}>
-      <div className={`${isUser ? "bg-primary text-white" : "bg-white"} p-2 rounded-md max-w-md`}>
+      <div className={`${isUser ? "bg-primary text-white" : "bg-white"} p-2 rounded-md max-w-sm`}>
         <p className="font-light text-sm whitespace-pre-wrap">{text}</p>
       </div>
       {!isUser && answerStatus === "UNANSWERED_BY_BOT" && showActionButtons && (
