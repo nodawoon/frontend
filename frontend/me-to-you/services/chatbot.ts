@@ -13,9 +13,9 @@ export const getAllConversations = async (targetUserId: number, page: number) =>
     });
 };
 
-export const createQuestion = async (targetUserId: string) => {
+export const createQuestion = async (targetUserId: number, question: string) => {
   return await clientInstance
-    .post<ApiResponseType<ChatbotResponse>>(`/chatbots/${targetUserId}`)
+    .post<ApiResponseType<ChatbotResponse>>(`/chatbots/${targetUserId}`, { question: question })
     .then(response => {
       return response;
     })

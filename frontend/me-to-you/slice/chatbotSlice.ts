@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllConversations } from "@/services/chatbot";
+import { createQuestion, getAllConversations } from "@/services/chatbot";
+import { MESSAGES } from "@/constants/messages";
 
 const initialState: ChatbotState = {
   loading: false,
@@ -11,22 +12,11 @@ const initialState: ChatbotState = {
   },
   chatbot: {
     chatBotId: 0,
-    question: "string",
-    response: "string",
+    question: "",
+    response: "",
     isQuestionIncluded: true,
     limitCount: 0,
     answerStatus: null,
-    questionerProfile: {
-      userId: 0,
-      email: "string",
-      nickname: "string",
-      gender: "MAN",
-      birthday: "2024-11-12",
-      shareUrl: "string",
-      mbti: "INTJ",
-      profileImage: "string",
-      oauthServerType: "KAKAO",
-    },
   },
 };
 
@@ -34,6 +24,14 @@ export const loadAllConversations = createAsyncThunk(
   "chatbot/getAllConversations",
   async ({ targetUserId, page }: { targetUserId: number; page: number }) => {
     const response = await getAllConversations(targetUserId, page);
+    return response.data;
+  }
+);
+
+export const addQuestion = createAsyncThunk(
+  "chatbot/createQuestion",
+  async ({ targetUserId, question }: { targetUserId: number; question: string }) => {
+    const response = await createQuestion(targetUserId, question);
     return response.data;
   }
 );
@@ -53,10 +51,12 @@ export const chatbotSlice = createSlice({
         state.chatInfo.first = first;
         state.chatInfo.last = last;
 
-        state.contentList = content.map(con => {
+        state.contentList = content.reverse().map(con => {
           return {
+            chatBotId: con.chatBotId,
             question: con.question,
-            response: con.response,
+            response:
+              con.answerStatus === "UNANSWERED_BY_BOT" ? MESSAGES.UNANSWERED_BY_BOT : con.response,
             isQuestionIncluded: con.isQuestionIncluded,
             limitCount: con.limitCount,
             answerStatus: con.answerStatus,
@@ -66,6 +66,19 @@ export const chatbotSlice = createSlice({
         state.loading = false;
       })
       .addCase(loadAllConversations.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(addQuestion.pending, state => {
+        // state.loading = true;
+      })
+      .addCase(addQuestion.fulfilled, (state, action) => {
+        state.chatbot =
+          action.payload.data.answerStatus === "UNANSWERED_BY_BOT"
+            ? { ...action.payload.data, response: MESSAGES.UNANSWERED_BY_BOT }
+            : action.payload.data;
+        state.loading = false;
+      })
+      .addCase(addQuestion.rejected, (state, action) => {
         state.error = action.error.message;
       });
   },

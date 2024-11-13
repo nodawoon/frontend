@@ -3,7 +3,7 @@ type ChatbotAnswerType = "ANSWERED_BY_BOT" | "UNANSWERED_BY_BOT" | "ANSWERED_BY_
 interface ChatbotState {
   loading: boolean;
   error: string | undefined;
-  contentList: ChatContent[];
+  contentList: ChatbotResponse[];
   chatInfo: {
     first: boolean;
     last: boolean;
@@ -18,31 +18,10 @@ interface ChatbotResponse {
   isQuestionIncluded: boolean;
   limitCount: number;
   answerStatus: ChatbotAnswerType;
-  questionerProfile: QuestionerType;
-}
-
-interface ChatContent {
-  question: string;
-  response: string;
-  isQuestionIncluded: boolean;
-  limitCount: number;
-  answerStatus: ChatbotAnswerType;
 }
 
 interface ChatRoomResponse {
   content: ChatbotResponse[];
   first: boolean;
   last: boolean;
-}
-
-interface QuestionerType {
-  userId: number;
-  email: string;
-  nickname: string;
-  gender: Gender;
-  birthday: string;
-  shareUrl: string;
-  mbti: MBTI_TYPE;
-  profileImage: string;
-  oauthServerType: "KAKAO" | "GOOGLE" | "NAVER";
 }
