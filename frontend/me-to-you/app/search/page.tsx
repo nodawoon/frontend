@@ -38,7 +38,7 @@ const Page = () => {
 
   const handleMoveChatRoom = async (nickname: string) => {
     const response = await getUserId(nickname);
-    const userId = response.data.data;
+    const userId = response.data.data.userId;
     console.info(userId);
 
     router.push(`/chat/${userId}`);

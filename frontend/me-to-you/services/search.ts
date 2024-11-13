@@ -21,7 +21,7 @@ export const getUserNickname = async (keyword: string) => {
 
 export const getUserId = async (nickname: string) => {
   return await clientInstance
-    .get<ApiResponseType<UserId>>(`/users/return-uuid/${nickname}`)
+    .get<ApiResponseType<UserId>>(`/users/return-userinfo/${nickname}`)
     .then(response => {
       return response;
     })
