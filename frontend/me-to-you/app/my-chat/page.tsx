@@ -79,7 +79,7 @@ const Page = () => {
                   ""
                 )}
                 <div className="flex-1 pr-4 overflow-hidden">
-                  <p className="flex justify-between font-semibold items-end">
+                  <p className="flex justify-between font-semibold items-center">
                     {chat.nickname}{" "}
                     <span className="text-xs text-medium-gray">
                       {chat.answerStatus === "ANSWERED_BY_BOT" ? "" : "답변을 기다리고 있어요."}
