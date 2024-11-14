@@ -1,5 +1,5 @@
 import React from "react";
-import { ChatbotAnswerType } from "@/types/selfSurvey";
+import { useAppSelector } from "@/store/hooks";
 
 interface MessageBubbleProps {
   text: string;
@@ -20,7 +20,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   onAskAnother,
   showActionButtons = true,
 }) => {
-  const { chatbot } = useSelector((state: RootState) => state.chatbot);
+  const { chatbot } = useAppSelector(state => state.chatbot);
   return (
     <div className={`w-fit ${isUser ? "ml-auto" : "mr-auto"} mb-4`}>
       <div className={`${isUser ? "bg-primary text-white" : "bg-white"} p-2 rounded-md max-w-sm`}>
