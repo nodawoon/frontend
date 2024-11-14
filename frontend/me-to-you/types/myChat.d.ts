@@ -13,7 +13,7 @@ interface Pageable {
   sort: Sort;
 }
 
-interface ChatRoom {
+interface MyChatRoom {
   targetUserId: number;
   chatBotId: number;
   nickname: string;
@@ -23,7 +23,7 @@ interface ChatRoom {
   isNew: boolean;
 }
 
-interface ChatRoomResponse {
+interface MyChatResponse {
   content: ChatRoom[];
   pageable: Pageable;
   size: number;

@@ -1,5 +1,5 @@
 interface chatHistoryProps {
-  exist: boolean;
+  exist: boolean | undefined;
   content: array<{
     chatBotId: number;
     question: string | undefined;

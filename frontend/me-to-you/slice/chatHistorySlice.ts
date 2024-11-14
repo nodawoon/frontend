@@ -8,7 +8,7 @@ import {
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState: chatHistoryProps = {
-  exist: false,
+  exist: undefined,
   content: [
     {
       chatBotId: 0,
@@ -68,8 +68,8 @@ const chatHistorySlice = createSlice({
   },
 });
 
-export const loadChatState = createAsyncThunk("chatbot/getChatState", async () => {
-  const response = await getChatState();
+export const loadChatState = createAsyncThunk("chatbot/getChatState", async (userId: number) => {
+  const response = await getChatState(userId);
   return response.data;
 });
 
