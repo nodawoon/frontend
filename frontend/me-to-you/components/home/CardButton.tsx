@@ -38,7 +38,7 @@ const CardButton: React.FC<CardButtonProps> = ({
   }, [exist]);
 
   const errorMessage = () => {
-    if (page === 4 || page === 5) {
+    if (page === 4) {
       if (!exist) {
         Swal.fire({
           title: "챗봇 미학습",
@@ -73,7 +73,7 @@ const CardButton: React.FC<CardButtonProps> = ({
   }
   return (
     <Link
-      href={page === 1 || page === 2 || page === 3 ? url : chatURL}
+      href={page !== 4 ? url : chatURL}
       className={`${combinedClassName} ${className}`}
       onClick={errorMessage}
     >
