@@ -7,10 +7,10 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState, updateChatResponse } from "@/slice/chatHistorySlice";
 import Swal from "sweetalert2";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { loadUser } from "@/slice/userSlice";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isExist, setIsExist] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
 
@@ -22,12 +22,17 @@ const Page: React.FC = () => {
   useEffect(() => {
     (async () => {
       await dispatch(loadChatHistory({ status: "unanswer-bot", page: 0 }));
+      if (user.userId === 0) {
+        await dispatch(loadUser());
+      }
     })();
   }, [dispatch]);
 
   useEffect(() => {
     (async () => {
-      await dispatch(loadChatState(user.userId));
+      if (user.userId !== 0) {
+        await dispatch(loadChatState(user.userId));
+      }
       if (exist) {
         setIsExist(true);
       } else {

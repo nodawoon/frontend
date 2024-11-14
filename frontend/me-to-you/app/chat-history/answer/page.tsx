@@ -7,35 +7,42 @@ import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   loadChatHistory,
-  // loadChatState,
+  loadChatState,
   updateChatbotPrompt,
   updateChatbotPromptRemove,
 } from "@/slice/chatHistorySlice";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { loadUser } from "@/slice/userSlice";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
-  // const [isExist, setIsExist] = useState(false);
+  const [isExist, setIsExist] = useState(false);
   const { content, isLoading, number, last } = useAppSelector(state => state.chatHistory);
-  // const { exist } = useAppSelector(state => state.chatHistory);
+  const { user } = useAppSelector(state => state.user);
+  const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
+      if (user.userId === 0) {
+        await dispatch(loadUser());
+      }
       await dispatch(loadChatHistory({ status: "answer-user", page: 0 }));
     })();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await dispatch(loadChatState());
-  //     if (exist) {
-  //       setIsExist(true);
-  //     } else {
-  //       setIsExist(false);
-  //     }
-  //   })();
-  // }, [dispatch]);
+  useEffect(() => {
+    (async () => {
+      if (user.userId !== 0) {
+        await dispatch(loadChatState(user.userId));
+      }
+      if (exist) {
+        setIsExist(true);
+      } else {
+        setIsExist(false);
+      }
+    })();
+  }, [dispatch, user.userId]);
 
   const handleLoadMore = async () => {
     await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
