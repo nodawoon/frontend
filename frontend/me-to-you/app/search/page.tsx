@@ -49,10 +49,10 @@ const Page = () => {
 
   return (
     <div className="bg-light-gray h-[92vh] w-full overflow-hidden">
-      <div className="w-[90%] ml-auto mr-auto pt-6 pb-6">
+      <div className="w-[90%] ml-auto mr-auto py-6">
         <input
           placeholder="친구의 닉네임을 입력해주세요."
-          className="p-2 rounded-md w-full"
+          className="p-2 rounded-md w-full outline-0"
           value={keyword}
           onChange={e => setKeyword(e.target.value)}
         />
@@ -84,7 +84,9 @@ const Page = () => {
               ))}
             </ul>
           ) : (
-            <p className="bg-white rounded-md p-4 mt-2">검색 결과가 없습니다.</p>
+            debounceSearchText.length > 0 && (
+              <p className="text-sm w-full text-center mt-2">검색 결과가 없습니다.</p>
+            )
           )}
         </div>
       </div>
