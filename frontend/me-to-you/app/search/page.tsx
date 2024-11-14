@@ -15,6 +15,7 @@ const Page = () => {
   const [keyword, setKeyword] = useState<string>("");
   const router = useRouter();
   const debounceSearchText = useSearchNickname(keyword, 300);
+  const [isSearch, setIsSearch] = useState<boolean>(false);
 
   const getUserName = async (keyword: string) => {
     try {
@@ -35,8 +36,10 @@ const Page = () => {
   useEffect(() => {
     if (keyword !== "") {
       getUserName(keyword);
+      setIsSearch(true);
     } else {
       setUserList([]);
+      setIsSearch(false);
     }
   }, [debounceSearchText]);
 
@@ -83,8 +86,10 @@ const Page = () => {
                 </li>
               ))}
             </ul>
+          ) : isSearch ? (
+            <p className="ml-2">검색 결과가 없습니다.</p>
           ) : (
-            <p className="bg-white rounded-md p-4 mt-2">검색 결과가 없습니다.</p>
+            ""
           )}
         </div>
       </div>
