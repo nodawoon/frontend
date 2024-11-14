@@ -1,8 +1,8 @@
-interface ChatbotResponse {
+interface SelfSurveyResponse {
   question: string;
   response: string;
 }
 
-interface ChatbotResponseState {
-  responses: ChatbotResponse[];
+interface SelfSurveyResponseState {
+  responses: SelfSurveyResponse[];
 }
