@@ -62,7 +62,7 @@ const Page = () => {
   return (
     <div className="w-full bg-light-gray h-[92vh] overflow-y-auto scrollbar-hide">
       <div className="w-[90%] ml-auto mr-auto pt-6 pb-6">
-        <p>친구의 챗봇과 대화한 기록이에요.</p>
+        <p className="ml-2">친구의 챗봇과 대화한 기록이에요.</p>
         {chatData && chatData.content.length > 0 ? (
           <>
             {chatData.content.map((chat, idx) => (
@@ -81,12 +81,11 @@ const Page = () => {
                 <div className="flex-1 pr-4 overflow-hidden">
                   <p className="flex justify-between font-semibold items-center">
                     {chat.nickname}{" "}
-                    <span className="text-xs text-medium-gray">
-                      {chat.answerStatus === "ANSWERED_BY_BOT" ? "" : "답변을 기다리고 있어요."}
-                    </span>{" "}
                   </p>
                   <p className="mt-2 text-sm truncate overflow-hidden whitespace-nowrap">
-                    {chat.lastChatBotAnswer}
+                    {chat.answerStatus === "ANSWERED_BY_BOT"
+                      ? chat.lastChatBotAnswer
+                      : "답변을 기다리고 있어요."}
                   </p>
                 </div>
                 <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-light-gray flex items-center justify-center">
