@@ -7,7 +7,7 @@ import ChatResultCard from "@/components/chat-history/ChatResultCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   loadChatHistory,
-  loadChatState,
+  // loadChatState,
   updateChatbotPrompt,
   updateChatbotPromptRemove,
 } from "@/slice/chatHistorySlice";
@@ -15,9 +15,9 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
-  const [isExist, setIsExist] = useState(false);
+  // const [isExist, setIsExist] = useState(false);
   const { content, isLoading, number, last } = useAppSelector(state => state.chatHistory);
-  const { exist } = useAppSelector(state => state.chatHistory);
+  // const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -26,16 +26,16 @@ const Page: React.FC = () => {
     })();
   }, [dispatch]);
 
-  useEffect(() => {
-    (async () => {
-      await dispatch(loadChatState());
-      if (exist) {
-        setIsExist(true);
-      } else {
-        setIsExist(false);
-      }
-    })();
-  }, [dispatch]);
+  // useEffect(() => {
+  //   (async () => {
+  //     await dispatch(loadChatState());
+  //     if (exist) {
+  //       setIsExist(true);
+  //     } else {
+  //       setIsExist(false);
+  //     }
+  //   })();
+  // }, [dispatch]);
 
   const handleLoadMore = async () => {
     await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
@@ -51,7 +51,7 @@ const Page: React.FC = () => {
   const createPrompt = async (id: number, key: string) => {
     if (key === "add") {
       await dispatch(updateChatbotPrompt({ chatBotId: id }));
-      Swal.fire({
+      await Swal.fire({
         title: "학습 완료",
         text: "나의 챗봇이 해당 답변을 학습했어요!",
         icon: "success",
@@ -59,7 +59,7 @@ const Page: React.FC = () => {
       });
     } else if (key === "remove") {
       await dispatch(updateChatbotPromptRemove({ chatBotId: id }));
-      Swal.fire({
+      await Swal.fire({
         title: "학습 취소",
         text: "나의 챗봇이 해당 답변을 잊었어요!",
         icon: "success",
