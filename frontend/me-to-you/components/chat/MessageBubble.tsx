@@ -1,5 +1,6 @@
 import React from "react";
-import { ChatbotAnswerType } from "@/types/selfSurvey";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface MessageBubbleProps {
   text: string;

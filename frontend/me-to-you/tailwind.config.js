@@ -25,9 +25,10 @@ module.exports = {
       "yellow": "#FFF1BA",
     },
     screens: {
-      mobile: "320px",
-      tablet: "600px",
-      desktop: "1024px",
+      "xs-mobile": { min: "320px", max: "460px" },
+      "mobile": "320px",
+      "tablet": "600px",
+      "desktop": "1024px",
     },
     extend: {
       fontFamily: {
