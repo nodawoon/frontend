@@ -27,7 +27,6 @@ const Page = () => {
     try {
       const response = await getMyChatRoom(page);
       const data: MyChatResponse = response.data.data;
-      console.info(data.content);
 
       if (data.content.length === 0) {
         setHasMore(false);
