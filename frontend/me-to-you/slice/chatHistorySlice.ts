@@ -68,8 +68,8 @@ const chatHistorySlice = createSlice({
   },
 });
 
-export const loadChatState = createAsyncThunk("chatbot/getChatState", async () => {
-  const response = await getChatState();
+export const loadChatState = createAsyncThunk("chatbot/getChatState", async (userId: number) => {
+  const response = await getChatState(userId);
   return response.data;
 });
 

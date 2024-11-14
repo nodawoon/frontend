@@ -10,8 +10,11 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isExist, setIsExist] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
+
+  const { user } = useAppSelector(state => state.user);
   const { content, isLoading, number, last } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
@@ -24,14 +27,14 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(loadChatState());
+      await dispatch(loadChatState(user.userId));
       if (exist) {
         setIsExist(true);
       } else {
         setIsExist(false);
       }
     })();
-  }, [dispatch]);
+  }, [dispatch, exist, user.userId]);
 
   const handleChange = (value: string) => {
     setSendMessage(value);

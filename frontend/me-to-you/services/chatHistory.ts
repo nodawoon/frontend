@@ -1,8 +1,8 @@
 import { clientInstance } from "@/libs/http-client";
 
-export const getChatState = async () => {
+export const getChatState = async (userId: number) => {
   return await clientInstance
-    .get<ApiResponseType<{ exist: boolean }>>("/self-survey/exists")
+    .get<ApiResponseType<{ exist: boolean }>>(`/self-survey/exists/${userId}`)
     .then(response => {
       return response;
     })

@@ -51,25 +51,19 @@ const Page = () => {
     const response = await getUserId(nickname);
     const userId = response.data.data.userId;
 
-    if (exist) {
-      router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
-    }
+    const result = await dispatch(loadChatState(userId));
 
-    if (!exist) {
-      const result = await dispatch(loadChatState());
-
-      if (result.meta.requestStatus === "fulfilled") {
-        if (!exist) {
-          await Swal.fire({
-            icon: "warning",
-            text: "아직 챗봇이 없는 사용자 입니다!",
-            confirmButtonColor: "#5498FF",
-            confirmButtonText: "닫기",
-          });
-          return;
-        } else {
-          router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
-        }
+    if (result.meta.requestStatus === "fulfilled") {
+      if (!exist) {
+        await Swal.fire({
+          icon: "warning",
+          text: "아직 챗봇이 없는 사용자 입니다!",
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
+        return;
+      } else {
+        router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
       }
     }
   };
