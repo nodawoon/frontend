@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import scrollbarPlugin from "tailwind-scrollbar";
+import tailwind_scrollbar_hide from "tailwind-scrollbar-hide";
 
 module.exports = {
   content: [
@@ -24,9 +25,10 @@ module.exports = {
       "yellow": "#FFF1BA",
     },
     screens: {
-      mobile: "320px",
-      tablet: "600px",
-      desktop: "1024px",
+      "xs-mobile": { min: "320px", max: "460px" },
+      "mobile": "320px",
+      "tablet": "600px",
+      "desktop": "1024px",
     },
     extend: {
       fontFamily: {
@@ -98,5 +100,5 @@ module.exports = {
       },
     },
   },
-  plugins: [scrollbarPlugin],
+  plugins: [scrollbarPlugin, tailwind_scrollbar_hide],
 };

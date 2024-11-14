@@ -41,14 +41,19 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
   },
   "/results": {
     title: "결과 확인",
-    background: "bg-light-gray",
+    background: "bg-white",
   },
   "/responses": {
     title: "설문 응답",
     background: "bg-white",
   },
-  "/chatbot": {
+  "/self-survey": {
     title: "챗봇 생성",
+    background: "bg-white",
+  },
+  "/self-survey/result": {
+    title: "",
+    hideBackButton: true,
     background: "bg-white",
   },
   "/survey/invitation": {
@@ -60,5 +65,17 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     title: "",
     hideBackButton: true,
     background: "bg-white",
+  },
+  "/chat": {
+    title: "너에게 난 챗봇",
+    background: "bg-light-gray",
+  },
+  "/search": {
+    title: "친구 찾기",
+    background: "bg-light-gray",
+  },
+  "/my-chat": {
+    title: "내가 참여한 채팅",
+    background: "bg-light-gray",
   },
 };

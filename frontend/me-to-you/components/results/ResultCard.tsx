@@ -48,7 +48,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
     >
       <Image
         className="my-auto rounded-full border border-gray w-[50px] h-[50px]"
-        src="/character.svg"
+        src="/images/character.svg"
         alt="프로필 이미지"
         width="50"
         height="50"

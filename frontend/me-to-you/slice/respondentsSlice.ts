@@ -24,14 +24,10 @@ const respondentSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(loadRespondentList.fulfilled, (state, action) => {
-        const list = action.payload.data as unknown as {
-          respondentId: number;
-          respondentNickname: string | undefined;
-        }[];
-        state.list = list;
+        state.list = action.payload.data;
       })
-      .addCase(loadRespondentList.rejected, (state, action) => {
-        state.list = [{ respondentId: 0, respondentNickname: undefined }];
+      .addCase(loadRespondentList.rejected, state => {
+        state.list = initialState;
       });
   },
 });
@@ -43,15 +39,10 @@ const respondentQuestionSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(loadRespondentQuestionList.fulfilled, (state, action) => {
-        const list = action.payload.data as unknown as {
-          respondentNickname: string | undefined;
-          createdDate: string;
-          response: string;
-        }[];
-        state.list = list;
+        state.list = action.payload.data;
       })
-      .addCase(loadRespondentQuestionList.rejected, (state, action) => {
-        state.list = [{ respondentNickname: undefined, createdDate: "", response: "" }];
+      .addCase(loadRespondentQuestionList.rejected, state => {
+        state.list = initialQuestionState;
       });
   },
 });
@@ -63,15 +54,10 @@ const respondentDetailSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(loadRespondentDetail.fulfilled, (state, action) => {
-        const list = action.payload.data as unknown as {
-          surveyQuestionId: number;
-          createdDate: string;
-          response: string;
-        }[];
-        state.list = list;
+        state.list = action.payload.data;
       })
-      .addCase(loadRespondentDetail.rejected, (state, action) => {
-        state.list = [{ surveyQuestionId: 0, createdDate: "", response: "" }];
+      .addCase(loadRespondentDetail.rejected, state => {
+        state.list = initialDetailState;
       });
   },
 });

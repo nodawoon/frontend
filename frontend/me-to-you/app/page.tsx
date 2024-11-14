@@ -24,14 +24,20 @@ export default function Home() {
           <CardButton
             page={3}
             className="my-1.5 min-w-full"
-            title="챗봇 생성"
+            title="챗봇 학습"
             text="챗봇에게 나에 대한 정보를 알려주세요."
           ></CardButton>
           <CardButton
             page={4}
             className="my-1.5 min-w-full"
-            title="채팅 보기"
+            title="챗봇 기록"
             text="어떤 사람이 나의 챗봇과 대화했는지 확인하세요."
+          ></CardButton>
+          <CardButton
+            page={5}
+            className="my-1.5 min-w-full"
+            title="내가 참여한 채팅"
+            text="친구들의 챗봇에게 궁금한 것을 물어보세요!"
           ></CardButton>
         </div>
       </div>

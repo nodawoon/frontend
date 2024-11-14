@@ -52,7 +52,7 @@ const Page = () => {
     >
       <div className="flex flex-col h-full justify-center items-center max-w-md px-4">
         <Image
-          src="/character.svg"
+          src="/images/character.svg"
           alt="로고"
           width={175}
           height={175}

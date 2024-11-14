@@ -47,20 +47,27 @@ const Page: React.FC = () => {
           {list[0]?.respondentNickname === undefined ? (
             <div className="text-gray mb-5 text-lg">아직 응답자가 없어요...</div>
           ) : (
-            list.map((e, index) => {
-              if (e.respondentNickname === undefined) return;
-              return (
-                <ResultCard
-                  key={index}
-                  name={e.respondentNickname !== "" ? e.respondentNickname : "익명"}
-                  text={e.response}
-                  date={e.createdDate}
-                  flow={isTruncate === index ? "break-all" : "truncate"}
-                  questionNumber={Number(param.surveyQuestionId)}
-                  onClick={() => (isTruncate === index ? setIsTruncate(-1) : setIsTruncate(index))}
-                />
-              );
-            })
+            list.map(
+              (
+                e: { respondentNickname: string; createdDate: string; response: string },
+                index: number
+              ) => {
+                if (e.respondentNickname === undefined) return;
+                return (
+                  <ResultCard
+                    key={index}
+                    name={e.respondentNickname !== "" ? e.respondentNickname : "익명"}
+                    text={e.response}
+                    date={e.createdDate}
+                    flow={isTruncate === index ? "break-all" : "truncate"}
+                    questionNumber={Number(param.surveyQuestionId)}
+                    onClick={() =>
+                      isTruncate === index ? setIsTruncate(-1) : setIsTruncate(index)
+                    }
+                  />
+                );
+              }
+            )
           )}
         </div>
       </div>
