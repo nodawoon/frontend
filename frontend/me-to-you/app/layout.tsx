@@ -3,6 +3,7 @@ import Header from "@/components/layout/Header";
 import Image from "next/image";
 import ReduxProvider from "./ReduxProvider";
 import { AuthProvider } from "@/context/AuthContext";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export const metadata: { description: string; title: string } = {
   title: "너에게 난",
@@ -16,6 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="h-[100%]">
+      <GoogleTagManager gtmId="G-DJ3DYN2Y7M" />
       <body className="h-[100%] desktop:flex overflow-y-hidden">
         <ReduxProvider>
           <AuthProvider>

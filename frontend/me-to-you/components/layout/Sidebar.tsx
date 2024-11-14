@@ -221,6 +221,15 @@ const Sidebar: React.FC<SidebarProps> = ({
           <p className="text-xl font-medium text-button" onClick={handleClickNavProfile}>
             프로필 보기
           </p>
+          <p
+            className="text-xl font-medium text-button"
+            onClick={() => {
+              router.push("/search");
+              setIsMenuOpen(false);
+            }}
+          >
+            친구 찾기
+          </p>
           <p className="text-xl font-medium text-button" onClick={handleClickLogout}>
             로그아웃
           </p>

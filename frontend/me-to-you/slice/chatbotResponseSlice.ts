@@ -6,13 +6,13 @@ const initialResponses = Array(30).fill({
   response: "",
 });
 
-const initialState: ChatbotResponseState = {
+const initialState: SelfSurveyResponseState = {
   responses: initialResponses,
 };
 
 const submitChatbotResponse = createAsyncThunk(
   "chatbotResponse/submitChatbotResponse",
-  async (chatbotResponse: ChatbotResponseState) => {
+  async (chatbotResponse: SelfSurveyResponseState) => {
     const response = await clientInstance.post("/self-survey", chatbotResponse);
     return response.data;
   }
