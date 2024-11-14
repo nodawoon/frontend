@@ -66,6 +66,10 @@ export const PAGE_CONFIG: { [key: string]: PageConfig } = {
     hideBackButton: true,
     background: "bg-white",
   },
+  "/chat-history": {
+    title: "챗봇 기록",
+    background: "bg-white",
+  },
   "/chat": {
     title: "너에게 난 챗봇",
     background: "bg-light-gray",
