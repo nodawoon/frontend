@@ -5,10 +5,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSearchNickname } from "@/hooks/useSearchNickname";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
-import { loadChatState } from "@/slice/chatHistorySlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 import Swal from "sweetalert2";
+import { getChatState } from "@/services/chatHistory";
 
 interface User {
   nickname: string;
@@ -22,7 +22,6 @@ const Page = () => {
   const [isSearch, setIsSearch] = useState<boolean>(false);
 
   const { exist } = useSelector((state: RootState) => state.chatHistory);
-  const dispatch: AppDispatch = useDispatch();
 
   const getUserName = async (keyword: string) => {
     try {
@@ -54,20 +53,24 @@ const Page = () => {
     const response = await getUserId(nickname);
     const userId = response.data.data.userId;
 
-    const result = await dispatch(loadChatState(userId));
+    if (exist === undefined) {
+      const res = await getChatState(userId);
+      const updatedExist = res.data.data.exist;
 
-    if (result.meta.requestStatus === "fulfilled") {
-      if (!exist) {
+      if (updatedExist) {
+        router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
+      } else {
         await Swal.fire({
           icon: "warning",
           text: "아직 챗봇이 없는 사용자 입니다!",
           confirmButtonColor: "#5498FF",
           confirmButtonText: "닫기",
         });
-        return;
-      } else {
-        router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
       }
+    }
+
+    if (exist) {
+      router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
     }
   };
 
