@@ -25,7 +25,9 @@ const Page: React.FC = () => {
     (async () => {
       await dispatch(loadRespondentDetail(param.respondentId));
       await dispatch(loadUser());
-      await dispatch(loadRespondentList());
+      if (resList[0]?.respondentNickname === undefined) {
+        await dispatch(loadRespondentList());
+      }
     })();
   }, [dispatch]);
 
