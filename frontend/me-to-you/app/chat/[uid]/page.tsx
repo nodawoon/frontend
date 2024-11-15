@@ -121,6 +121,7 @@ const ChatPage: React.FC = () => {
     if (isFirstRender) {
       dispatch(loadAllConversations({ targetUserId, page: 0 }));
     } else {
+      if (page === 0) return;
       dispatch(loadAllConversations({ targetUserId, page }));
     }
   }, [dispatch, isFirstRender, page, targetUserId]);
