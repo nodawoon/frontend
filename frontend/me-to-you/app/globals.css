@@ -89,7 +89,7 @@ a:hover,
 .rounded-image {
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 
 @layer utilities {
