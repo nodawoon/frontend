@@ -8,12 +8,12 @@ import { loadChatHistory, loadChatState, updateChatResponse } from "@/slice/chat
 import Swal from "sweetalert2";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { loadUser } from "@/slice/userSlice";
+import { useRouter } from "next/navigation";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
-  const [isExist, setIsExist] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
-
+  const router = useRouter();
   const { user } = useAppSelector(state => state.user);
   const { content, isLoading, number, last } = useAppSelector(state => state.chatHistory);
   const { exist } = useAppSelector(state => state.chatHistory);
@@ -37,11 +37,20 @@ const Page: React.FC = () => {
   }, [dispatch, user.userId]);
 
   useEffect(() => {
-    if (exist) {
-      setIsExist(true);
-    } else {
-      setIsExist(false);
-    }
+    (async () => {
+      if (exist === undefined) {
+        return;
+      }
+      if (!exist) {
+        await Swal.fire({
+          icon: "warning",
+          text: "아직 챗봇이 없는 사용자 입니다!",
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
+        router.push("/");
+      }
+    })();
   }, [exist]);
 
   const handleChange = (value: string) => {
@@ -90,7 +99,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="w-[90%] mx-auto ">
-      <div className="flex justify-around mt-4">
+      <div className="flex justify-between mt-4">
         <Link href="/chat-history" className="text-gray text-sm self-center">
           ✨ 챗봇 답변
         </Link>

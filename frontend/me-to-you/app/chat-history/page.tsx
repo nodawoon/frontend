@@ -7,10 +7,12 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { loadUser } from "@/slice/userSlice";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
-  const [isExist, setIsExist] = useState(false);
+  const router = useRouter();
   const { content, last, number, isLoading } = useAppSelector(state => state.chatHistory);
   const { user } = useAppSelector(state => state.user);
   const { exist } = useAppSelector(state => state.chatHistory);
@@ -30,10 +32,17 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      if (exist) {
-        setIsExist(true);
-      } else {
-        setIsExist(false);
+      if (exist === undefined) {
+        return;
+      }
+      if (!exist) {
+        await Swal.fire({
+          icon: "warning",
+          text: "아직 챗봇이 없는 사용자 입니다!",
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
+        router.push("/");
       }
     })();
   }, [exist]);
@@ -51,7 +60,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="w-[90%] mx-auto ">
-      <div className="flex justify-around mt-4">
+      <div className="flex justify-between mt-4">
         <Link href="" className="text-primary text-md font-bold self-center">
           ✨ 챗봇 답변
         </Link>
