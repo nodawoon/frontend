@@ -40,7 +40,7 @@ const Page: React.FC = () => {
     currentSurvey.question;
 
   return (
-    <div className="w-full flex flex-col items-center justify-start min-h-screen bg-white">
+    <div className="w-full flex flex-col items-center justify-start min-h-[92vh] bg-white">
       <div className="flex flex-col w-[90%]">
         <p className="text-[23px] mt-10 mb-5 w-full font-bold">{question}</p>
         <div className="flex flex-wrap gap-3 mb-10">

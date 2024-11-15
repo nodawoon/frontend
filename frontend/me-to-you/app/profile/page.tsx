@@ -141,8 +141,8 @@ const ProfilePage = () => {
 
       <ReadOnlyUserInfo infoKey={userInfo.keys} infoValue={userInfo.values} />
 
-      <div className="w-full flex justify-between">
-        <p className="text-lg font-bold w-1/3">닉네임</p>
+      <div className="w-full flex justify-between items-center">
+        <p className="text-lg font-bold w-1/3 ml-2">닉네임</p>
         {isEdit ? (
           <TextInput
             placeholder="변경 할 닉네임을 입력해주세요(2-8자)"
@@ -151,12 +151,12 @@ const ProfilePage = () => {
             validationMessage={validationText}
           />
         ) : (
-          <p className="text-lg">{user.nickname}</p>
+          <p className="text-lg mr-2">{user.nickname}</p>
         )}
       </div>
 
-      <div className="w-full flex justify-between">
-        <p className="text-lg font-bold w-1/3">MBTI</p>
+      <div className="w-full flex justify-between items-center">
+        <p className="text-lg font-bold w-1/3 ml-2">MBTI</p>
         {isEdit ? (
           <SelectInput
             options={MBTI_LIST}
@@ -164,7 +164,7 @@ const ProfilePage = () => {
             setSelectedOption={handleChangeMBTI}
           />
         ) : (
-          <p className="text-lg">{user.mbti === "NONE" ? "모르겠음" : user.mbti}</p>
+          <p className="text-lg mr-2">{user.mbti === "NONE" ? "모르겠음" : user.mbti}</p>
         )}
       </div>
 

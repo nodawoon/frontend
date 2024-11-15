@@ -60,7 +60,7 @@ const Page = () => {
   });
 
   return (
-    <div className="w-full bg-light-gray h-[92vh] overflow-y-auto scrollbar-hide">
+    <div className="w-full bg-light-gray min-h-[92vh] overflow-y-auto scrollbar-hide">
       <div className="w-[90%] ml-auto mr-auto pt-6 pb-6">
         <p className="ml-2">친구의 챗봇과 대화한 기록이에요.</p>
         {chatData && chatData.content.length > 0 ? (

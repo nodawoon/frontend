@@ -3,8 +3,8 @@ import CardButtonList from "@/components/home/CardButtonList";
 export default function Home() {
   return (
     <>
-      <div className="flex flex-col mx-auto min-h-screen justify-start pt-[10%] bg-light-gray">
-        <p className="text-center my-6 text-[26px] font-bold">
+      <div className="flex flex-col mx-auto min-h-[92vh] justify-start pt-[10%] bg-light-gray">
+        <p className="text-center my-6 text-[26px] font-bold xs-mobile:text-2xl">
           <span className="text-primary">타인</span>이 보는 <span className="text-primary">내</span>{" "}
           모습을 알아보세요.
         </p>

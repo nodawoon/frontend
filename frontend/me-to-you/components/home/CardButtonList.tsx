@@ -88,7 +88,7 @@ const CardButtonList: React.FC<CardButtonListProps> = ({ titleList, textList }) 
         <div className="w-auto">{title}</div>
         <span className="material-symbols-rounded text-icon">arrow_forward</span>
       </div>
-      <div className="py-0.5 text-sm font-light">{textList[index]}</div>
+      <div className="py-0.5 text-sm font-light xs-mobile:text-xs">{textList[index]}</div>
     </Link>
   ));
 };
