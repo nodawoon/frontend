@@ -47,5 +47,5 @@ const chatbotResponseSlice = createSlice({
   },
 });
 
-export const { addResponse } = chatbotResponseSlice.actions;
+export const { addResponse, clearResponses } = chatbotResponseSlice.actions;
 export default chatbotResponseSlice.reducer;

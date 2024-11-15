@@ -35,9 +35,20 @@ export const updateRequest = async (chatbotId: number) => {
     });
 };
 
-export const deleteQuestion = async (chatbotId: string) => {
+export const deleteQuestion = async (chatbotId: number) => {
   return await clientInstance
     .delete(`/chatbots/${chatbotId}/question`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};
+
+export const updateRequestToWait = async (chatbotId: number) => {
+  return await clientInstance
+    .patch(`/chatbots/${chatbotId}/wait`)
     .then(response => {
       return response;
     })

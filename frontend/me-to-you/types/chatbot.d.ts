@@ -1,4 +1,9 @@
-type ChatbotAnswerType = "ANSWERED_BY_BOT" | "UNANSWERED_BY_BOT" | "ANSWERED_BY_USER" | null;
+type ChatbotAnswerType =
+  | "ANSWERED_BY_BOT"
+  | "UNANSWERED_BY_BOT"
+  | "ANSWERED_BY_USER"
+  | "NONE"
+  | null;
 
 interface ChatbotState {
   loading: boolean;
