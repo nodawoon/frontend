@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import chatbot from "@/public/chatbot-survey.json";
 import SelectButton from "@/components/common/SelectButton";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addResponse } from "@/slice/chatbotResponseSlice";
+import { addResponse, clearResponses } from "@/slice/chatbotResponseSlice";
 import TextInput from "@/components/common/TextInput";
 import TextArea from "@/components/common/TextArea";
 import Button from "@/components/common/Button";
@@ -90,6 +90,7 @@ const Page = () => {
       icon: "success",
       showConfirmButton: true,
     }).then(() => {
+      dispatch(clearResponses());
       router.push("/self-survey/result");
     });
   };
