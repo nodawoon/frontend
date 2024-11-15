@@ -13,10 +13,13 @@ import {
 } from "@/slice/chatHistorySlice";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { loadUser } from "@/slice/userSlice";
+import { useRouter } from "next/navigation";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
-  const [isExist, setIsExist] = useState(false);
+  const [filterNum, setFilterNum] = useState(0);
+  const [list, setList] = useState([]);
+  const router = useRouter();
   const { content, isLoading, number, last } = useAppSelector(state => state.chatHistory);
   const { user } = useAppSelector(state => state.user);
   const { exist } = useAppSelector(state => state.chatHistory);
@@ -40,12 +43,25 @@ const Page: React.FC = () => {
   }, [dispatch, user.userId]);
 
   useEffect(() => {
-    if (exist) {
-      setIsExist(true);
-    } else {
-      setIsExist(false);
-    }
+    (async () => {
+      if (exist === undefined) {
+        return;
+      }
+      if (!exist) {
+        await Swal.fire({
+          icon: "warning",
+          text: "아직 챗봇이 없는 사용자 입니다!",
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
+        router.push("/");
+      }
+    })();
   }, [exist]);
+
+  useEffect(() => {
+    filterHandle(filterNum);
+  }, [filterNum, content]);
 
   const handleLoadMore = async () => {
     await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
@@ -81,9 +97,48 @@ const Page: React.FC = () => {
     await dispatch(loadChatHistory({ status: "answer-user", page: 0 }));
   };
 
+  const filterHandle = (e: number) => {
+    setCurrent(-1);
+    switch (e) {
+      case 0:
+        setList(content);
+        break;
+      case 1:
+        setList(
+          content.filter(
+            (e: {
+              chatBotId: number;
+              question: string;
+              response: string;
+              isQuestionIncluded: boolean;
+            }) => {
+              return e.isQuestionIncluded === true;
+            }
+          )
+        );
+        break;
+      case 2:
+        setList(
+          content.filter(
+            (e: {
+              chatBotId: number;
+              question: string;
+              response: string;
+              isQuestionIncluded: boolean;
+            }) => {
+              return e.isQuestionIncluded === false;
+            }
+          )
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="w-[90%] mx-auto ">
-      <div className="flex justify-around mt-4">
+      <div className="flex justify-between mt-4">
         <Link href="/chat-history" className="text-gray text-sm self-center">
           ✨ 챗봇 답변
         </Link>
@@ -94,11 +149,33 @@ const Page: React.FC = () => {
           💬 답변 기다리는 중
         </Link>
       </div>
-      {content[0]?.question === undefined ? (
-        <div className="text-gray mt-5 ">아직 대화 내용이 없어요..</div>
+      <div className="mt-6 text-gray flex w-[50%] justify-between text-sm align-end">
+        <span
+          className={filterNum === 0 ? "text-primary font-bold" : ""}
+          onClick={() => setFilterNum(0)}
+        >
+          전체
+        </span>
+
+        <span
+          className={filterNum === 1 ? "text-primary font-bold" : ""}
+          onClick={() => setFilterNum(1)}
+        >
+          학습완료
+        </span>
+
+        <span
+          className={filterNum === 2 ? "text-primary font-bold" : ""}
+          onClick={() => setFilterNum(2)}
+        >
+          학습미완료
+        </span>
+      </div>
+      {content[0]?.question === undefined || list.length === 0 ? (
+        <div className="text-gray mt-4 ">대화 내용이 없어요..</div>
       ) : (
-        <div className="my-6">
-          {content.map(
+        <div className="mt-3 mb-5">
+          {list.map(
             (
               e: {
                 chatBotId: number;
