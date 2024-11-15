@@ -4,7 +4,12 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useSearchParams } from "next/navigation";
 import { AppDispatch, RootState } from "@/store/store";
-import { addQuestion, loadAllConversations, retryQuestion } from "@/slice/chatbotSlice";
+import {
+  addQuestion,
+  initContentList,
+  loadAllConversations,
+  retryQuestion,
+} from "@/slice/chatbotSlice";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import TextInput from "@/components/chat/TextInput";
 import QuestionGuide from "@/components/chat/QuestionGuide";
@@ -163,6 +168,18 @@ const ChatPage: React.FC = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch(initContentList());
+      setContent([]);
+      setIsFirstQuestion(true);
+      setIsInputDisabled(false);
+      setShowActionButton(false);
+      setPage(0);
+      setIsFirstRender(true);
+    };
+  }, [dispatch]);
 
   const renderMessages = () =>
     content.map((con, index) => (

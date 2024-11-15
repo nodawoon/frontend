@@ -47,7 +47,11 @@ export const retryQuestion = createAsyncThunk(
 export const chatbotSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    initContentList(state) {
+      state.contentList = [];
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(loadAllConversations.pending, state => {
@@ -102,3 +106,4 @@ export const chatbotSlice = createSlice({
 });
 
 export const chatbotReducer = chatbotSlice.reducer;
+export const { initContentList } = chatbotSlice.actions;
