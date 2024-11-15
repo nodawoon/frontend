@@ -87,7 +87,8 @@ const Page = () => {
                     {chat.nickname}{" "}
                   </p>
                   <p className="mt-2 text-sm truncate overflow-hidden whitespace-nowrap">
-                    {chat.answerStatus === "ANSWERED_BY_BOT"
+                    {chat.answerStatus === "ANSWERED_BY_BOT" ||
+                    chat.answerStatus === "ANSWERED_BY_USER"
                       ? chat.lastChatBotAnswer
                       : "답변을 기다리고 있어요."}
                   </p>
