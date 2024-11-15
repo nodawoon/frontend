@@ -52,9 +52,9 @@ const Page: React.FC = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-screen">
       <div className="bg-white w-full flex flex-col gap-7 mt-8 mb-14">
-        <StatisticsCard type="first" />
-        <StatisticsCard type="keyword" />
-        <StatisticsCard type="time" />
+        <StatisticsCard type="first" userNickname={user.nickname} />
+        <StatisticsCard type="keyword" userNickname={user.nickname} />
+        <StatisticsCard type="time" userNickname={user.nickname} />
       </div>
       <div className="w-full bg-light-gray">
         <div className="flex flex-col w-[85%] bg-light-gray mx-auto">
