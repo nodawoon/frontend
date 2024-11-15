@@ -64,6 +64,7 @@ const Page: React.FC = () => {
           title: "답변 미등록",
           text: "답변을 채워주세요!",
           icon: "warning",
+          confirmButtonColor: "#5498FF",
           confirmButtonText: "확인",
         });
       } else {
@@ -82,8 +83,10 @@ const Page: React.FC = () => {
       title: "답변 등록",
       text: "답변이 등록되었어요!",
       icon: "success",
+      confirmButtonColor: "#5498FF",
       confirmButtonText: "확인",
     });
+    setSendMessage("");
   };
 
   const handleLoadMore = async () => {
