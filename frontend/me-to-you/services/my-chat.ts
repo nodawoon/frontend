@@ -10,3 +10,14 @@ export const getMyChatRoom = async (page: number) => {
       throw error;
     });
 };
+
+export const patchIsNewStatus = async (chatBotId: number) => {
+  return await clientInstance
+    .patch(`/chatbots/${chatBotId}/status`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};

@@ -2,7 +2,7 @@
 
 import Loading from "@/components/common/Loading";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { getMyChatRoom } from "@/services/my-chat";
+import { getMyChatRoom, patchIsNewStatus } from "@/services/my-chat";
 import Image, { ImageLoaderProps } from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -19,7 +19,15 @@ const Page = () => {
     return `${src}?w=${width}&q=${quality || 50}`;
   };
 
-  const handleMoveChatRoom = (userId: number, nickname: string) => {
+  const handleMoveChatRoom = (
+    userId: number,
+    nickname: string,
+    chatBotId: number,
+    isNew: boolean
+  ) => {
+    if (isNew) {
+      patchIsNewStatus(chatBotId);
+    }
     router.push(`/chat/${userId}?nickname=${nickname}`);
   };
 
@@ -66,14 +74,16 @@ const Page = () => {
   return (
     <div className="w-full bg-light-gray min-h-[92vh] overflow-y-auto scrollbar-hide">
       <div className="w-[90%] ml-auto mr-auto pt-6 pb-6">
-        <p className="ml-2">친구의 챗봇과 대화한 기록이에요.</p>
         {chatData && chatData.content.length > 0 ? (
           <>
+            <p className="ml-2">친구의 챗봇과 대화한 기록이에요.</p>
             {chatData.content.map((chat, idx) => (
               <div
                 key={idx}
                 className="flex bg-white justify-between items-center rounded-md p-4 mt-2 cursor-pointer hover:bg-soft-gray"
-                onClick={() => handleMoveChatRoom(chat.targetUserId, chat.nickname)}
+                onClick={() =>
+                  handleMoveChatRoom(chat.targetUserId, chat.nickname, chat.chatBotId, chat.isNew)
+                }
               >
                 {chat.isNew ? (
                   <div className="mb-6 mr-4">
