@@ -8,6 +8,7 @@ import {
   addQuestion,
   initContentList,
   loadAllConversations,
+  removeQuestion,
   retryQuestion,
 } from "@/slice/chatbotSlice";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -99,10 +100,14 @@ const ChatPage: React.FC = () => {
     [chatbot.chatBotId, content, targetUserNickname]
   );
 
-  const handleAskAnotherQuestion = useCallback(() => {
-    setIsFirstQuestion(true);
-    setIsInputDisabled(false);
-  }, []);
+  const handleAskAnotherQuestion = useCallback(
+    (questionIndex: number) => {
+      dispatch(removeQuestion({ chatBotId: content[questionIndex].chatBotId }));
+      setIsFirstQuestion(true);
+      setIsInputDisabled(false);
+    },
+    [content, dispatch]
+  );
 
   useEffect(() => {
     if (isFirstRender && page === 0 && content.length > 0) {
@@ -194,7 +199,7 @@ const ChatPage: React.FC = () => {
           answerStatus={con.answerStatus}
           onRetry={() => handleRetryQuestion(index)}
           onWait={() => handleWaitAnswer(index)}
-          onAskAnother={handleAskAnotherQuestion}
+          onAskAnother={() => handleAskAnotherQuestion(index)}
           showActionButtons={showActionButton && index === content.length - 1}
         />
       </React.Fragment>

@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createQuestion, getAllConversations, updateRequest } from "@/services/chatbot";
+import {
+  createQuestion,
+  deleteQuestion,
+  getAllConversations,
+  updateRequest,
+} from "@/services/chatbot";
 import { MESSAGES } from "@/constants/messages";
 
 const initialState: ChatbotState = {
@@ -40,6 +45,14 @@ export const retryQuestion = createAsyncThunk(
   "chatbot/updateRequest",
   async ({ chatBotId }: { chatBotId: number }) => {
     const response = await updateRequest(chatBotId);
+    return response.data;
+  }
+);
+
+export const removeQuestion = createAsyncThunk(
+  "chatbot/deleteQuestion",
+  async ({ chatBotId }: { chatBotId: number }) => {
+    const response = await deleteQuestion(chatBotId);
     return response.data;
   }
 );
@@ -100,6 +113,12 @@ export const chatbotSlice = createSlice({
         state.loading = false;
       })
       .addCase(retryQuestion.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(removeQuestion.fulfilled, state => {
+        state.loading = false;
+      })
+      .addCase(removeQuestion.rejected, (state, action) => {
         state.error = action.error.message;
       });
   },

@@ -35,7 +35,7 @@ export const updateRequest = async (chatbotId: number) => {
     });
 };
 
-export const deleteQuestion = async (chatbotId: string) => {
+export const deleteQuestion = async (chatbotId: number) => {
   return await clientInstance
     .delete(`/chatbots/${chatbotId}/question`)
     .then(response => {
