@@ -88,7 +88,11 @@ export const chatbotSlice = createSlice({
           };
         });
 
-        state.contentList = [...newContent, ...state.contentList];
+        if (state.contentList.length === 0) {
+          state.contentList = newContent;
+        } else {
+          state.contentList = [...newContent, ...state.contentList];
+        }
 
         state.loading = false;
       })

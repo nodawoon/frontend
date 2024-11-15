@@ -27,7 +27,7 @@ const ChatPage: React.FC = () => {
   const [isOpenWelcome, setIsOpenWelcome] = useState(false);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [question, setQuestion] = useState("");
-  const [content, setContent] = useState<ChatbotResponse[]>(contentList);
+  const [content, setContent] = useState<ChatbotResponse[]>();
   const [isInputDisabled, setIsInputDisabled] = useState(false);
   const [showActionButton, setShowActionButton] = useState(false);
   const [page, setPage] = useState(0);
@@ -77,6 +77,7 @@ const ChatPage: React.FC = () => {
 
   const handleRetryQuestion = useCallback(
     (questionIndex: number) => {
+      if (!content) return;
       setIsInputDisabled(true);
       dispatch(retryQuestion({ chatBotId: content[questionIndex].chatBotId }));
     },
@@ -85,6 +86,7 @@ const ChatPage: React.FC = () => {
 
   const handleWaitAnswer = useCallback(
     (questionIndex: number) => {
+      if (!content) return;
       const waitingMessage: ChatbotResponse = {
         chatBotId: chatbot.chatBotId,
         isQuestionIncluded: false,
@@ -93,7 +95,7 @@ const ChatPage: React.FC = () => {
         response: `${targetUserNickname} 님의 답변을 기다리고 있어요...`,
         answerStatus: null,
       };
-      setContent(prev => [...prev, waitingMessage]);
+      setContent(prev => (prev ? [...prev, waitingMessage] : [waitingMessage]));
       setIsInputDisabled(true);
       setIsFirstQuestion(false);
     },
@@ -102,30 +104,14 @@ const ChatPage: React.FC = () => {
 
   const handleAskAnotherQuestion = useCallback(
     (questionIndex: number) => {
+      if (!content) return;
+
       dispatch(removeQuestion({ chatBotId: content[questionIndex].chatBotId }));
       setIsFirstQuestion(true);
       setIsInputDisabled(false);
     },
     [content, dispatch]
   );
-
-  useEffect(() => {
-    if (isFirstRender && page === 0 && content.length > 0) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
-      setIsFirstRender(false);
-    }
-  }, [content, page, isFirstRender]);
-
-  useEffect(() => {
-    if (chatbot.response === "") return;
-
-    setContent(prev => [...prev, chatbot]);
-
-    const showActionButton = chatbot.answerStatus === "UNANSWERED_BY_BOT";
-
-    setShowActionButton(showActionButton);
-    setIsInputDisabled(showActionButton);
-  }, [chatbot, page, isFirstRender]);
 
   useEffect(() => {
     if (isFirstRender) {
@@ -137,13 +123,28 @@ const ChatPage: React.FC = () => {
   }, [dispatch, isFirstRender, page, targetUserId]);
 
   useEffect(() => {
+    if (isFirstRender && page === 0 && content) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+      setIsFirstRender(false);
+    }
+  }, [content, page, isFirstRender]);
+
+  useEffect(() => {
+    if (chatbot.response === "") return;
+    setContent(prev => (prev ? [...prev, chatbot] : [chatbot]));
+    const showActionButton = chatbot.answerStatus === "UNANSWERED_BY_BOT";
+    setShowActionButton(showActionButton);
+    setIsInputDisabled(showActionButton);
+  }, [chatbot]);
+
+  useEffect(() => {
     if (page === 0) {
       setContent(contentList);
     } else {
       const scrollContainer = scrollContainerRef.current;
       const oldScrollHeight = scrollContainer?.scrollHeight || 0;
 
-      setContent(prevContent => [...contentList, ...prevContent]);
+      setContent(prevContent => (prevContent ? [...contentList, ...prevContent] : contentList));
 
       setTimeout(() => {
         if (scrollContainer) {
@@ -186,8 +187,9 @@ const ChatPage: React.FC = () => {
     };
   }, [dispatch]);
 
-  const renderMessages = () =>
-    content.map((con, index) => (
+  const renderMessages = () => {
+    if (!content) return null;
+    return content.map((con, index) => (
       <React.Fragment key={index}>
         <MessageBubble
           text={con.question || (content[index] && content[index].question)}
@@ -204,12 +206,13 @@ const ChatPage: React.FC = () => {
         />
       </React.Fragment>
     ));
+  };
 
   return (
-    <div className="bg-light-gray w-full min-h-[92vh]">
+    <div className="bg-light-gray w-full min-h-[92vh] overflow-y-hidden">
       <div className="w-[90%] m-auto flex flex-col-reverse">
         <div className="sticky bottom-4">
-          {(isFirstQuestion || content.length === 0) && (
+          {(isFirstQuestion || !content || content.length === 0) && (
             <QuestionGuide handleClickQuestionItem={handleSendQuestion} />
           )}
           <TextInput
