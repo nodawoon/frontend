@@ -45,3 +45,14 @@ export const deleteQuestion = async (chatbotId: number) => {
       throw error;
     });
 };
+
+export const updateRequestToWait = async (chatbotId: number) => {
+  return await clientInstance
+    .patch(`/chatbots/${chatbotId}/wait`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+};

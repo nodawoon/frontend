@@ -4,6 +4,7 @@ import {
   deleteQuestion,
   getAllConversations,
   updateRequest,
+  updateRequestToWait,
 } from "@/services/chatbot";
 import { MESSAGES } from "@/constants/messages";
 
@@ -57,6 +58,14 @@ export const removeQuestion = createAsyncThunk(
   }
 );
 
+export const waitRequest = createAsyncThunk(
+  "chatbot/updateRequestToWait",
+  async ({ chatBotId }: { chatBotId: number }) => {
+    const response = await updateRequestToWait(chatBotId);
+    return response.data;
+  }
+);
+
 export const chatbotSlice = createSlice({
   name: "user",
   initialState,
@@ -81,7 +90,11 @@ export const chatbotSlice = createSlice({
             chatBotId: con.chatBotId,
             question: con.question,
             response:
-              con.answerStatus === "UNANSWERED_BY_BOT" ? MESSAGES.UNANSWERED_BY_BOT : con.response,
+              con.answerStatus === "NONE"
+                ? "죄송합니다. 이 질문에 대해 제가 명확한 답변을 드리기 어려워요.😅"
+                : con.answerStatus === "UNANSWERED_BY_BOT"
+                  ? "답변을 기다리고 있어요..."
+                  : con.response,
             isQuestionIncluded: con.isQuestionIncluded,
             limitCount: con.limitCount,
             answerStatus: con.answerStatus,
@@ -101,7 +114,7 @@ export const chatbotSlice = createSlice({
       })
       .addCase(addQuestion.fulfilled, (state, action) => {
         state.chatbot =
-          action.payload.data.answerStatus === "UNANSWERED_BY_BOT"
+          action.payload.data.answerStatus === "NONE"
             ? { ...action.payload.data, response: MESSAGES.UNANSWERED_BY_BOT }
             : action.payload.data;
         state.loading = false;
@@ -111,12 +124,22 @@ export const chatbotSlice = createSlice({
       })
       .addCase(retryQuestion.fulfilled, (state, action) => {
         state.chatbot =
-          action.payload.data.answerStatus === "UNANSWERED_BY_BOT"
+          action.payload.data.answerStatus === "NONE"
             ? { ...action.payload.data, response: MESSAGES.UNANSWERED_BY_BOT }
             : action.payload.data;
         state.loading = false;
       })
       .addCase(retryQuestion.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(waitRequest.fulfilled, (state, action) => {
+        state.chatbot =
+          action.payload.data.answerStatus === "UNANSWERED_BY_BOT"
+            ? { ...action.payload.data, response: "답변을 기다리고 있어요..." }
+            : action.payload.data;
+        state.loading = false;
+      })
+      .addCase(waitRequest.rejected, (state, action) => {
         state.error = action.error.message;
       })
       .addCase(removeQuestion.fulfilled, state => {

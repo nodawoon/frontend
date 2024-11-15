@@ -10,6 +10,7 @@ import {
   loadAllConversations,
   removeQuestion,
   retryQuestion,
+  waitRequest,
 } from "@/slice/chatbotSlice";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import TextInput from "@/components/chat/TextInput";
@@ -87,19 +88,12 @@ const ChatPage: React.FC = () => {
   const handleWaitAnswer = useCallback(
     (questionIndex: number) => {
       if (!content) return;
-      const waitingMessage: ChatbotResponse = {
-        chatBotId: chatbot.chatBotId,
-        isQuestionIncluded: false,
-        limitCount: 0,
-        question: content[questionIndex].question,
-        response: `${targetUserNickname} 님의 답변을 기다리고 있어요...`,
-        answerStatus: null,
-      };
-      setContent(prev => (prev ? [...prev, waitingMessage] : [waitingMessage]));
-      setIsInputDisabled(true);
+
+      dispatch(waitRequest({ chatBotId: content[questionIndex].chatBotId }));
+
       setIsFirstQuestion(false);
     },
-    [chatbot.chatBotId, content, targetUserNickname]
+    [content, dispatch]
   );
 
   const handleAskAnotherQuestion = useCallback(
@@ -109,6 +103,7 @@ const ChatPage: React.FC = () => {
       dispatch(removeQuestion({ chatBotId: content[questionIndex].chatBotId }));
       setIsFirstQuestion(true);
       setIsInputDisabled(false);
+      setShowActionButton(false);
     },
     [content, dispatch]
   );
@@ -131,10 +126,13 @@ const ChatPage: React.FC = () => {
 
   useEffect(() => {
     if (chatbot.response === "") return;
+
     setContent(prev => (prev ? [...prev, chatbot] : [chatbot]));
-    const showActionButton = chatbot.answerStatus === "UNANSWERED_BY_BOT";
+
+    const showActionButton = chatbot.answerStatus === "NONE";
+
     setShowActionButton(showActionButton);
-    setIsInputDisabled(showActionButton);
+    setIsInputDisabled(showActionButton || chatbot.answerStatus === "UNANSWERED_BY_BOT");
   }, [chatbot]);
 
   useEffect(() => {
@@ -154,6 +152,17 @@ const ChatPage: React.FC = () => {
       }, 0);
     }
   }, [contentList, page]);
+
+  useEffect(() => {
+    if (contentList.length > 0) {
+      const lastAnswer = contentList[contentList.length - 1];
+      setIsInputDisabled(lastAnswer.answerStatus === "UNANSWERED_BY_BOT");
+      setIsFirstQuestion(lastAnswer.answerStatus !== "UNANSWERED_BY_BOT");
+    } else {
+      setIsInputDisabled(false);
+      setIsFirstQuestion(true);
+    }
+  }, [contentList]);
 
   useEffect(() => {
     const handleScroll = () => {
