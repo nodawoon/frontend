@@ -33,13 +33,16 @@ const Page: React.FC = () => {
       if (user.userId !== 0) {
         await dispatch(loadChatState(user.userId));
       }
-      if (exist) {
-        setIsExist(true);
-      } else {
-        setIsExist(false);
-      }
     })();
-  }, [dispatch, exist, user.userId]);
+  }, [dispatch, user.userId]);
+
+  useEffect(() => {
+    if (exist) {
+      setIsExist(true);
+    } else {
+      setIsExist(false);
+    }
+  }, [exist]);
 
   const handleChange = (value: string) => {
     setSendMessage(value);

@@ -36,7 +36,7 @@ const Page: React.FC = () => {
         setIsExist(false);
       }
     })();
-  }, [dispatch, user.userId]);
+  }, [exist]);
 
   const handleLoadMore = async () => {
     await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));
