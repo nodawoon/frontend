@@ -26,7 +26,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       <div className={`${isUser ? "bg-primary text-white" : "bg-white"} p-2 rounded-md max-w-sm`}>
         <p className="font-light text-sm whitespace-pre-wrap">{text}</p>
       </div>
-      {!isUser && answerStatus === "UNANSWERED_BY_BOT" && showActionButtons && (
+      {!isUser && answerStatus === "NONE" && showActionButtons && (
         <div className="mt-1 flex space-x-1 justify-end">
           {chatbot.limitCount > 0 && (
             <button onClick={onRetry} className="bg-white px-2 py-1 rounded-md text-sm font-light">
