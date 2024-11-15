@@ -12,10 +12,12 @@ import {
 import { statisticsReducer } from "@/slice/statisticsSlice";
 import { chatbotReducer } from "@/slice/chatbotSlice";
 import { chatHistoryReducer } from "@/slice/chatHistorySlice";
+import { imageReducer } from "@/slice/imageSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    image: imageReducer,
     question: questionReducer,
     surveyResponse: surveyResponseReducer,
     respondents: respondentReducer,
