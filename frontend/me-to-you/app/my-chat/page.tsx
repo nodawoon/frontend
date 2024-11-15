@@ -3,7 +3,7 @@
 import Loading from "@/components/common/Loading";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { getMyChatRoom } from "@/services/my-chat";
-import Image from "next/image";
+import Image, { ImageLoaderProps } from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -14,6 +14,10 @@ const Page = () => {
   const [page, setPage] = useState(0);
 
   const router = useRouter();
+
+  const imageLoader = ({ src, width, quality }: ImageLoaderProps) => {
+    return `${src}?w=${width}&q=${quality || 50}`;
+  };
 
   const handleMoveChatRoom = (userId: number, nickname: string) => {
     router.push(`/chat/${userId}?nickname=${nickname}`);
@@ -90,8 +94,9 @@ const Page = () => {
                 </div>
                 <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-light-gray flex items-center justify-center">
                   <Image
+                    loader={imageLoader}
                     src={
-                      chat.profileImageUrl?.startsWith("http")
+                      chat.profileImageUrl?.startsWith("https")
                         ? chat.profileImageUrl
                         : "/images/character.svg"
                     }
