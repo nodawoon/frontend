@@ -3,7 +3,8 @@ import Header from "@/components/layout/Header";
 import Image from "next/image";
 import ReduxProvider from "./ReduxProvider";
 import { AuthProvider } from "@/context/AuthContext";
-import { GoogleTagManager } from "@next/third-parties/google";
+// import { GoogleTagManager } from "@next/third-parties/google";
+import Script from "next/script";
 
 export const metadata: { description: string; title: string } = {
   title: "너에게 난",
@@ -17,7 +18,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="h-[100%]">
-      <GoogleTagManager gtmId="G-DJ3DYN2Y7M" />
+      {/*<GoogleTagManager gtmId="G-DJ3DYN2Y7M" />*/}
+      <head>
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=G-DJ3DYN2Y7M`}
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-DJ3DYN2Y7M');
+            `,
+          }}
+        />
+        <title>{metadata.title}</title>
+      </head>
       <body className="h-[100%] desktop:flex overflow-y-hidden">
         <ReduxProvider>
           <AuthProvider>
