@@ -120,7 +120,8 @@ const ProfilePage = () => {
   }, [dispatch, isEdit]);
 
   return (
-    <div className="w-[90%] mx-auto flex flex-col items-center gap-8 mt-8">
+    <div className="w-[90%] h-[92vh] flex flex-col items-center gap-8">
+      <div></div>
       <div className="flex flex-col">
         {isEdit ? (
           <ProfileImageUploader
@@ -170,7 +171,7 @@ const ProfilePage = () => {
 
       <Button
         size="lg"
-        className={`w-full ${isEdit ? "mt-[152px]" : "mt-44"}`}
+        className={`w-full ${isEdit ? "mt-28" : "mt-32"} mb-5`}
         onClick={handleClickSaveButton}
       >
         {isEdit ? "저장하기" : "수정하기"}
