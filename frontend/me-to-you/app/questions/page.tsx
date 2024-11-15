@@ -93,7 +93,7 @@ const Page = () => {
         onLoad={handleKakaoInit}
       />
       <div className="bg-light-gray text-center relative">
-        <p className="px-10 py-8 text-sm font-bold">
+        <p className="px-10 py-8 desktop:text-lg mobile:text-sm font-bold">
           설문이 생성되었어요. 친구들에게 공유해보세요!
         </p>
         <SurveyCard />

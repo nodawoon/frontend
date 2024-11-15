@@ -12,7 +12,9 @@ interface shareProps {
 const ShareLink = ({ handleKakaoShare, handleUrlShare, handleQRShare }: shareProps) => {
   return (
     <div className="text-center">
-      <p>설문이 생성되었어요! 지인들에게 공유해보세요:{")"}</p>
+      <p className="mobile:text-sm desktop:text-lg">
+        설문이 생성되었어요! 지인들에게 공유해보세요:{")"}
+      </p>
       <div className="flex justify-center py-4">
         <button className="mr-2" onClick={handleKakaoShare}>
           <Image

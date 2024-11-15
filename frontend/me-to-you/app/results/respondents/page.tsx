@@ -19,7 +19,7 @@ const Page: React.FC = () => {
   const combinedClassName: string = "h-auto rounded-xl p-1 bg-white hover:bg-gray w-full";
 
   return (
-    <div className="w-full flex flex-col items-center justify-start min-h-screen bg-light-gray">
+    <div className="w-full flex flex-col items-center justify-start min-h-[92vh] bg-light-gray">
       <div className="flex flex-col w-[90%]">
         <p className="text-[23px] mt-10 mb-5 w-full">내 질문에 응답한 사람들</p>
         <div className="relative flex flex-wrap gap-3">

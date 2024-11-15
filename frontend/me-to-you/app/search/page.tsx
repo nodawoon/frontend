@@ -75,7 +75,7 @@ const Page = () => {
   };
 
   return (
-    <div className="bg-light-gray h-[92vh] w-full overflow-hidden">
+    <div className="bg-light-gray min-h-[92vh] w-full overflow-hidden">
       <div className="w-[90%] ml-auto mr-auto py-6">
         <input
           placeholder="친구의 닉네임을 입력해주세요."

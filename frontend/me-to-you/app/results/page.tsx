@@ -50,11 +50,11 @@ const Page: React.FC = () => {
     );
   });
   return (
-    <div className="w-full flex flex-col items-center justify-center min-h-screen">
+    <div className="w-full flex flex-col items-center justify-center min-h-[92vh]">
       <div className="bg-white w-full flex flex-col gap-7 mt-8 mb-14">
-        <StatisticsCard type="first" />
-        <StatisticsCard type="keyword" />
-        <StatisticsCard type="time" />
+        <StatisticsCard type="first" userNickname={user.nickname} />
+        <StatisticsCard type="keyword" userNickname={user.nickname} />
+        <StatisticsCard type="time" userNickname={user.nickname} />
       </div>
       <div className="w-full bg-light-gray">
         <div className="flex flex-col w-[85%] bg-light-gray mx-auto">
@@ -88,8 +88,10 @@ const Page: React.FC = () => {
       </div>
       <div className="bg-light-gray w-full py-5">
         <div className="flex flex-col w-[85%] mx-auto">
-          <p className="text-[20px] my-1">사람들은 {user.nickname}님을 어떻게 생각할까요?</p>
-          <p className="text-medium-gray font-light text-sm mb-4">
+          <p className="text-[20px] my-1 xs-mobile:text-lg">
+            사람들은 {user.nickname}님을 어떻게 생각할까요?
+          </p>
+          <p className="text-medium-gray font-light text-sm mb-4 xs-mobile:text-xs">
             질문을 클릭하면 질문별로 응답을 확인할 수 있어요!
           </p>
           {surveyList}

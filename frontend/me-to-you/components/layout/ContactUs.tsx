@@ -18,7 +18,7 @@ const profiles: Profile[] = [
 
 const ContactUs: React.FC = () => {
   return (
-    <div>
+    <div className="w-[90%] ml-auto mr-auto">
       <p className="text-xl font-bold mb-10 mt-10">
         Team <span className="text-primary">다운 없는 아름다운</span>
       </p>
@@ -33,10 +33,10 @@ const ContactUs: React.FC = () => {
               className="object-contain"
             />
             <div>
-              <p className="font-medium">
+              <p className="font-medium xs-mobile:text-sm">
                 {name} ({ping})
               </p>
-              <p className="text-sm font-light">{role}</p>
+              <p className="text-sm font-light xs-mobile:text-[10px]">{role}</p>
             </div>
           </div>
         ))}

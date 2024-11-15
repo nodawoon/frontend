@@ -25,7 +25,7 @@ const SurveyCard = () => {
       {survey.questions.slice(0, 10).map(question => (
         <div key={question.id} className="mb-6 border border-none p-4 rounded-2xl bg-white">
           <div
-            className="flex justify-between items-center"
+            className="flex justify-between items-center text-start"
             onClick={() => handleClickOpen(question.id.toString())}
           >
             <p
@@ -90,7 +90,7 @@ const SurveyCard = () => {
                 openQuestionId === question.id.toString()
                   ? "scale-y-100 opacity-100"
                   : "scale-y-0 opacity-0 h-0"
-              }`}
+              } mt-2`}
               style={{ transformOrigin: "top", overflow: "hidden" }}
             >
               <div className="">

@@ -170,7 +170,7 @@ const Page = () => {
             </div>
             {questions.questions.map(question => (
               <div key={question.id}>
-                <div className="mt-8 font-bold text-xl">
+                <div className="mt-8 font-bold text-xl flex justify-start items-center">
                   {question.emoji} {question.question}
                 </div>
                 <div className="mt-2.5">

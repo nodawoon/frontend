@@ -25,7 +25,9 @@ const Page: React.FC = () => {
     (async () => {
       await dispatch(loadRespondentDetail(param.respondentId));
       await dispatch(loadUser());
-      await dispatch(loadRespondentList());
+      if (resList[0]?.respondentNickname === undefined) {
+        await dispatch(loadRespondentList());
+      }
     })();
   }, [dispatch]);
 
@@ -49,7 +51,7 @@ const Page: React.FC = () => {
   }
 
   return (
-    <div className="w-full flex flex-col items-center justify-start min-h-screen">
+    <div className="w-full flex flex-col items-center justify-start min-h-[92vh]">
       <div className="flex flex-col w-[90%]">
         <ProfileCard className="mt-5 mb-7 w-full" name={name} date={list[0]?.createdDate} />
         <div className="relative flex flex-wrap gap-3 mb-10">

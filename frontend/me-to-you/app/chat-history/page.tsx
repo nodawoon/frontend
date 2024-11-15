@@ -6,30 +6,37 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadChatHistory, loadChatState } from "@/slice/chatHistorySlice";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { loadUser } from "@/slice/userSlice";
 
 const Page: React.FC = () => {
   const [current, setCurrent] = useState(-1);
   const [isExist, setIsExist] = useState(false);
   const { content, last, number, isLoading } = useAppSelector(state => state.chatHistory);
+  const { user } = useAppSelector(state => state.user);
   const { exist } = useAppSelector(state => state.chatHistory);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
+      if (user.userId === 0) {
+        await dispatch(loadUser());
+      }
       await dispatch(loadChatHistory({ status: "answer-bot", page: 0 }));
+      if (user.userId !== 0) {
+        await dispatch(loadChatState(user.userId));
+      }
     })();
-  }, [dispatch]);
+  }, [dispatch, user.userId]);
 
   useEffect(() => {
     (async () => {
-      await dispatch(loadChatState());
       if (exist) {
         setIsExist(true);
       } else {
         setIsExist(false);
       }
     })();
-  }, [dispatch]);
+  }, [exist]);
 
   const handleLoadMore = async () => {
     await dispatch(loadChatHistory({ status: "answer-bot", page: number + 1 }));

@@ -126,9 +126,15 @@ const PieChart: React.FC = () => {
           <div key={idx} className="flex w-full justify-between my-1">
             <div className="flex gap-1 items-center mr-1">
               <div className={`${bgColors[idx]} w-2 h-2 rounded-full`}></div>
-              <p className="text-light text-sm">{obj.response}</p>
+              <p
+                className={`text-light text-sm xs-mobile:text-[9px] truncate max-w-[120px] xs-mobile:max-w-[60px] mobile:text-sm`}
+              >
+                {obj.response}
+              </p>
             </div>
-            <p className="text-light text-sm">{obj.percent.toFixed(1)}%</p>
+            <p className="text-light text-sm xs-mobile:text-[9px] ml-1">
+              {obj.percent.toFixed(1)}%
+            </p>
           </div>
         ))}
       </div>
