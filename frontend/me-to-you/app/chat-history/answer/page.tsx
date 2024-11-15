@@ -65,6 +65,7 @@ const Page: React.FC = () => {
         title: "학습 완료",
         text: "나의 챗봇이 해당 답변을 학습했어요!",
         icon: "success",
+        confirmButtonColor: "#5498FF",
         confirmButtonText: "확인",
       });
     } else if (key === "remove") {
@@ -73,6 +74,7 @@ const Page: React.FC = () => {
         title: "학습 취소",
         text: "나의 챗봇이 해당 답변을 잊었어요!",
         icon: "success",
+        confirmButtonColor: "#5498FF",
         confirmButtonText: "확인",
       });
     }
