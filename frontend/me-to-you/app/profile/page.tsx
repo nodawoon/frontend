@@ -13,6 +13,7 @@ import SelectInput from "@/components/common/SelectInput";
 import ProfileImageUploader from "@/components/profile/ProfileImageUploader";
 import { useCheckNickName } from "@/hooks/useCheckNickName";
 import Swal from "sweetalert2";
+import { addImage } from "@/slice/imageSlice";
 
 interface InputState {
   nickname: string;
@@ -22,6 +23,7 @@ interface InputState {
 const ProfilePage = () => {
   const dispatch: AppDispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
+  const { file } = useSelector((state: RootState) => state.image);
 
   const [isEdit, setIsEdit] = useState(false);
   const [inputs, setInputs] = useState<InputState>({
@@ -30,6 +32,7 @@ const ProfilePage = () => {
     profileImage: user.profileImage ? user.profileImage : "",
   });
   const [uploadImage, setUploadImage] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string>(user.profileImage || "");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const { validationText, validationNickname, debouncedCheckNickname } = useCheckNickName();
@@ -61,19 +64,14 @@ const ProfilePage = () => {
     const files = e.target.files;
     if (files && files.length > 0) {
       const validFile = await checkFileValid(files[0]);
-      if (validFile) setUploadImage(validFile);
+      if (validFile) {
+        setUploadImage(validFile);
+        setProfileImagePreview(URL.createObjectURL(validFile));
+      }
     }
   };
-
   const handleClickProfileImage = async () => {
-    await Swal.fire({
-      icon: "warning",
-      text: "프로필 사진 편집은 잠시만 기다려주세요! (개발 중...🛠)",
-      confirmButtonColor: "#5498FF",
-      confirmButtonText: "닫기",
-    });
-    return;
-    // TODO: fileInputRef.current?.click();
+    fileInputRef.current?.click();
   };
 
   const handleClickSaveButton = useCallback(async () => {
@@ -83,41 +81,62 @@ const ProfilePage = () => {
     }
 
     if (isEdit) {
-      const result = await dispatch(
-        editUser({
-          nickname: inputs.nickname,
-          mbti: inputs.mbti,
-          profileImage: inputs.profileImage,
-        })
-      );
+      let newProfileImage = profileImagePreview;
+      let response = null;
 
-      if (result.meta.requestStatus === "fulfilled") {
-        await Swal.fire({
-          icon: "success",
-          text: "회원 정보를 수정했습니다!",
-          confirmButtonColor: "#5498FF",
-          confirmButtonText: "닫기",
-        });
-        setIsEdit(false);
-      } else {
-        await Swal.fire({
-          icon: "error",
-          text: "회원 정보 수정에 실패했습니다! ㅠㅠ",
-          confirmButtonColor: "#5498FF",
-          confirmButtonText: "닫기",
-        });
+      if (uploadImage) {
+        const formData = new FormData();
+        formData.append("file", uploadImage);
+
+        response = await dispatch(addImage(formData));
+      }
+      if (response && response.meta.requestStatus === "fulfilled") {
+        if (file) {
+          newProfileImage = file;
+          const result = await dispatch(
+            editUser({
+              nickname: inputs.nickname,
+              mbti: inputs.mbti,
+              profileImage: newProfileImage,
+            })
+          );
+
+          if (result.meta.requestStatus === "fulfilled") {
+            await Swal.fire({
+              icon: "success",
+              text: "회원 정보를 수정했습니다!",
+              confirmButtonColor: "#5498FF",
+              confirmButtonText: "닫기",
+            });
+            setIsEdit(false);
+            setUploadImage(null);
+          } else {
+            await Swal.fire({
+              icon: "error",
+              text: "회원 정보 수정에 실패했습니다! ㅠㅠ",
+              confirmButtonColor: "#5498FF",
+              confirmButtonText: "닫기",
+            });
+          }
+        }
       }
     }
-  }, [dispatch, isEdit, inputs]);
+  }, [isEdit, profileImagePreview, uploadImage, dispatch, file, inputs.nickname, inputs.mbti]);
+
+  useEffect(() => {
+    if (!inputs.nickname) dispatch(loadUser());
+  }, [dispatch, inputs.nickname, isEdit]);
+
+  useEffect(() => {
+    dispatch(loadUser()).then(() => {
+      setProfileImagePreview(user.profileImage || "");
+    });
+  }, [dispatch, isEdit, user.profileImage]);
 
   useEffect(() => {
     validationNickname(inputs.nickname);
     if (user.nickname !== inputs.nickname) debouncedCheckNickname(inputs.nickname);
   }, [debouncedCheckNickname, inputs.nickname, user.nickname, validationNickname]);
-
-  useEffect(() => {
-    dispatch(loadUser());
-  }, [dispatch, isEdit]);
 
   return (
     <div className="w-[90%] h-[92vh] flex flex-col items-center gap-8">
@@ -126,7 +145,7 @@ const ProfilePage = () => {
         {isEdit ? (
           <ProfileImageUploader
             handleClickProfileImage={handleClickProfileImage}
-            profileImage={uploadImage ? URL.createObjectURL(uploadImage) : inputs.profileImage}
+            profileImage={profileImagePreview}
             fileInputRef={fileInputRef}
             handleChangeImageFiles={handleChangeImageFiles}
           />
