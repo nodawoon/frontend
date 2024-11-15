@@ -32,7 +32,8 @@ const CardButtonList: React.FC<CardButtonListProps> = ({ titleList, textList }) 
       router.push("/chat-history");
     }
     if (exist === undefined) {
-      const updatedExist = await getChatState(user.userId);
+      const response = await getChatState(user.userId);
+      const updatedExist = response.data.data.exist;
 
       if (updatedExist) {
         setChatURL("/chat-history");
