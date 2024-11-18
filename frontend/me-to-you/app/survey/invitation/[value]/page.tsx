@@ -48,7 +48,7 @@ const Page = () => {
 
   return (
     <div
-      className={`overflow-y-hidden flex justify-center items-center ${screenSize === "large" ? "mt-48" : screenSize === "medium" ? "mt-32" : "mt-16"}`}
+      className={`overflow-y-hidden flex justify-center items-center ${screenSize === "large" ? "mt-48" : "mt-32"}`}
     >
       <div className="flex flex-col h-full justify-center items-center max-w-md px-4">
         <Image
@@ -70,7 +70,7 @@ const Page = () => {
           <p>내가 본 친구의 모습을 설문을 통해</p>
           <p>친구에게 알려줄 수 있어요.</p>
         </div>
-        <Link className="mt-40" href={`../nickname/${param.value}`}>
+        <Link className="mt-[40%]" href={`../nickname/${param.value}`}>
           <Button size="lg">닉네임 설정하러 가기</Button>
         </Link>
       </div>

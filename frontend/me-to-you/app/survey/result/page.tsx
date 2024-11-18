@@ -11,7 +11,7 @@ const Page = () => {
   const { isLoggedIn } = useContext(AuthContext);
   return (
     <div className="overflow-y-hidden">
-      <div className="flex flex-col min-h-[90%] justify-center items-center mt-[25%]">
+      <div className="flex flex-col min-h-[90%] justify-center items-center mt-[30%]">
         <Image
           src="/images/character.svg"
           alt="로고"

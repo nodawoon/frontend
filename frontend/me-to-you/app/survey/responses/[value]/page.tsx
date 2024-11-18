@@ -135,13 +135,11 @@ const Page = () => {
     const selectedOptions = existingResponse ? existingResponse.response : [];
     const isOptionSelected = selectedOptions.includes(option);
 
-    if (!isOptionSelected && selectedOptions.length >= 12) {
-      return;
-    }
-
     const updatedResponse = isOptionSelected
       ? selectedOptions.filter(opt => opt !== option)
-      : [...selectedOptions, option];
+      : selectedOptions.length < 12
+        ? [...selectedOptions, option]
+        : selectedOptions;
 
     if (questionId === 2) {
       setSelectedOptionsCount(updatedResponse.length);
@@ -218,20 +216,28 @@ const Page = () => {
                       ))}
                     </div>
                   ) : question.type === "multi_select" ? (
-                    <div className="grid grid-cols-4 gap-2 mt-2">
-                      {question.options?.map((option, idx) => (
-                        <SelectButton
-                          size="sm"
-                          key={idx}
-                          isSelected={(
-                            responseList.find(response => response.surveyQuestionId === question.id)
-                              ?.response || []
-                          ).includes(option)}
-                          onClick={() => handlerMultiSelectAnswer(question.id, option)}
-                        >
-                          {option}
-                        </SelectButton>
-                      ))}
+                    <div className="grid grid-cols-4 gap-2 mt-2 xs-mobile:grid-cols-3">
+                      {question.options?.map((option, idx) => {
+                        const existingResponse = responseList.find(
+                          response => response.surveyQuestionId === question.id
+                        );
+                        const selectedOptions = existingResponse ? existingResponse.response : [];
+                        const isOptionSelected = selectedOptions.includes(option);
+
+                        const isDisabled = !isOptionSelected && selectedOptions.length >= 12;
+
+                        return (
+                          <SelectButton
+                            size="sm"
+                            key={idx}
+                            isSelected={isOptionSelected}
+                            onClick={() => handlerMultiSelectAnswer(question.id, option)}
+                            disabled={isDisabled}
+                          >
+                            {option}
+                          </SelectButton>
+                        );
+                      })}
                     </div>
                   ) : question.type === "short_answer" ? (
                     <div className="mt-2">
