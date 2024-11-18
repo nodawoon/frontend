@@ -139,7 +139,7 @@ const ProfilePage = () => {
   }, [debouncedCheckNickname, inputs.nickname, user.nickname, validationNickname]);
 
   return (
-    <div className="w-[90%] h-[92vh] flex flex-col items-center gap-8">
+    <div className="w-[90%] m-auto h-[92vh] flex flex-col items-center justify-around">
       <div></div>
       <div className="flex flex-col">
         {isEdit ? (
@@ -165,7 +165,7 @@ const ProfilePage = () => {
         <p className="text-lg font-bold w-1/3 ml-2">닉네임</p>
         {isEdit ? (
           <TextInput
-            placeholder="변경 할 닉네임을 입력해주세요(2-8자)"
+            placeholder="닉네임을 입력해주세요(2-8자)"
             value={inputs.nickname === user.nickname ? user.nickname : inputs.nickname}
             handleChangeInput={handleChangeNickname}
             validationMessage={validationText}
@@ -188,11 +188,7 @@ const ProfilePage = () => {
         )}
       </div>
 
-      <Button
-        size="lg"
-        className={`w-full ${isEdit ? "mt-28" : "mt-32"} mb-5`}
-        onClick={handleClickSaveButton}
-      >
+      <Button size="lg" className="w-full  mt-6 mb-6" onClick={handleClickSaveButton}>
         {isEdit ? "저장하기" : "수정하기"}
       </Button>
     </div>

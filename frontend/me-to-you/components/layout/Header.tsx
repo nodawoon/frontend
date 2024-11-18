@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, Suspense } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
 import { PAGE_CONFIG, PageConfig } from "@/constants/pageConfig";
 import { ROUTES } from "@/constants/routes";
@@ -11,7 +11,7 @@ const Header: React.FC = () => {
   const [isContactUsOpen, setIsContactUsOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState("");
   const [scrollY, setScrollY] = useState(0);
-
+  const router = useRouter();
   const pathname = usePathname();
 
   const getPageConfig = (path: string): PageConfig => {
@@ -67,9 +67,15 @@ const Header: React.FC = () => {
         {!currentPageConfig.hideBackButton && !isMenuOpen && (
           <span
             className="material-symbols-rounded"
-            onClick={() => {
-              window.history.back();
-            }}
+            onClick={
+              pathname === "/chat-history"
+                ? () => {
+                    window.history.back();
+                  }
+                : () => {
+                    router.push("/");
+                  }
+            }
           >
             arrow_back_ios
           </span>
