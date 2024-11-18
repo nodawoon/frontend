@@ -68,7 +68,7 @@ const Header: React.FC = () => {
           <span
             className="material-symbols-rounded"
             onClick={
-              pathname === "/chat-history"
+              !pathname.startsWith("/chat-history")
                 ? () => {
                     window.history.back();
                   }

@@ -36,7 +36,7 @@ const Page = () => {
     const maxLenValue = maxLen(nickname);
 
     if (nickname.length < minLen) {
-      setValidation("닉네임은 최소 2자 이상이어야 합니다.");
+      setValidation("2글자 이상 입력");
     } else if (nickname.length > maxLenValue) {
       setValidation(`닉네임은 최대 ${maxLenValue}자 이하여야 합니다.`);
     } else {
@@ -73,7 +73,7 @@ const Page = () => {
       }`}
     >
       <div className="mt-10">
-        <p className="font-bold text-[24px] mb-3">
+        <p className="font-bold text-[24px] xs-mobile:text-[22px] mb-3">
           <span className="text-primary">친구</span>에게 보일 닉네임을 설정하세요!
         </p>
         <TextInput
@@ -88,12 +88,12 @@ const Page = () => {
       {validation === "" ? (
         <Link
           href={{ pathname: `../responses/${param.value}`, query: { nickname: nickname } }}
-          className="w-full max-w-md mx-auto absolute bottom-5 left-0 right-0 text-center"
+          className="w-full max-w-md text-center mt-auto"
         >
           <Button size="lg">설문 입력하러 가기</Button>
         </Link>
       ) : (
-        <div className="w-full max-w-md mx-auto absolute bottom-5 left-0 right-0 text-center">
+        <div className="w-full max-w-md text-center mt-auto">
           <Button size="lg" disabled={true}>
             {validation}
           </Button>
