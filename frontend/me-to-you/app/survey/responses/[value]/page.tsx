@@ -272,12 +272,12 @@ const Page = () => {
         )}
       </div>
 
-      <div className="flex justify-between items-center ">
+      <div className="flex justify-between items-center pb-5">
         {questionState > 1 && (
           <Button
             size="md"
             option="secondary"
-            className="w-[45%]"
+            className="w-[45%] z-10"
             onClick={() => handlerPrevQuestion()}
           >
             이전
@@ -286,7 +286,7 @@ const Page = () => {
         {questionState < 10 ? (
           <Button
             size="md"
-            className={`w-${questionState > 1 ? "[45%]" : "full"}`}
+            className={`w-${questionState > 1 ? "[45%]" : "full"} z-10`}
             onClick={() => handlerNextQuestion()}
             disabled={
               questionState === 2
@@ -298,7 +298,12 @@ const Page = () => {
             다음
           </Button>
         ) : (
-          <Button size="md" className="w-[45%]" onClick={() => handlerSubmit()} disabled={isSubmit}>
+          <Button
+            size="md"
+            className="w-[45%] z-10"
+            onClick={() => handlerSubmit()}
+            disabled={isSubmit}
+          >
             제출
           </Button>
         )}
