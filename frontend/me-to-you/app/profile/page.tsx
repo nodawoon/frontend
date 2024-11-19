@@ -91,34 +91,33 @@ const ProfilePage = () => {
         response = await dispatch(addImage(formData));
       }
       if (response && response.meta.requestStatus === "fulfilled") {
-        if (file) {
-          newProfileImage = file;
-          const result = await dispatch(
-            editUser({
-              nickname: inputs.nickname,
-              mbti: inputs.mbti,
-              profileImage: newProfileImage,
-            })
-          );
+        if (file) newProfileImage = file;
+      }
 
-          if (result.meta.requestStatus === "fulfilled") {
-            await Swal.fire({
-              icon: "success",
-              text: "회원 정보를 수정했습니다!",
-              confirmButtonColor: "#5498FF",
-              confirmButtonText: "닫기",
-            });
-            setIsEdit(false);
-            setUploadImage(null);
-          } else {
-            await Swal.fire({
-              icon: "error",
-              text: "회원 정보 수정에 실패했습니다! ㅠㅠ",
-              confirmButtonColor: "#5498FF",
-              confirmButtonText: "닫기",
-            });
-          }
-        }
+      const result = await dispatch(
+        editUser({
+          nickname: inputs.nickname,
+          mbti: inputs.mbti,
+          profileImage: newProfileImage,
+        })
+      );
+
+      if (result.meta.requestStatus === "fulfilled") {
+        await Swal.fire({
+          icon: "success",
+          text: "회원 정보를 수정했습니다!",
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
+        setIsEdit(false);
+        setUploadImage(null);
+      } else {
+        await Swal.fire({
+          icon: "error",
+          text: "회원 정보 수정에 실패했습니다! ㅠㅠ",
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
       }
     }
   }, [isEdit, profileImagePreview, uploadImage, dispatch, file, inputs.nickname, inputs.mbti]);

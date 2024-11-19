@@ -35,5 +35,11 @@ export const useCheckNickName = () => {
     [dispatch]
   );
 
+  // const debouncedCheckNickname = (nickname: string) => {
+  //   if (nickname.length >= 2 && nickname.length <= 7) {
+  //     dispatch(checkNicknameDuplication(nickname));
+  //   }
+  // };
+
   return { validationText, validationNickname, debouncedCheckNickname };
 };
