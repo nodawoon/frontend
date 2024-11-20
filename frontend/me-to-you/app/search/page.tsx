@@ -17,13 +17,18 @@ interface User {
 const Page = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const [keyword, setKeyword] = useState<string>("");
+  const [text, setText] = useState("검색 결과가 없습니다.");
   const router = useRouter();
   const debounceSearchText = useSearchNickname(keyword, 300);
   const [isSearch, setIsSearch] = useState<boolean>(false);
-
   const { exist } = useSelector((state: RootState) => state.chatHistory);
 
   const getUserName = async (keyword: string) => {
+    if (!/^[가-힣a-zA-Z0-9\u318D·\s]*$/.test(keyword)) {
+      setText("올바른 문자를 입력해주세요. (특수 문자 사용 불가)");
+      return;
+    }
+    setText("검색 결과가 없습니다.");
     try {
       const response = await getUserNickname(keyword);
       const data = response.data;
@@ -111,7 +116,7 @@ const Page = () => {
               ))}
             </ul>
           ) : isSearch ? (
-            <p className="ml-2">검색 결과가 없습니다.</p>
+            <p className="ml-2">{text}</p>
           ) : (
             debounceSearchText.length > 0 && (
               <p className="text-sm w-full text-center mt-2">검색 결과가 없습니다.</p>

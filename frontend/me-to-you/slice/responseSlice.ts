@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: SurveyResponseState = {
   shareUrl: "",
   respondentNickname: "",
-  surveyResponseRequestList: [],
+  surveyResponseRequestList: Array(10),
 };
 
 const submitSurveyResponse = createAsyncThunk(
@@ -27,13 +27,13 @@ const surveyResponseSlice = createSlice({
     },
     addResponse: (state, action: PayloadAction<SurveyResponse>) => {
       const existingResponseIndex = state.surveyResponseRequestList.findIndex(
-        response => response.surveyQuestionId === action.payload.surveyQuestionId
+        response => response?.surveyQuestionId === action.payload.surveyQuestionId
       );
 
       if (existingResponseIndex !== -1) {
         state.surveyResponseRequestList[existingResponseIndex] = action.payload;
       } else {
-        state.surveyResponseRequestList.push(action.payload);
+        state.surveyResponseRequestList[action.payload.surveyQuestionId - 1] = action.payload;
       }
     },
     removeResponse: state => {

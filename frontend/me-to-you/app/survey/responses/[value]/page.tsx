@@ -48,7 +48,7 @@ const Page = () => {
 
   useEffect(() => {
     const existingResponse = responseList.find(
-      response => response.surveyQuestionId === questionState
+      response => response?.surveyQuestionId === questionState
     );
 
     if (!existingResponse) {
@@ -194,7 +194,7 @@ const Page = () => {
                             className="w-full text-left font-bold h-10 mt-[25px]"
                             isSelected={
                               responseList.find(
-                                response => response.surveyQuestionId === question.id
+                                response => response?.surveyQuestionId === question.id
                               )?.response[0] === option ||
                               (option === "직접 입력" && isCustomInputActive[question.id])
                             }
@@ -221,7 +221,7 @@ const Page = () => {
                     <div className="grid grid-cols-4 gap-2 mt-2 xs-mobile:grid-cols-3">
                       {question.options?.map((option, idx) => {
                         const existingResponse = responseList.find(
-                          response => response.surveyQuestionId === question.id
+                          response => response?.surveyQuestionId === question.id
                         );
                         const selectedOptions = existingResponse ? existingResponse.response : [];
                         const isOptionSelected = selectedOptions.includes(option);
@@ -249,7 +249,7 @@ const Page = () => {
                           handlerSingleChoiceAnswer(question.id, e.target.value)
                         }
                         value={
-                          responseList.find(response => response.surveyQuestionId === question.id)
+                          responseList.find(response => response?.surveyQuestionId === question.id)
                             ?.response[0] || ""
                         }
                         maxLength={25}
@@ -262,7 +262,7 @@ const Page = () => {
                         maxLength={500}
                         onChange={e => handlerSingleChoiceAnswer(question.id, e.target.value)}
                         value={
-                          responseList.find(response => response.surveyQuestionId === question.id)
+                          responseList.find(response => response?.surveyQuestionId === question.id)
                             ?.response[0] || ""
                         }
                       />
@@ -293,7 +293,7 @@ const Page = () => {
             disabled={
               questionState === 2
                 ? selectedOptionsCount < 3
-                : !responseList.find(response => response.surveyQuestionId === questionState)
+                : !responseList.find(response => response?.surveyQuestionId === questionState)
                     ?.response[0]
             }
           >

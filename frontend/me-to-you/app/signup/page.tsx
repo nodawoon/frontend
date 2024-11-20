@@ -130,22 +130,22 @@ const SignupPage: React.FC = () => {
       return;
     }
 
-    if (!validateBirthday(inputs.birthday)) {
-      await Swal.fire({
-        icon: "error",
-        text: MESSAGES.INVALID_DATE,
-        confirmButtonColor: "#5498FF",
-      });
-      handleInputChange("birthday", "");
-      return;
-    }
-
     if (inputs.nickname.length > 8 || inputs.nickname.length < 2) {
       await Swal.fire({
         icon: "error",
         text: MESSAGES.NICKNAME_LENGTH,
         confirmButtonColor: "#5498FF",
       });
+      return;
+    }
+
+    if (!validateBirthday(inputs.birthday) || inputs["birthday"][9] === undefined) {
+      await Swal.fire({
+        icon: "error",
+        text: MESSAGES.INVALID_DATE,
+        confirmButtonColor: "#5498FF",
+      });
+      handleInputChange("birthday", "");
       return;
     }
 

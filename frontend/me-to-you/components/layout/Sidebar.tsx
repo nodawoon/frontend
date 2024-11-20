@@ -133,7 +133,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         getUserNickname(value).then(res => {
           setNickname(res.data.data.nickname); // Nickname 인터페이스의 nickname 속성에 접근
-          console.info(res.data.data.nickname);
         });
       }
     };
@@ -146,32 +145,40 @@ const Sidebar: React.FC<SidebarProps> = ({
     </Suspense>
   ) : pathname.startsWith("/survey/responses") ? (
     <div className="flex flex-col gap-4 w-full h-screen pl-5 pt-14 absolute bg-white z-50">
-      {survey.questions.map(question => (
-        <button
-          key={question.id}
-          onClick={() => handleChangeQuestion(question.id)}
-          className={`text-lg ${questionNumber === question.id ? "font-bold" : ""} truncate-text mt-2 text-sm text-left`}
-        >
-          <div className="flex items-center gap-2">
-            <div className="w-[20px] h-[20px] flex-shrink-0">
-              {(question.id === 2 && responseList[question.id - 1]?.response.length >= 3) ||
-              (question.id !== 2 && responseList[question.id - 1]?.response.length > 0) ? (
-                <Image src="/images/check_circle.svg" width={20} height={20} alt="check" />
-              ) : (
-                <span className="invisible">
-                  <Image src="/images/check_circle.svg" width={20} height={20} alt="placeholder" />
-                </span>
-              )}
+      {survey.questions.map(question => {
+        if (question.id === 14 || question.id === 16) return;
+        return (
+          <button
+            key={question.id}
+            onClick={() => handleChangeQuestion(question.id)}
+            className={`text-lg ${questionNumber === question.id ? "font-bold" : ""} truncate-text mt-2 text-sm text-left`}
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-[20px] h-[20px] flex-shrink-0">
+                {(question.id === 2 && responseList[question.id - 1]?.response.length >= 3) ||
+                (question.id !== 2 && responseList[question.id - 1]?.response[0]?.length > 0) ? (
+                  <Image src="/images/check_circle.svg" width={20} height={20} alt="check" />
+                ) : (
+                  <span className="invisible">
+                    <Image
+                      src="/images/check_circle.svg"
+                      width={20}
+                      height={20}
+                      alt="placeholder"
+                    />
+                  </span>
+                )}
+              </div>
+              <span className="truncate">
+                {question.id}.{" "}
+                {question.question.startsWith("님")
+                  ? nickname + question.question
+                  : question.question}
+              </span>
             </div>
-            <span className="truncate">
-              {question.id}.{" "}
-              {question.question.startsWith("님")
-                ? nickname + question.question
-                : question.question}
-            </span>
-          </div>
-        </button>
-      ))}
+          </button>
+        );
+      })}
     </div>
   ) : id && pathname.startsWith(`/self-survey/${id}`) && !pathname.includes("result") ? (
     <div className="w-full h-[100%] overflow-y-auto scrollbar-hide px-2 pt-4 pb-20 bg-white z-50">
