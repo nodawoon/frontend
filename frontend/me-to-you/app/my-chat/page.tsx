@@ -80,7 +80,7 @@ const Page = () => {
             {chatData.content.map((chat, idx) => (
               <div
                 key={idx}
-                className="flex bg-white justify-between items-center rounded-md p-4 mt-2 cursor-pointer hover:bg-soft-gray"
+                className="flex bg-white justify-between items-center rounded-md p-4 mt-2 cursor-pointer hover:bg-[#f0f0f0]"
                 onClick={() =>
                   handleMoveChatRoom(chat.targetUserId, chat.nickname, chat.chatBotId, chat.isNew)
                 }

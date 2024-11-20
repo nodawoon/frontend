@@ -16,7 +16,8 @@ const Page: React.FC = () => {
       await dispatch(loadRespondentList());
     })();
   }, [dispatch]);
-  const combinedClassName: string = "h-auto rounded-xl p-1 bg-white hover:bg-gray w-full";
+  const combinedClassName: string =
+    "h-auto rounded-xl p-1 bg-white hover:bg-[#f0f0f0] w-full cursor-pointer";
 
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-[92vh] bg-light-gray">

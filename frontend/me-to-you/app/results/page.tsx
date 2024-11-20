@@ -37,7 +37,7 @@ const Page: React.FC = () => {
     surveyList.push(
       <div
         key={index}
-        className="flex rounded-md my-2 w-full h-16 mx-auto bg-white pl-4 pr-6 hover:bg-gray"
+        className="flex rounded-md my-2 w-full h-16 mx-auto bg-white pl-4 pr-6 hover:bg-[#f0f0f0] cursor-pointer"
         onClick={() => {
           nextPage(e.id);
         }}
@@ -70,7 +70,7 @@ const Page: React.FC = () => {
               <div className="text-gray mb-5">아직 응답자가 없어요...</div>
             ) : (
               <button
-                className="bg-white w-full h-14 rounded-md mb-10 hover:bg-gray"
+                className="bg-white w-full h-14 rounded-md mb-10 hover:bg-[#f0f0f0]"
                 onClick={() => {
                   router.push("results/respondents");
                 }}

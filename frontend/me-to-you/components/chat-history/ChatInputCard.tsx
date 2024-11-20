@@ -30,7 +30,7 @@ const ChatInputCard: React.FC<CardProps> = ({
         <span className={"text-md grow " + (index !== current ? "truncate" : "")}>{question}</span>
         <span
           className={
-            "material-symbols-rounded text-icon w-auto ml-1 " +
+            "material-symbols-rounded text-icon w-auto ml-1 cursor-pointer " +
             (state === "답변하기" ? "text-sm self-center text-center" : "h-6")
           }
           onClick={() => onClick(index, chatbotId)}

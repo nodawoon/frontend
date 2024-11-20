@@ -27,7 +27,10 @@ const ChatResultCard: React.FC<CardProps> = ({
       <p className="flex justify-between my-2 ml-2">
         <span>Q.&nbsp;</span>
         <span className={"text-md grow " + (index !== current ? "truncate" : "")}>{question}</span>
-        <span className="material-symbols-rounded text-icon w-6 ml-1" onClick={() => onClick()}>
+        <span
+          className="material-symbols-rounded text-icon w-6 ml-1 cursor-pointer"
+          onClick={() => onClick()}
+        >
           {"keyboard_arrow_" + state}
         </span>
       </p>

@@ -81,7 +81,7 @@ const CardButtonList: React.FC<CardButtonListProps> = ({ titleList, textList }) 
   return titleList.map((title, index) => (
     <Link
       href={getUrl(index + 1)}
-      className="my-1.5 min-w-full flex flex-col justify-center h-20 px-3.5 text-base text-black bg-white font-bold break-words rounded-lg hover:bg-soft-gray"
+      className="my-1.5 min-w-full flex flex-col justify-center h-20 px-3.5 text-base text-black bg-white font-bold break-words rounded-lg hover:bg-[#f0f0f0]"
       onClick={() => errorMessage(index + 1)}
       key={index}
     >

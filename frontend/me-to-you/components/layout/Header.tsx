@@ -66,7 +66,7 @@ const Header: React.FC = () => {
       <div className="flex justify-between items-center p-4">
         {!currentPageConfig.hideBackButton && !isMenuOpen && (
           <span
-            className="material-symbols-rounded"
+            className="material-symbols-rounded cursor-pointer"
             onClick={
               !pathname.startsWith("/chat-history")
                 ? () => {
@@ -82,7 +82,7 @@ const Header: React.FC = () => {
         )}
         {(currentPageConfig.hideBackButton || isMenuOpen) && <span />}
         <p className="text-base font-bold">{pageTitle}</p>
-        <span className="material-symbols-rounded" onClick={handleMenuClick}>
+        <span className="material-symbols-rounded cursor-pointer" onClick={handleMenuClick}>
           {isMenuOpen ? "close" : "menu"}
         </span>
       </div>

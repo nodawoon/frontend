@@ -151,21 +151,21 @@ const Page: React.FC = () => {
       </div>
       <div className="mt-6 text-gray flex w-[50%] justify-between text-sm align-end">
         <span
-          className={filterNum === 0 ? "text-primary font-bold" : ""}
+          className={"cursor-pointer " + (filterNum === 0 ? "text-primary font-bold" : "")}
           onClick={() => setFilterNum(0)}
         >
           전체
         </span>
 
         <span
-          className={filterNum === 1 ? "text-primary font-bold" : ""}
+          className={"cursor-pointer " + (filterNum === 1 ? "text-primary font-bold" : "")}
           onClick={() => setFilterNum(1)}
         >
           학습완료
         </span>
 
         <span
-          className={filterNum === 2 ? "text-primary font-bold" : ""}
+          className={"cursor-pointer " + (filterNum === 2 ? "text-primary font-bold" : "")}
           onClick={() => setFilterNum(2)}
         >
           학습미완료
@@ -205,7 +205,7 @@ const Page: React.FC = () => {
                     >
                       <span className="font-medium">완료된 학습</span>입니다. 취소하려면{" "}
                       <span
-                        className="text-pink font-medium"
+                        className="text-pink font-medium cursor-pointer"
                         onClick={() => createPrompt(e.chatBotId, "remove")}
                       >
                         취소
@@ -220,7 +220,7 @@ const Page: React.FC = () => {
                     >
                       이 대화를 챗봇에 추가 학습 시키시려면{" "}
                       <span
-                        className="text-primary font-medium"
+                        className="text-primary font-medium cursor-pointer"
                         onClick={() => createPrompt(e.chatBotId, "add")}
                       >
                         여기
