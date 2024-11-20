@@ -46,7 +46,8 @@ export default function RootLayout({
               <section>{children}</section>
             </section>
 
-            <section className="desktop:intro-section-desktop hidden">
+            {/*<section className="desktop:intro-section-desktop hidden">*/}
+            <section className="hidden">
               <div className="h-1/2"></div>
               <Image
                 src="/images/logo.svg"

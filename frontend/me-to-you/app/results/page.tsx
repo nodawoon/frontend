@@ -50,8 +50,8 @@ const Page: React.FC = () => {
     );
   });
   return (
-    <div className="w-full flex flex-col items-center justify-center min-h-[92vh]">
-      <div className="bg-white w-full flex flex-col gap-7 mt-8 mb-14">
+    <div className="w-full bg-light-gray flex flex-col items-center justify-center min-h-[92vh]">
+      <div className="w-full flex flex-col gap-7 mt-8 mb-14">
         <StatisticsCard type="first" userNickname={user.nickname} />
         <StatisticsCard type="keyword" userNickname={user.nickname} />
         <StatisticsCard type="time" userNickname={user.nickname} />
@@ -77,7 +77,7 @@ const Page: React.FC = () => {
               >
                 <p className="flex justify-between px-5">
                   <span className="text-[20px]">응답자별 결과 보기</span>
-                  <span className="self-center material-symbols-rounded text-icon text-[15px]">
+                  <span className="self-center material-symbols-rounded text-icon">
                     arrow_forward_ios
                   </span>
                 </p>
