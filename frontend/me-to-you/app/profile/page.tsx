@@ -94,6 +94,16 @@ const ProfilePage = () => {
         if (file) newProfileImage = file;
       }
 
+      if (!/^[가-힣a-zA-Z0-9\u318D·\s]*$/.test(inputs.nickname)) {
+        await Swal.fire({
+          icon: "error",
+          text: "올바른 닉네임을 입력해주세요!",
+          confirmButtonColor: "#5498FF",
+          confirmButtonText: "닫기",
+        });
+        return;
+      }
+
       const result = await dispatch(
         editUser({
           nickname: inputs.nickname,

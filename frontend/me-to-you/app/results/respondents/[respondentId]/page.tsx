@@ -93,7 +93,7 @@ const Page: React.FC = () => {
                       return (
                         <div
                           key={i}
-                          className="w-auto bg-soft-gray px-3 mr-3 my-1 rounded-md font-bold py-0.5 text-[14px]"
+                          className="w-auto bg-gray px-3 mr-3 my-1 rounded-md font-bold py-0.5 text-[14px]"
                         >
                           {e}
                         </div>
