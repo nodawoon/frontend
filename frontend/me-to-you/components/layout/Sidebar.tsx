@@ -84,11 +84,21 @@ const Sidebar: React.FC<SidebarProps> = ({
                 confirmButtonText: "닫기",
               });
             }
-            Swal.fire("다음에 또 오세요 :)", "", "success");
+            Swal.fire({
+              text: "다음에 또 오세요 :)",
+              title: "",
+              icon: "success",
+              confirmButtonColor: "#5498FF",
+            });
             router.push(ROUTES.LOGIN);
           })
           .catch(error => {
-            Swal.fire(`Error: ${error}`, "", "error");
+            Swal.fire({
+              text: `Error: ${error}`,
+              title: "",
+              icon: "error",
+              confirmButtonColor: "#5498FF",
+            });
           });
       }
     });

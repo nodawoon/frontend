@@ -77,6 +77,7 @@ const Page = () => {
         title: `작성하지 않은 답이 있어요.`,
         text: "작성하고 오세요!",
         icon: "warning",
+        confirmButtonColor: "#5498FF",
         showConfirmButton: true,
       });
       return;
@@ -88,6 +89,7 @@ const Page = () => {
       title: "설문 제출 성공!",
       text: "이 답변을 토대로, 챗봇이 생성될 거에요.",
       icon: "success",
+      confirmButtonColor: "#5498FF",
       showConfirmButton: true,
     }).then(() => {
       dispatch(clearResponses());

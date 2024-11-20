@@ -41,5 +41,5 @@ export const useCheckNickName = () => {
   //   }
   // };
 
-  return { validationText, validationNickname, debouncedCheckNickname };
+  return { validationText, validationNickname, debouncedCheckNickname, isNicknameExist };
 };

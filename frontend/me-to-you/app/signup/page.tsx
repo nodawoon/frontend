@@ -61,7 +61,8 @@ const SignupPage: React.FC = () => {
     mbti: "NONE",
   });
 
-  const { validationText, validationNickname, debouncedCheckNickname } = useCheckNickName();
+  const { validationText, validationNickname, debouncedCheckNickname, isNicknameExist } =
+    useCheckNickName();
   const dispatch = useDispatch<AppDispatch>();
   const { user, isFirst } = useSelector((state: RootState) => state.user);
   const router = useRouter();
@@ -119,6 +120,16 @@ const SignupPage: React.FC = () => {
       router.push(ROUTES.LOGIN);
     }
 
+    if (isNicknameExist) {
+      await Swal.fire({
+        icon: "error",
+        text: "닉네임이 중복됩니다.",
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      return;
+    }
+
     if (!validateBirthday(inputs.birthday)) {
       await Swal.fire({
         icon: "error",
@@ -166,7 +177,7 @@ const SignupPage: React.FC = () => {
       });
       router.push(ROUTES.HOME);
     }
-  }, [inputs, isFormValid, dispatch, user, handleInputChange, router]);
+  }, [inputs, isFormValid, dispatch, user, handleInputChange, router, isNicknameExist]);
 
   useEffect(() => {
     validationNickname(inputs.nickname);

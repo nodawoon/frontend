@@ -74,6 +74,7 @@ const Page = () => {
           title: `${response.surveyQuestionId}번 항목을 작성하지 않으셨습니다.`,
           text: "작성하고 오세요!",
           icon: "warning",
+          confirmButtonColor: "#5498FF",
           showConfirmButton: true,
         });
         return false;
@@ -89,6 +90,7 @@ const Page = () => {
         title: "설문 제출 성공!",
         text: "답변이 친구에게로 전달 될거에요.",
         icon: "success",
+        confirmButtonColor: "#5498FF",
         showConfirmButton: true,
       }).then(() => {
         router.push("/survey/result");
