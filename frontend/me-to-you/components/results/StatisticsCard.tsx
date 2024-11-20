@@ -16,7 +16,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({ type, userNickname }) =
         : userNickname + "님과 함께 보낼 수 있는 시간 🥰";
 
   return (
-    <div className="rounded-xl bg-light-gray w-[90%] h-80 m-auto flex flex-col justify-between p-8 items-center">
+    <div className="rounded-xl bg-white w-[90%] h-80 m-auto flex flex-col justify-between p-8 items-center">
       <p className="text-black font-bold text-lg text-center xs-mobile:text-base">{title}</p>
       {type === "first" ? <BarChart /> : type === "keyword" ? <PodiumChart /> : <PieChart />}
     </div>
