@@ -61,7 +61,7 @@ const SignupPage: React.FC = () => {
     mbti: "NONE",
   });
 
-  const { validationText, validationNickname, debouncedCheckNickname, isNicknameExist } =
+  const { validationText, validationNickname, debouncedCheckNickname, isNicknameExist, isCorrect } =
     useCheckNickName();
   const dispatch = useDispatch<AppDispatch>();
   const { user, isFirst } = useSelector((state: RootState) => state.user);
@@ -118,6 +118,16 @@ const SignupPage: React.FC = () => {
         confirmButtonText: "닫기",
       });
       router.push(ROUTES.LOGIN);
+    }
+
+    if (!isCorrect) {
+      await Swal.fire({
+        icon: "error",
+        text: MESSAGES.NICKNAME_CORRECT,
+        confirmButtonColor: "#5498FF",
+        confirmButtonText: "닫기",
+      });
+      return;
     }
 
     if (isNicknameExist) {
@@ -177,7 +187,7 @@ const SignupPage: React.FC = () => {
       });
       router.push(ROUTES.HOME);
     }
-  }, [inputs, isFormValid, dispatch, user, handleInputChange, router, isNicknameExist]);
+  }, [inputs, isFormValid, dispatch, user, handleInputChange, router, isNicknameExist, isCorrect]);
 
   useEffect(() => {
     validationNickname(inputs.nickname);

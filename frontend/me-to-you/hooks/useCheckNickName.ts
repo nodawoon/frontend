@@ -6,7 +6,7 @@ import { checkNicknameDuplication } from "@/slice/userSlice";
 
 export const useCheckNickName = () => {
   const [validationText, setValidationText] = useState<string>("");
-
+  const [isCorrect, setIsCorrect] = useState<boolean>(true);
   const dispatch = useDispatch<AppDispatch>();
   const { isNicknameExist } = useSelector((state: RootState) => state.user);
 
@@ -14,6 +14,8 @@ export const useCheckNickName = () => {
     (nickname: string) => {
       if (!/^[가-힣a-zA-Z0-9\u318D·\s]*$/.test(nickname)) {
         setValidationText("올바른 문자를 입력해주세요. (특수 문자 사용 불가)");
+        setIsCorrect(false);
+        return;
       } else if (nickname.length < 2 || nickname.length > 7) {
         setValidationText("최소 2자에서 최대 7자로 입력해주세요.");
       } else if (isNicknameExist) {
@@ -21,6 +23,7 @@ export const useCheckNickName = () => {
       } else {
         setValidationText("사용 가능한 닉네임 입니다!");
       }
+      setIsCorrect(true);
     },
     [isNicknameExist]
   );
@@ -41,5 +44,5 @@ export const useCheckNickName = () => {
   //   }
   // };
 
-  return { validationText, validationNickname, debouncedCheckNickname, isNicknameExist };
+  return { validationText, validationNickname, debouncedCheckNickname, isNicknameExist, isCorrect };
 };

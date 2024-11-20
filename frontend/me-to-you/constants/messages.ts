@@ -5,6 +5,7 @@ export const MESSAGES = {
   LOGIN_REQUIRED: "서비스를 이용하려면 로그인부터 해주세요!",
   INVALID_SIGNUP_FORM: "모든 값을 입력해주세요!",
   NICKNAME_LENGTH: "닉네임은 2자 이상, 8자 이하로 설정해주세요!",
+  NICKNAME_CORRECT: "올바른 닉네임을 사용해주세요!!",
   WELCOME: (nickname: string) => `${nickname}님 환영합니다 :)`,
   UNANSWERED_BY_BOT: `죄송합니다. 이 질문에 대해 제가 명확한 답변을 드리기 어려워요.😅
   \n하지만 몇 가지 옵션이 있어요:
