@@ -43,7 +43,7 @@ const Page: React.FC = () => {
     <div className="w-full flex flex-col items-center justify-start min-h-[92vh] bg-white">
       <div className="flex flex-col w-[90%]">
         <p className="text-[23px] mt-10 mb-5 w-full font-bold">{question}</p>
-        <div className="flex flex-wrap gap-3 pb-20">
+        <div className="flex flex-wrap gap-3 pb-20 z-10">
           {list[0]?.respondentNickname === undefined ? (
             <div className="text-gray mb-5 text-lg">아직 응답자가 없어요...</div>
           ) : (
