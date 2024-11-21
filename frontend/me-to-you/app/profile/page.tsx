@@ -13,7 +13,7 @@ import SelectInput from "@/components/common/SelectInput";
 import ProfileImageUploader from "@/components/profile/ProfileImageUploader";
 import { useCheckNickName } from "@/hooks/useCheckNickName";
 import Swal from "sweetalert2";
-import { addImage } from "@/slice/imageSlice";
+import { createImage } from "@/services/file";
 
 interface InputState {
   nickname: string;
@@ -23,7 +23,6 @@ interface InputState {
 const ProfilePage = () => {
   const dispatch: AppDispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
-  const { file } = useSelector((state: RootState) => state.image);
 
   const [isEdit, setIsEdit] = useState(false);
   const [inputs, setInputs] = useState<InputState>({
@@ -36,6 +35,7 @@ const ProfilePage = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const { validationText, validationNickname, debouncedCheckNickname } = useCheckNickName();
+  const delay = (ms: number | undefined) => new Promise(resolve => setTimeout(resolve, ms));
 
   const userInfo = {
     keys: ["소셜 타입", "이메일", "생년월일", "성별"],
@@ -81,56 +81,75 @@ const ProfilePage = () => {
     }
 
     if (isEdit) {
-      let newProfileImage = profileImagePreview;
-      let response = null;
+      let newProfileImage = "";
 
-      if (uploadImage) {
-        const formData = new FormData();
-        formData.append("file", uploadImage);
+      try {
+        if (uploadImage) {
+          const formData = new FormData();
+          formData.append("file", uploadImage);
 
-        response = await dispatch(addImage(formData));
-      }
-      if (response && response.meta.requestStatus === "fulfilled") {
-        if (file) newProfileImage = file;
-      }
+          const response = await createImage(formData);
 
-      if (!/^[가-힣a-zA-Z0-9\u318D·\s]*$/.test(inputs.nickname)) {
+          newProfileImage = response.data.data.url;
+
+          if (!newProfileImage) {
+            await Swal.fire({
+              icon: "error",
+              text: "이미지 업로드에 실패했습니다.",
+              confirmButtonColor: "#5498FF",
+              confirmButtonText: "닫기",
+            });
+            return;
+          }
+        }
+
+        if (!/^[가-힣a-zA-Z0-9\u318D·\s]*$/.test(inputs.nickname)) {
+          await Swal.fire({
+            icon: "error",
+            text: "올바른 닉네임을 입력해주세요!",
+            confirmButtonColor: "#5498FF",
+            confirmButtonText: "닫기",
+          });
+          return;
+        }
+
+        await delay(500);
+
+        const result = await dispatch(
+          editUser({
+            nickname: inputs.nickname,
+            mbti: inputs.mbti,
+            profileImage: newProfileImage,
+          })
+        );
+
+        if (result.meta.requestStatus === "fulfilled") {
+          await Swal.fire({
+            icon: "success",
+            text: "회원 정보를 수정했습니다!",
+            confirmButtonColor: "#5498FF",
+            confirmButtonText: "닫기",
+          });
+          setIsEdit(false);
+          setUploadImage(null);
+        } else {
+          await Swal.fire({
+            icon: "error",
+            text: "회원 정보 수정에 실패했습니다! ㅠㅠ",
+            confirmButtonColor: "#5498FF",
+            confirmButtonText: "닫기",
+          });
+        }
+      } catch (error) {
         await Swal.fire({
           icon: "error",
-          text: "올바른 닉네임을 입력해주세요!",
-          confirmButtonColor: "#5498FF",
-          confirmButtonText: "닫기",
-        });
-        return;
-      }
-
-      const result = await dispatch(
-        editUser({
-          nickname: inputs.nickname,
-          mbti: inputs.mbti,
-          profileImage: newProfileImage,
-        })
-      );
-
-      if (result.meta.requestStatus === "fulfilled") {
-        await Swal.fire({
-          icon: "success",
-          text: "회원 정보를 수정했습니다!",
-          confirmButtonColor: "#5498FF",
-          confirmButtonText: "닫기",
-        });
-        setIsEdit(false);
-        setUploadImage(null);
-      } else {
-        await Swal.fire({
-          icon: "error",
-          text: "회원 정보 수정에 실패했습니다! ㅠㅠ",
+          text: `오류가 발생했습니다. ${error}`,
           confirmButtonColor: "#5498FF",
           confirmButtonText: "닫기",
         });
       }
     }
-  }, [isEdit, profileImagePreview, uploadImage, dispatch, file, inputs.nickname, inputs.mbti]);
+  }, [isEdit, uploadImage, dispatch, inputs.nickname, inputs.mbti]);
 
   useEffect(() => {
     if (!inputs.nickname) dispatch(loadUser());

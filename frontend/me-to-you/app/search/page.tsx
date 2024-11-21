@@ -23,6 +23,8 @@ const Page = () => {
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const { exist } = useSelector((state: RootState) => state.chatHistory);
 
+  const delay = (ms: number | undefined) => new Promise(resolve => setTimeout(resolve, ms));
+
   const getUserName = async (keyword: string) => {
     if (!/^[가-힣a-zA-Z0-9\u318D·\s]*$/.test(keyword)) {
       setText("올바른 문자를 입력해주세요. (특수 문자 사용 불가)");
@@ -61,6 +63,8 @@ const Page = () => {
     if (exist === undefined) {
       const res = await getChatState(userId);
       const updatedExist = res.data.data.exist;
+
+      await delay(500);
 
       if (updatedExist) {
         router.push(`/chat/${userId}?nickname=${encodeURIComponent(nickname)}`);
