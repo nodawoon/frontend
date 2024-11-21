@@ -119,7 +119,7 @@ const ProfilePage = () => {
           editUser({
             nickname: inputs.nickname,
             mbti: inputs.mbti,
-            profileImage: newProfileImage,
+            profileImage: newProfileImage || user.profileImage,
           })
         );
 
